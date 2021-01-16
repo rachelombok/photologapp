@@ -16,7 +16,7 @@ mongoose.connect("mongodb+srv://rachelombok:Justice1@cluster0.co5zq.mongodb.net/
 app.use(morgan('common'));
 app.use(helmet());
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: "https://dazzling-hodgkin-b03184.netlify.app",
 }));
 
 app.use(express.json());
