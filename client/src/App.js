@@ -2,8 +2,11 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import ReactMapGL,  {Marker, Popup} from 'react-map-gl';
 import { listLogEntries } from './API';
-
+import 'mapbox-gl/dist/mapbox-gl.css';
 import LogEntryForm from './LogEntryForm';
+
+
+const MAPBOX_TOKEN = 'pk.eyJ1IjoicmFjaGVsb21ib2siLCJhIjoiY2tqejd5Nzg3MDR3bzJvbGVkdXZhemN4bSJ9.7fvb2K_M79hL-bOqPA9J9g'; // Set your mapbox token here
 
 const App = () => {
   const [logEntries, setLogEntries ] = useState([]);
@@ -41,7 +44,7 @@ const App = () => {
     <ReactMapGL
       {...viewport}
       mapStyle="mapbox://styles/rachelombok/ckjxcoi1x1lu417okylhr6t7b"
-      mapboxApiAccessToken = {process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+      mapboxApiAccessToken = {MAPBOX_TOKEN}
       onViewportChange={nextViewport => setViewport(nextViewport)}
       dynamicPosition={setViewport}
       onDblClick={showAddMarkerPopup}
