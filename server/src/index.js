@@ -39,3 +39,7 @@ app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`);
 
 });
+
+app.get('/', (req, res) => 
+{ res.send('Hello from Express!')
+});
