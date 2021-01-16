@@ -8,7 +8,7 @@ const logs = require('./api/logs');
 require('dotenv').config();
 const app = express();
 
-mongoose.connect(process.env.DATABASE_URL, {
+mongoose.connect("mongodb+srv://rachelombok:Justice1@cluster0.co5zq.mongodb.net/PhotoLogApp?retryWrites=true&w=majority", {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
 });
