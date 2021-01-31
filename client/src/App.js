@@ -4,6 +4,8 @@ import ReactMapGL,  {Marker, Popup} from 'react-map-gl';
 import { listLogEntries } from './API';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import LogEntryForm from './form/LogEntryForm';
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 const App = () => {
   const [logEntries, setLogEntries ] = useState([]);
