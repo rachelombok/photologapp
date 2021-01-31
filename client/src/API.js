@@ -26,9 +26,16 @@ export async function createLogEntry(entry) {
     url: `${API_URL}/api/logs`,
     data: entry,
     headers: {'Content-Type': 'multipart/form-data' }
-    }).then(function (response) {
-      console.log(response);
+    }).then(response => { 
+      console.log(response)
+    })
+    .catch(error => {
+        console.log(error.response)
     });
+    
+    /*.then(function (response) {
+      console.log(response);
+    });*/
     
   /*if (response.headers.get('content-type').includes('text/html')) {
     const message = await response.text();
