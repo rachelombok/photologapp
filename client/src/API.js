@@ -20,19 +20,16 @@ export async function createLogEntry(entry) {
         },
   });*/
 
-  try{
+  
   await axios({
     method: 'post',
     url: `${API_URL}/api/logs`,
     data: entry,
     headers: {'Content-Type': 'multipart/form-data' }
+    }).then(function (response) {
+      console.log(response);
     });
     
-  }
-  catch (error){
-    console.log("ERORRRRR");
-  }
-  
   /*if (response.headers.get('content-type').includes('text/html')) {
     const message = await response.text();
     json = {
