@@ -1,14 +1,20 @@
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, './.env') });
 const express = require('express');
 const morgan = require('morgan'); 
 const helmet = require('helmet');
+const fs = require('fs');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const middlewares = require('./middlewares');
 const mongoose = require('mongoose');
 const logs = require('./api/logs');
-require('dotenv').config();
-const app = express();
 
-mongoose.connect("mongodb+srv://rachelombok:Justice1@cluster0.co5zq.mongodb.net/PhotoLogApp?retryWrites=true&w=majority", {
+const app = express();
+console.log(process.env.DATABASE_URL);
+app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
 });
@@ -18,7 +24,8 @@ app.use(helmet());
 app.use(cors({
     origin: "https://dazzling-hodgkin-b03184.netlify.app",
 }));
-
+// http://localhost:3000
+// https://dazzling-hodgkin-b03184.netlify.app
 app.use(express.json());
 
 app.get('/', (req, res) =>{
@@ -26,6 +33,7 @@ app.get('/', (req, res) =>{
         message: 'Hello World!'
     });
 });
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/logs', logs)
 

@@ -11,7 +11,6 @@ const errorHandler = (error, req, res, next) => {
     res.json({
         message: error.message,
         stack: process.env.NODE_EV === 'production' ? 'waffles' : error.stack,
-
     });
 };
 

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import ReactMapGL,  {Marker, Popup} from 'react-map-gl';
 import { listLogEntries } from './API';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import LogEntryForm from './LogEntryForm';
+import LogEntryForm from './form/LogEntryForm';
 
 
 const REACT_APP_MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoicmFjaGVsb21ib2siLCJhIjoiY2tqejd5Nzg3MDR3bzJvbGVkdXZhemN4bSJ9.7fvb2K_M79hL-bOqPA9J9g'; // Set your mapbox token here
@@ -88,10 +88,12 @@ const App = () => {
                   onClose={() => setShowPopup({})}
                   anchor="top" >
                   <div className='popup'>
-                    <h3>{entry.title}</h3>
-                    <p>{entry.comments}</p>
+                    <h3>{entry.placeName}</h3>
+                    <p>{entry.description}</p>
                     <small>Visited on: {new Date(entry.visitDate).toLocaleDateString()}</small>
                     {entry.image && <img src={entry.image} alt={entry.title} />}
+                   
+                    {/* image[0].name*/ }
                   </div>
                 </Popup>
               ) : null
