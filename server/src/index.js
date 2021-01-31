@@ -13,6 +13,7 @@ const logs = require('./api/logs');
 const app = express();
 console.log(process.env.DATABASE_URL);
 app.use(bodyParser.json());
+
 // app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true, 
