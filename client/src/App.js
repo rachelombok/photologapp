@@ -41,7 +41,7 @@ const App = () => {
     <ReactMapGL
       {...viewport}
       mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
-      mapboxApiAccessToken = {process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
       onViewportChange={nextViewport => setViewport(nextViewport)}
       dynamicPosition={setViewport}
       onDblClick={showAddMarkerPopup}
