@@ -23,7 +23,7 @@ mongoose.connect(process.env.DATABASE_URL, {
 app.use(morgan('common'));
 app.use(helmet());
 app.use(cors({
-    origin: "https://dazzling-hodgkin-b03184.netlify.app",
+    origin: process.env.CORS_ORIGIN,
 }));
 // http://localhost:3000
 // https://dazzling-hodgkin-b03184.netlify.app

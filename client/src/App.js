@@ -5,8 +5,6 @@ import { listLogEntries } from './API';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import LogEntryForm from './form/LogEntryForm';
 
-const REACT_APP_MAPBOX_ACCESS_TOKEN="pk.eyJ1IjoicmFjaGVsb21ib2siLCJhIjoiY2tqejd5Nzg3MDR3bzJvbGVkdXZhemN4bSJ9.7fvb2K_M79hL-bOqPA9J9g";
-
 const App = () => {
   const [logEntries, setLogEntries ] = useState([]);
   const [showPopup, setShowPopup] = useState({});
@@ -43,7 +41,7 @@ const App = () => {
     <ReactMapGL
       {...viewport}
       mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
-      mapboxApiAccessToken={REACT_APP_MAPBOX_ACCESS_TOKEN}
+      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
       onViewportChange={nextViewport => setViewport(nextViewport)}
       dynamicPosition={setViewport}
       onDblClick={showAddMarkerPopup}
