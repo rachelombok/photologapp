@@ -3,7 +3,7 @@ import axios from "axios";
 const API_URL = 'https://photologapp.herokuapp.com';
 // const accessToken = 'AKIAIN7Z4ARG3LRKPCDA'
 // https://photologapp.herokuapp.com
-// http://localhost:1337/
+// http://localhost:1337
 export async function listLogEntries(){
     const response = await fetch(`${API_URL}/api/logs`);
     return response.json();

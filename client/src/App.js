@@ -90,7 +90,14 @@ const App = () => {
                     <h3>{entry.placeName}</h3>
                     <p>{entry.description}</p>
                     <small>Visited on: {new Date(entry.visitDate).toLocaleDateString()}</small>
-                    {entry.image && <img src={entry.image} alt={entry.title} />}
+                    
+                    {entry.image && 
+                      entry.image.map(function(e, i){
+                        return <img src={e} alt={i} key={e}/>
+                      })
+                    
+                    }
+                    {/*logEntries.map(entry => ( <img src={entry.image[0]} alt={entry.title} />*/}
                    
                     {/* image[0].name*/ }
                   </div>

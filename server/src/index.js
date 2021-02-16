@@ -15,7 +15,7 @@ console.log(process.env.DATABASE_URL);
 app.use(bodyParser.json());
 
 // app.use(bodyParser.urlencoded({ extended: true }));
-mongoose.connect("mongodb+srv://rachelombok:Justice1@cluster0.co5zq.mongodb.net/PhotoLogApp?retryWrites=true&w=majority", {
+mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
 });

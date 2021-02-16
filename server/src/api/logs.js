@@ -19,9 +19,18 @@ router.get('/', async (req, res, next) => {
     
 });
 
-router.post('/', upload.single("image"), async (req, res, next) => {
+router.post('/', upload.array("image", 5), async (req, res, next) => {
     try{
+        let fileArray = req.files,fileLocation;
+        console.log(req.files);
         console.log(JSON.stringify(req.body));
+        
+        const galleryImgLocationArray = [];
+		for ( let i = 0; i < fileArray.length; i++ ) {
+			fileLocation = fileArray[ i ].location;
+			console.log( 'filenm', fileLocation );
+			galleryImgLocationArray.push( fileLocation )
+		}
         const logEntry = new LogEntry({
             placeName: req.body.placeName,
             description: req.body.description,
@@ -30,7 +39,8 @@ router.post('/', upload.single("image"), async (req, res, next) => {
             visitDate: req.body.visitDate,
             latitude: req.body.latitude,
             longitude: req.body.longitude,
-            image: req.file.location, 
+            image: galleryImgLocationArray,
+            //image: req.file.location, 
         });
         console.log('bloop', logEntry);
         const createdEntry = await logEntry.save();

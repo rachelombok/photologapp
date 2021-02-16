@@ -13,12 +13,16 @@ import React, { useState } from 'react';
    const onSubmit = async (data) => {
     try {
       setLoading(true);
-      console.log(location);
+      
+      //console.log(location);
       let formData = new FormData();
       formData.append('placeName', data.placeName);
       formData.append('description', data.description);
       formData.append('photographer', data.photographer);
-      formData.append('image', photo);
+      //formData.append('image', photo);
+      for ( let i = 0; i < photo.length; i++ ) {
+				formData.append( 'image', photo[ i ], photo[ i ].name );
+			}
       formData.append('rating', 5);
       formData.append('latitude', location.latitude);
       formData.append('longitude', location.longitude);
@@ -62,7 +66,7 @@ import React, { useState } from 'react';
    };
 
    const setFile = evt => {
-    setPhoto(evt.target.files[0]);
+    setPhoto(evt.target.files);
     //setFileName(evt.target.files[0].name);
   };
 
@@ -77,7 +81,7 @@ import React, { useState } from 'react';
        <label htmlFor="description">Description</label>
        <textarea name="description" rows={3} ref={register}></textarea>
        <label htmlFor="image">Image</label>
-       <input name="image" type='file' onChange={setFile} placeholder="Pase an image URL" ref={register} />
+       <input name="image" type='file' multiple onChange={setFile} placeholder="Pase an image URL" ref={register} />
        <label htmlFor="visitDate">Visit Date</label>
        <input name="visitDate" type="date" required ref={register} />
        <button disabled={loading}>{loading ? 'Loading...' : 'Create Entry'}</button>
