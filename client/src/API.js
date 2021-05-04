@@ -1,10 +1,11 @@
 import axios from "axios";
-
-const API_URL = 'https://photologapp.herokuapp.com';
+const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:1337' : 'https://photologapp.herokuapp.com';
+//const API_URL = 'https://photologapp.herokuapp.com';
 // https://photologapp.herokuapp.com
 // http://localhost:1337
 export async function listLogEntries(){
-    const response = await fetch(`${process.env.API_URL}/api/logs`);
+    const response = await fetch(`${API_URL}/api/logs`);
+    console.log(API_URL);
     return response.json();
 }
 
@@ -26,10 +27,12 @@ export async function createLogEntry(entry) {
     data: entry,
     headers: {'Content-Type': 'multipart/form-data' }
     }).then(response => { 
-      console.log(response)
+      console.log(response);
+      console.log('workedhere');
     })
     .catch(error => {
         console.log(error.response)
+        console.log('didntworkedhere');
     });
     
     /*.then(function (response) {

@@ -5,3 +5,10 @@ to push to server:
 
 to push client
 `git push origin testheroku`
+
+to start server:
+`cd server, npm run dev`
+
+to start client:
+`cd client, npm start`
+
