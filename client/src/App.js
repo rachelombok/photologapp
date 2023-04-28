@@ -2,10 +2,11 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import ReactMapGL,  {Marker, Popup} from 'react-map-gl';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { listLogEntries } from './API';
+import { listLogEntries } from './services/postService';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import LogEntryForm from './components/form/LogEntryForm';
-import LoginPage from './pages/LoginPage/LoginPage';
+import LoginPage from './pages/AuthPage/LoginPage';
+import RegisterPage from './pages/AuthPage/RegisterPage';
 import {
   BrowserRouter as Router,
   Switch,
@@ -21,6 +22,7 @@ class App extends React.Component{
             <Switch>
                 <Route exact path='/' component={Map}/>
                 <Route exact path='/test' component={LoginPage} />
+                <Route exact path='/test2' component={RegisterPage} />
             </Switch>
           </Router>
         </div>

@@ -8,7 +8,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const middlewares = require('./middlewares');
 const mongoose = require('mongoose');
+//const apiRouter = require('./api');
+
 const logs = require('./api/logs');
+const user = require('./api/user');
+const auth = require('./api/auth');
 
 const app = express();
 //console.log(process.env.DATABASE_URL);
@@ -36,7 +40,9 @@ app.get('/', (req, res) =>{
 });
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/logs', logs)
+app.use('/api/logs', logs);
+app.use('/api/user', user);
+app.use('/api/auth', auth);
 
 app.use(middlewares.notFound);
 

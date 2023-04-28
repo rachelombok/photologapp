@@ -3,7 +3,7 @@ import ReactMapGl,{ Marker, Popup, NavigationControl} from "react-map-gl";
 //import { listLogEntries } from './API';
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { listLogEntries } from "../../API";
+import { listLogEntries } from "../../services/postService";
 import MapMarker from './../mapmarker/mapmarker.js'
 import Geocoder from "react-map-gl-geocoder";
 import AddLocation from './../addlocation/addlocation.js';
@@ -28,7 +28,6 @@ const Map = () => {
   
     const getTravelEntries = async () => {
       const logEntries = await listLogEntries();
-      console.log("WHAT");
       console.log('doesthisork', logEntries)
       setLogEntries(logEntries);
     };

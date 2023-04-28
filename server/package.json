@@ -13,15 +13,18 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.828.0",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "gitignore-command": "^0.3.1",
     "helmet": "^4.3.1",
+    "jwt-simple": "^0.5.6",
     "mongoose": "^5.11.11",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
-    "multer-s3": "^2.9.0"
+    "multer-s3": "^2.9.0",
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "eslint": "^7.17.0",

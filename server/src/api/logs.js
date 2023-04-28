@@ -13,7 +13,6 @@ router.get('/', async (req, res, next) => {
         const entries = await LogEntry.find();
         res.json(entries);
         
-
     } catch (error){
         next(error);
     }
@@ -22,8 +21,9 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', upload.array("image", 5), async (req, res, next) => {
     try{
+        console.log('files', req.files);
         let fileArray = req.files,fileLocation;
-        console.log(req.files);
+        console.log('filearray', fileArray);
         console.log(JSON.stringify(req.body));
         
         const galleryImgLocationArray = [];
@@ -41,6 +41,7 @@ router.post('/', upload.array("image", 5), async (req, res, next) => {
             latitude: req.body.latitude,
             longitude: req.body.longitude,
             image: galleryImgLocationArray,
+            author: 'user',
             //image: req.file.location, 
         });
         console.log('bloop', logEntry);
@@ -54,7 +55,7 @@ router.post('/', upload.array("image", 5), async (req, res, next) => {
         if (error.name === 'Validation Error'){
             res.status(422);        
         }
-        console.log(`regular err: ${error.name}`);
+        console.log(`logs regular err: ${error}`);
         next(error);
     }
     /*const uid = req.params.id;
