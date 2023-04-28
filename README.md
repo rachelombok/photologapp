@@ -1,4 +1,4 @@
-photolog app
+photolog app, https://dazzling-hodgkin-b03184.netlify.app/
 
 to push to server:
 `git subtree push --prefix server heroku master`
