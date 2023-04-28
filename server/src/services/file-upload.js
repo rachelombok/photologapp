@@ -44,7 +44,7 @@ const upload = multer({
     filename: (req, file, cb) => {
         cb(null, file.fieldname + '-' + Date.now())
     }
-    // just adding a comment
+    
 });*/
   
   module.exports = upload;
