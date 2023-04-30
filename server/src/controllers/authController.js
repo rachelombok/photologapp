@@ -1,4 +1,5 @@
-const jwt = require('jwt-simple');
+const jwtSimple = require('jwt-simple');
+const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/User');
 const ConfirmationToken = require('../models/ConfirmationToken');
@@ -12,10 +13,46 @@ const {
   validatePassword,
 } = require('../utils/validation');
 
+module.exports.get = (req, res) => {
+  res.json({
+    message: 'Hello Auth! 🔐',
+  });
+};
+
+const createTokenSendResponse = (user, res, next) => {
+  const payload = {
+    _id: user._id,
+      email: user.email,
+      username: user.username,
+      avatar: user.avatar,
+  };
+  const token = jwt.sign(payload, 'shhhhh', { expiresIn: '2d'});
+  return res.json({
+    success: true,
+    token: token,
+    user: payload
+   });
+  /*jwt.sign(
+    payload,
+    "shhhhh", { //process.env.JWT_SECRET
+      expiresIn: '2d',
+    }, (err, token) => {
+      if (err) {
+        res.status(422);
+        const error = Error('Unable to login');
+        next(error);
+      } else {
+      // login all good
+        res.json({ user: payload, token });
+      }
+    },
+  );*/
+};
+
 module.exports.verifyJwt = (token) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const id = jwt.decode(token, "j2390jf09kjsalkj4r93").id;
+      const id = jwtSimple.decode(token, "j2390jf09kjsalkj4r93").id;
       const user = await User.findOne(
         { _id: id },
         'email username avatar bookmarks bio fullName confirmed website'
@@ -61,7 +98,7 @@ module.exports.optionalAuth = async (req, res, next) => {
 
 module.exports.loginAuthentication = async (req, res, next) => {
   const { authorization } = req.headers;
-  console.log("athuoriz ", authorization);
+  console.log("athuoriz ", authorization, req);
   const { usernameOrEmail, password } = req.body;
   console.log(req);
   if (authorization) {
@@ -102,16 +139,16 @@ module.exports.loginAuthentication = async (req, res, next) => {
             'The credentials you provided are incorrect, please try again.',
         });
       }
-
-      res.send({
+      createTokenSendResponse(user, res, next);
+      /*res.send({
         user: {
           _id: user._id,
           email: user.email,
           username: user.username,
           avatar: user.avatar,
         },
-        token: jwt.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
-      });
+        token: jwtSimple.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
+      });*/
     });
   } catch (err) {
     next(err);
@@ -136,7 +173,8 @@ module.exports.register = async (req, res, next) => {
   if (passwordError) return res.status(400).send({ error: passwordError });
 
   try {
-    user = new User({ fullname, email, username, password });
+    const hashPassword = await bcrypt.hash(password, 10);
+    user = new User({ fullname, email, username, password: hashPassword });
     confirmationToken = new ConfirmationToken({
       user: user._id,
       token: crypto.randomBytes(20).toString('hex'),
@@ -145,16 +183,17 @@ module.exports.register = async (req, res, next) => {
     console.log("conf ", confirmationToken);
     await user.save();
     await confirmationToken.save();
-    res.status(201).send({
+    createTokenSendResponse(user, res, next);
+    /*res.status(201).send({
       user: {
         id: user._id,
         email: user.email,
         username: user.username,
       },
       // j2390jf09kjsalkj4r93
-      //token: jwt.encode({ id: user._id }, process.env.JWT_SECRET),
-      token: jwt.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
-    });
+      //token: jwtSimple.encode({ id: user._id }, process.env.JWT_SECRET),
+      token: jwtSimple.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
+    });*/
   } catch (err) {
       console.log(err);
     next(err.message);
@@ -205,7 +244,7 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
           avatar: userDocument.avatar,
           bookmarks: userDocument.bookmarks,
         },
-        token: jwt.encode({ id: userDocument._id }, process.env.JWT_SECRET),
+        token: jwtSimple.encode({ id: userDocument._id }, process.env.JWT_SECRET),
       });
     }
 
@@ -242,7 +281,7 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
         avatar: user.avatar,
         bookmarks: user.bookmarks,
       },
-      token: jwt.encode({ id: user._id }, process.env.JWT_SECRET),
+      token: jwtSimple.encode({ id: user._id }, process.env.JWT_SECRET),
     });
   } catch (err) {
     next(err);

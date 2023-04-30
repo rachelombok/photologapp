@@ -5,15 +5,24 @@ export const signOut = () => () => {
   localStorage.removeItem('token');
 };
 
-export const signInSuccess = (user) => {
-  console.log("yazzzz signed in", user, user.token)
-  localStorage.setItem('token', user.token);
+export const signInSuccess = (response) => {
+  localStorage.setItem('jwtToken', response.data.token);
+  localStorage.setItem("user", JSON.stringify(response.data.user));
+  console.log("yazzzz signed in", response, localStorage);
   
 };
 
 export const signInFailure = (err) => ({
   
 });
+
+export const setAuthentication = (token) => {
+	if (token) {
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+	} else {
+		axios.defaults.headers.common['Authorization'] = null
+	}
+}
 
 /**
  * Logs a user in with the provided credentials
@@ -34,7 +43,9 @@ export const login = async (usernameOrEmail, password, authToken) => {
       method: 'POST',
       ...request,
     });
-    //signInSuccess(response);
+    signInSuccess(response);
+    setAuthentication(response.data.token);
+    //localStorage.setItem('jwtToken', response.data.token)
     console.log("loginres", response)
     // jwt.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
     return response.data;

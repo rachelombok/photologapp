@@ -21,11 +21,11 @@ const {
 module.exports.retrieveUser = async (req, res, next) => {
   const { username } = req.params;
   const requestingUser = res.locals.user;
-  console.log(res.locals.user);
+  console.log('req user', res.locals.user, req.user);
   try {
     const user = await User.findOne(
       { username },
-      'username fullname avatar bio bookmarks fullname _id website'
+      'username fullname avatar bio fullname _id'
     );
     if (!user) {
       return res
@@ -33,7 +33,7 @@ module.exports.retrieveUser = async (req, res, next) => {
         .send({ error: 'Could not find a user with that username.' });
     }
 
-    const posts = await Post.aggregate([
+    /*const posts = await Post.aggregate([
       {
         $facet: {
           data: [
@@ -108,19 +108,21 @@ module.exports.retrieveUser = async (req, res, next) => {
 
     const followingDocument = await Following.findOne({
       user: ObjectId(user._id),
-    });
+    });*/
+    //user.isMe = req.user.id === user._id.toString();
+    user.isMe = res.locals.user === user._id.toString();
 
     return res.send({
       user,
-      followers: followersDocument.followers.length,
-      following: followingDocument.followers.length,
+      //followers: followersDocument.followers.length,
+      //following: followingDocument.followers.length,
       // Check if the requesting user follows the retrieved user
-      isFollowing: requestingUser
+      /*isFollowing: requestingUser
         ? !!followersDocument.followers.find(
             (follower) => String(follower.user) === String(requestingUser._id)
           )
-        : false,
-      posts: posts[0],
+        : false,*/
+      //posts: posts[0],
     });
   } catch (err) {
     next(err);

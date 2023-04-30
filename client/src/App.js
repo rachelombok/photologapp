@@ -7,22 +7,30 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import LogEntryForm from './components/form/LogEntryForm';
 import LoginPage from './pages/AuthPage/LoginPage';
 import RegisterPage from './pages/AuthPage/RegisterPage';
+import ProfilePage from './pages/Profile/ProfilePage';
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
 import Map from './components/map/map.js';
+import { UserContext } from './context/UserContext';
 
 class App extends React.Component{
+  //const { user } = useContext(UserContext);
+  static contextType = UserContext;
+  
+  // this.context.X
   render(){
     return(
         <div>
+          {console.log(this.context)}
           <Router>
             <Switch>
                 <Route exact path='/' component={Map}/>
                 <Route exact path='/test' component={LoginPage} />
                 <Route exact path='/test2' component={RegisterPage} />
+                <Route path="/:username" component={ProfilePage} />
             </Switch>
           </Router>
         </div>
