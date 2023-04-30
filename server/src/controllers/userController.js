@@ -21,11 +21,11 @@ const {
 module.exports.retrieveUser = async (req, res, next) => {
   const { username } = req.params;
   const requestingUser = res.locals.user;
-  console.log('req user', res.locals.user, req.user);
+  //console.log('req user', res, req);
   try {
     const user = await User.findOne(
       { username },
-      'username fullname avatar bio fullname _id'
+      'username fullname avatar bio fullname _id logs logCount'
     );
     if (!user) {
       return res

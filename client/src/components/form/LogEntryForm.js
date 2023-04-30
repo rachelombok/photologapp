@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
  import { useForm } from 'react-hook-form';
-
+//import { UserContext } from '../../context/UserContext.js';
  import { listLogEntries, createLogEntry } from '../../services/postService.js';
 
  const LogEntryForm = ({ location, onFormClose }) => {
@@ -9,6 +9,8 @@ import React, { useState } from 'react';
    //const [file, setFileName] = useState(null);
    const [photo, setPhoto] = useState(null);
    const { register, handleSubmit } = useForm();
+   //const { user } = useContext(UserContext);
+   const token = localStorage.getItem('jwtToken');
 
    const onSubmit = async (data) => {
     try {
@@ -38,8 +40,8 @@ import React, { useState } from 'react';
       //data.image = photo;
       console.log(data);
       console.log(formData);
-      
-      await createLogEntry(formData);
+      console.log(token);
+      await createLogEntry(formData, token);
       
       onFormClose();
 

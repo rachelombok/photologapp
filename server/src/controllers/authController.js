@@ -69,16 +69,35 @@ module.exports.verifyJwt = (token) => {
 };
 
 module.exports.requireAuth = async (req, res, next) => {
+  let token;
   const { authorization } = req.headers;
+  console.log("req auth here", authorization, req.headers);
   if (!authorization) return res.status(401).send({ error: 'Not authorized login.' });
-  console.log("req auth here");
+  if (authorization && authorization.startsWith("Bearer")) {
+    token = authorization.split(" ")[1];
+  }
+  if (!token) {
+    return next({
+      message: "You need to be logged in to visit this route",
+      statusCode: 403,
+    });
+  }
   try {
-    const user = await this.verifyJwt(authorization);
+    //const user = await this.verifyJwt(authorization);
+    const decoded = jwt.verify(token, 'shhhhh'); //turn key to env secret
+    console.log('decode', decoded);
+    const user = await User.findById(decoded._id).select("-password");
+    console.log('found user', user);
+    if (!user) {
+      return next({ message: `No user found for ID ${decoded._id}` });
+    }
     // Allow other middlewares to access the authenticated user details.
     res.locals.user = user;
-    return next();
+    req.user = user;
+    console.log('made it done requireauth');
+    next();
   } catch (err) {
-    return res.status(401).send({ error: err });
+    return res.status(401).send({ error: `New error: ${err}` });
   }
 };
 

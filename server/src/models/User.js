@@ -66,11 +66,11 @@ const userSchema = new Schema({
         type: Number,
         default: 0,
     },
-    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-    postCount: {
+    logs: [{ type: mongoose.Schema.Types.ObjectId, ref: "LogEntry" }],
+    logCount: {
         type: Number,
         default: 0,
-    },
+      },
     bookmarks: [
         { 
             post: {
