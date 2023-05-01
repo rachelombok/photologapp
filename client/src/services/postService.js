@@ -9,7 +9,13 @@ export async function listLogEntries(){
     return response.json();
 }
 
-export async function createLogEntry(entry) {
+export async function createLogEntry(entry, token) {
+  //const token = localStorage.getItem("token");
+  const headers = {
+    'Content-Type': 'multipart/form-data' 
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  console.log(headers, token);
     for (var key of entry.entries()) {
       console.log(key[0] + ', ' + key[1])
     }
@@ -25,7 +31,7 @@ export async function createLogEntry(entry) {
     method: 'post',
     url: `${API_URL}/api/logs`,
     data: entry,
-    headers: {'Content-Type': 'multipart/form-data' }
+    headers: {...headers}
     }).then(response => { 
       console.log(response);
       console.log('workedhere');

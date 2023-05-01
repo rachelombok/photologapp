@@ -3,8 +3,11 @@ const { Router } = require('express');
 const router = Router();
 const LogEntry = require('../models/LogEntry');
 const upload = require("../services/file-upload");
+const {
+    requireAuth,
+  } = require('../controllers/authController');
 //const singleUpload = upload.single("image");
-
+const User = require('../models/User');
 //const fs = require('fs');
 //const path = require('path');
 
@@ -19,9 +22,11 @@ router.get('/', async (req, res, next) => {
     
 });
 
-router.post('/', upload.array("image", 5), async (req, res, next) => {
+router.post('/', requireAuth, upload.array("image", 5), async (req, res, next) => {
+    console.log('did we make tit after auth?');
     try{
-        console.log('files', req.files);
+        const reqUser = req.user._id;
+        console.log('files', req.user, req);
         let fileArray = req.files,fileLocation;
         console.log('filearray', fileArray);
         console.log(JSON.stringify(req.body));
@@ -41,9 +46,13 @@ router.post('/', upload.array("image", 5), async (req, res, next) => {
             latitude: req.body.latitude,
             longitude: req.body.longitude,
             image: galleryImgLocationArray,
-            author: 'user',
+            author: reqUser,
             //image: req.file.location, 
         });
+        await User.findByIdAndUpdate(reqUser, {
+            $push: { logs: logEntry._id },
+            $inc: { logCount: 1 },
+          });
         console.log('bloop', logEntry);
         const createdEntry = await logEntry.save();
         console.log(createdEntry);

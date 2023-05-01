@@ -34,7 +34,7 @@ const userSchema = new Schema({
         type: String,
         required: true,
         minlength: 8,
-        maxlength: 20,
+        //maxlength: 20,
     },
     avatar: {
         type:String,
@@ -66,11 +66,11 @@ const userSchema = new Schema({
         type: Number,
         default: 0,
     },
-    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-    postCount: {
+    logs: [{ type: mongoose.Schema.Types.ObjectId, ref: "LogEntry" }],
+    logCount: {
         type: Number,
         default: 0,
-    },
+      },
     bookmarks: [
         { 
             post: {

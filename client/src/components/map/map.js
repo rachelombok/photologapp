@@ -7,9 +7,11 @@ import { listLogEntries } from "../../services/postService";
 import MapMarker from './../mapmarker/mapmarker.js'
 import Geocoder from "react-map-gl-geocoder";
 import AddLocation from './../addlocation/addlocation.js';
+import NavigationBar from "../navigationbar/navigationbar";
 //import 'bootstrap/dist/css/bootstrap.min.css';
 const geostyle = {
-  margin: '20px'
+  margin: '20px 20px 40px 40px',
+  paddingTop: '30px'
 }
 
 const Map = () => {
@@ -85,7 +87,8 @@ const Map = () => {
       
       <div >
         
-       
+       <NavigationBar/>
+      
       <ReactMapGl
       ref={myMap}
       {...viewport}
@@ -94,10 +97,6 @@ const Map = () => {
         onViewportChange={setViewport}
         onDblClick={markVisited}
       >
-        
-        
-        
-          
         <MapMarker
           logEntries={logEntries}
           viewport={viewport}

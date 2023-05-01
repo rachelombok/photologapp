@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
  import { useForm } from 'react-hook-form';
-
+import { UserContext } from '../../context/UserContext.js';
  import { listLogEntries, createLogEntry } from '../../services/postService.js';
-
+import { Form, InputGroup, Button } from 'react-bootstrap';
  const LogEntryForm = ({ location, onFormClose }) => {
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState('');
    //const [file, setFileName] = useState(null);
    const [photo, setPhoto] = useState(null);
    const { register, handleSubmit } = useForm();
+   const { user } = useContext(UserContext);
+   const token = localStorage.getItem('jwtToken');
 
    const onSubmit = async (data) => {
     try {
@@ -38,8 +40,8 @@ import React, { useState } from 'react';
       //data.image = photo;
       console.log(data);
       console.log(formData);
-      
-      await createLogEntry(formData);
+      console.log(token);
+      await createLogEntry(formData, token);
       
       onFormClose();
 
@@ -76,7 +78,25 @@ import React, { useState } from 'react';
 
 
    return (
-     <form onSubmit={handleSubmit(onSubmit)} className="entry-form" encType='multipart/form-data'>
+    <div>
+      <style type='text/css'>
+      {`
+      .btn-flat {
+      background: linear-gradient(90deg, rgba(18,21,168,1) 0%, rgba(163,0,232,1) 100%);
+      background-color: rgb(18,21,168);
+      color: white;
+      min-width: 100%;
+      margin: 10px 0 0 0;
+    }
+
+      .btn-xxl {
+      padding: 1rem 1.5rem;
+      font-size: 1.5rem;
+    }
+    `}
+
+    </style>
+     {/*<form onSubmit={handleSubmit(onSubmit)} className="entry-form" encType='multipart/form-data'>
        { error ? <h3 className="error">{error}</h3> : null}
        <label htmlFor="placeName">Title</label>
        <input name="placeName" required ref={register} />
@@ -89,7 +109,52 @@ import React, { useState } from 'react';
        <label htmlFor="visitDate">Visit Date</label>
        <input name="visitDate" type="date" required ref={register} />
        <button disabled={loading}>{loading ? 'Loading...' : 'Create Entry'}</button>
-     </form>
+  </form>*/}
+     <Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
+     <Form.Group controlId="formBasicEmail">
+          <Form.Label>Place Name</Form.Label>
+          <Form.Control name='placeName' type="text" placeholder="Ex: Central Park" required ref={register}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Photographer</Form.Label>
+          <InputGroup>
+          <InputGroup.Text>@</InputGroup.Text>
+          <Form.Control name='photographer' readOnly placeholder="rachelombok" ref={register} defaultValue={user.username}/>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label htmlFor='images' >Images</Form.Label>
+          <Form.Control type="file" name='image' accept="image/png, image/jpeg" required ref={register} multiple label="5 images MAX" onChange={setFile}/>
+          <Form.Text className="text-muted">
+          </Form.Text>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Description</Form.Label>
+          <Form.Control name='description' as='textarea' placeholder='Ex: Nice greenery shots in the heart of NYC, taken with a Nikon D3200 with f/11,
+          ISO 200, shutter 1/16. Very beautiful during the summer.' ref={register}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Tags</Form.Label>
+          <Form.Control name='tags' placeholder='landscape NYC nature sun' />
+          <Form.Text className="text-muted">
+            Separate by whitespace, up to 10 tags.
+          </Form.Text>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Visit Date</Form.Label>
+          <Form.Control name='visitDate' type="date" ref={register}/>
+        </Form.Group>
+        <Button disabled={loading} type='submit' {...loading ? "Creating..." : "Created"} variant='flat' block size='lg'>
+            <b>Submit</b>
+</Button>
+      
+       {/* 
+        
+        <Button disabled={loading} type='submit' {...loading ? "Creating..." : "Created"} variant='flat' block size='lg'>
+            <b>Submit</b>
+</Button>*/}
+     </Form>
+     </div>
    );
  };
 

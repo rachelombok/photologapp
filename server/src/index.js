@@ -22,13 +22,22 @@ app.use(bodyParser.json());
 mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
+    useFindAndModify: false
 });
-
 app.use(morgan('common'));
 app.use(helmet());
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
 }));
+app.use(function(req, res, next) { 
+    res.header("Access-Control-Allow-Origin", process.env.CORS_ORIGIN); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH');
+    next();
+  });
+
+
 // http://localhost:3000
 // https://dazzling-hodgkin-b03184.netlify.app
 app.use(express.json());

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import './authpage.css';
 import { Card, Form, Button } from 'react-bootstrap'
@@ -7,11 +7,13 @@ import {
   registerUser,
   login,
 } from '../../services/authenticationService';
+import { UserContext } from '../../context/UserContext';
 
 const LoginPage = () => {
   const history = useHistory();
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
+  const { setUser } = useContext(UserContext);
     /*constructor (props) {
         super(props);
         this.state = {
@@ -54,7 +56,10 @@ const LoginPage = () => {
     const onSubmit = async (data) => {
       console.log(data);
       try{
-        await login(data.email, data.password);
+        const res = await login(data.email, data.password);
+        console.log(res);
+        setUser(res.user);
+        //localStorage.setItem("jwt",data.token)
         history.push("/");
       } catch(error){
         console.error(error);
@@ -88,7 +93,7 @@ const LoginPage = () => {
                 <button onClick={this.changeState}>Stop / Start</button>
           */}
           <div >
-          <Link to="/test"><Button variant="outline-light" className='switch-btn'>Login</Button>{' '}</Link>
+          <Link to="/test2"><Button variant="outline-light" className='switch-btn'>Sign Up</Button>{' '}</Link>
           </div>
 
           <div className='center'>
@@ -136,9 +141,10 @@ const LoginPage = () => {
         <Button variant="light" type="submit" block size='md'>
           Submit
         </Button>
-        <p className="forgot-password text-end">
+        <p className="forgot-password ">
                     Forgot <a href="#" style={{color: '#fff'}}>password?</a>
                 </p>
+               
                 
         </Form>
         </div>

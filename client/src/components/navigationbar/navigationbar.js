@@ -1,20 +1,21 @@
 import React from 'react';
-import { Navbar,Nav,Button, Popover, OverlayTrigger} from 'react-bootstrap'
+import { Navbar,Nav,Button, Popover, OverlayTrigger, NavDropdown} from 'react-bootstrap'
 import './navigationbar.css';
-import logo from './../assets/images/digcamtrans.png';
-
+//import logo from '../../assets/images/digcamtrans.jpeg';
+import logo from '../../assets/images/digicamtrans.jpeg';
+import HelpMenu from '../helpmenu/helpmenu';
  
 
   const popover = (
     <Popover id="popover-basic">
-      <Popover.Title as="h3">Add Point</Popover.Title>
-      <Popover.Content style={{color: 'white'}}>
+      <Popover.Header as="h3">Add Point</Popover.Header>
+      <Popover.Body style={{color: 'white'}}>
       To share photos with the community, double click the map and upload your photo, set the correct location, and add a little writeup + details.
-      </Popover.Content>
-      <Popover.Title as="h3">Browse Points</Popover.Title>
-      <Popover.Content style={{color: 'white'}}>
+      </Popover.Body>
+      <Popover.Header as="h3">Browse Points</Popover.Header>
+      <Popover.Body style={{color: 'white'}}>
       Browse the map and search for snap spots posted by the JustShoot community, and click to see each one.
-      </Popover.Content>
+      </Popover.Body>
     </Popover>
   );
 
@@ -56,6 +57,7 @@ class NavigationBar extends React.Component{
           </OverlayTrigger>
 
 
+          <HelpMenu/>
                       </Nav>
                      
                   </Navbar>

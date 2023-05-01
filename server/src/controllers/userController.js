@@ -8,7 +8,8 @@ const socketHandler = require('../handlers/socketHandler');
 const ObjectId = require('mongoose').Types.ObjectId;
 const fs = require('fs');
 const crypto = require('crypto');
-
+const upload = require("../services/file-upload");
+const jwt = require('jsonwebtoken');
 const {
   validateEmail,
   validateFullName,
@@ -18,22 +19,41 @@ const {
 } = require('../utils/validation');
 //const { sendConfirmationEmail } = require('../utils/controllerUtils');
 
+const createTokenSendResponse = (user, res, next) => {
+  const payload = {
+    _id: user._id,
+      email: user.email,
+      username: user.username,
+      fullname: user.fullname,
+      avatar: user.avatar,
+    website: user.website,
+    bio: user.bio,
+
+  };
+  const token = jwt.sign(payload, 'shhhhh', { expiresIn: '2d'});
+  return res.json({
+    success: true,
+    token: token,
+    user: payload
+   });
+  }
+
 module.exports.retrieveUser = async (req, res, next) => {
   const { username } = req.params;
   const requestingUser = res.locals.user;
-  console.log(res.locals.user);
+  //console.log('req user', res, req);
   try {
     const user = await User.findOne(
       { username },
-      'username fullname avatar bio bookmarks fullname _id website'
-    );
+      'username fullname avatar bio fullname _id logCount website'
+    ).populate({ path: "logs", select: "image thumbnail rating timestamp" });
     if (!user) {
       return res
         .status(404)
         .send({ error: 'Could not find a user with that username.' });
     }
 
-    const posts = await Post.aggregate([
+    /*const posts = await Post.aggregate([
       {
         $facet: {
           data: [
@@ -108,19 +128,21 @@ module.exports.retrieveUser = async (req, res, next) => {
 
     const followingDocument = await Following.findOne({
       user: ObjectId(user._id),
-    });
+    });*/
+    //user.isMe = req.user.id === user._id.toString();
+    user.isMe = res.locals.user === user._id.toString();
 
     return res.send({
       user,
-      followers: followersDocument.followers.length,
-      following: followingDocument.followers.length,
+      //followers: followersDocument.followers.length,
+      //following: followingDocument.followers.length,
       // Check if the requesting user follows the retrieved user
-      isFollowing: requestingUser
+      /*isFollowing: requestingUser
         ? !!followersDocument.followers.find(
             (follower) => String(follower.user) === String(requestingUser._id)
           )
-        : false,
-      posts: posts[0],
+        : false,*/
+      //posts: posts[0],
     });
   } catch (err) {
     next(err);
@@ -499,8 +521,18 @@ module.exports.changeAvatar = async (req, res, next) => {
       .status(400)
       .send({ error: 'Please provide the image to upload.' });
   }
-  console.log(req.files);
-  console.log(JSON.stringify(req.body));
+  console.log('changing avatar', req.file);
+  try {
+    await User.findByIdAndUpdate(req.user._id, {
+      avatar: req.file.location
+    });
+    res.send([req.file.location]);
+  } catch(e){
+    return res
+    .status(404)
+    .send({ error: 'Trouble updating your picture, try again later' });
+  }
+  
 
   /*cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -552,6 +584,7 @@ module.exports.removeAvatar = async (req, res, next) => {
 module.exports.updateProfile = async (req, res, next) => {
   const user = res.locals.user;
   const { fullName, username, website, bio, email } = req.body;
+  console.log('this is what we are updateing', fullName, username, website, bio, email);
   let confirmationToken = undefined;
   let updatedFields = {};
   try {
@@ -618,8 +651,9 @@ module.exports.updateProfile = async (req, res, next) => {
         updatedFields = { ...updatedFields, email, confirmed: false };
       }
     }
+    console.log(updatedFields);
     const updatedUser = await userDocument.save();
-    res.send(updatedFields);
+     createTokenSendResponse(updatedUser, res, next);
     /*if (email && email !== user.email) {
       sendConfirmationEmail(
         updatedUser.username,

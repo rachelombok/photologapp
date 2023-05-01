@@ -10,8 +10,8 @@ const requiredNumber = {
   
 const logEntrySchema = new Schema({
   author: {
-    //type: mongoose.Schema.Types.ObjectId,
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    //type: String,
     ref: "User",
     required: true,
   },

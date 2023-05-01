@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import './authpage.css';
 import { Card, Form, Button } from 'react-bootstrap'
@@ -7,11 +7,13 @@ import {
   registerUser,
   login,
 } from '../../services/authenticationService';
+import { UserContext } from '../../context/UserContext';
 
-const RegisterPage = () => {
+const RegisterPage = ({ login }) => {
   const history = useHistory();
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
+  const { setUser } = useContext(UserContext);
     /*constructor (props) {
         super(props);
         this.state = {
@@ -54,7 +56,9 @@ const RegisterPage = () => {
     const onSubmit = async (data) => {
       console.log(data);
       try{
-        await registerUser(data.email, data.fullname, data.username, data.password);
+        const res = await registerUser(data.email, data.fullname, data.username, data.password);
+        console.log(res);
+        setUser(res.user);
         history.push("/");
       } catch(error){
         console.error(error);
@@ -96,6 +100,7 @@ const RegisterPage = () => {
             className='login-container'
             onSubmit={handleSubmit(onSubmit)}
             encType='multipart/form-data'
+            autoComplete='off'
             >
               <h3>Create Account</h3>
 
@@ -136,6 +141,7 @@ const RegisterPage = () => {
           placeholder="Enter username" 
           size="lg"
           ref={register}
+          autoComplete='username'
           //value={this.state.username}
           onChange={handleOnChange}
           required
@@ -152,10 +158,12 @@ const RegisterPage = () => {
           placeholder="Enter password" 
           size="lg"
           ref={register}
+          autoComplete='new-password'
           //value={this.state.password}
           onChange={handleOnChange}
           required
           minLength={8}
+          maxLength={30}
           />
         </Form.Group>
         <Form.Group controlId="formBasicCheckbox" >
@@ -165,9 +173,9 @@ const RegisterPage = () => {
         <Button variant="light" type="submit" block size='md'>
           Submit
         </Button>
-        <p className="forgot-password text-end">
-                    Forgot <a href="#" style={{color: '#fff'}}>password?</a>
-                </p>
+        <Form.Label muted className="text-right">
+        <span onClick={login}>Login</span>
+      </Form.Label>
                 
         </Form>
         </div>

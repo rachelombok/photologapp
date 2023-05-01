@@ -29,49 +29,10 @@ router.get('/:userId/:offset/followers', requireAuth, retrieveFollowers);
 router.get('/:username/:offset/search', searchUsers);
 
 router.put('/confirm', requireAuth, confirmUser);
-router.put('/avatar', requireAuth, 
-  upload.array("image", 5), async (req, res, next) => {
-    try{
-        let fileArray = req.files,fileLocation;
-        console.log(req.files);
-        console.log(JSON.stringify(req.body));
-        
-        const galleryImgLocationArray = [];
-		for ( let i = 0; i < fileArray.length; i++ ) {
-			fileLocation = fileArray[ i ].location;
-			console.log( 'filenm', fileLocation );
-			galleryImgLocationArray.push( fileLocation )
-		}
-        /*const logEntry = new LogEntry({
-            placeName: req.body.placeName,
-            description: req.body.description,
-            photographer: req.body.photographer,
-            rating: req.body.rating,
-            visitDate: req.body.visitDate,
-            latitude: req.body.latitude,
-            longitude: req.body.longitude,
-            image: galleryImgLocationArray,
-            //image: req.file.location, 
-        });*/
-        //console.log('bloop', logEntry);
-        //const createdEntry = await logEntry.save();
-        //console.log(createdEntry);
-        //const createdEntry = await logentry.save();
-        //res.json(createdEntry);
-    
+router.patch('/avatar', requireAuth, upload.single("image"), changeAvatar);
+router.patch('/edit', requireAuth, updateProfile);
 
-    } catch (error){
-        if (error.name === 'Validation Error'){
-            res.status(422);        
-        }
-        console.log(`user regular err: ${error.name}`);
-        next(error);
-    } },
-  changeAvatar
-);
-router.put('/', requireAuth, updateProfile);
-
-router.delete('/avatar', requireAuth, removeAvatar);
+router.delete('/avatar', optionalAuth, removeAvatar);
 
 router.post('/:postId/bookmark', requireAuth, bookmarkPost);
 router.post('/:userId/follow', requireAuth, followUser);
