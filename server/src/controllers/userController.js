@@ -8,7 +8,8 @@ const socketHandler = require('../handlers/socketHandler');
 const ObjectId = require('mongoose').Types.ObjectId;
 const fs = require('fs');
 const crypto = require('crypto');
-
+const upload = require("../services/file-upload");
+const jwt = require('jsonwebtoken');
 const {
   validateEmail,
   validateFullName,
@@ -18,6 +19,25 @@ const {
 } = require('../utils/validation');
 //const { sendConfirmationEmail } = require('../utils/controllerUtils');
 
+const createTokenSendResponse = (user, res, next) => {
+  const payload = {
+    _id: user._id,
+      email: user.email,
+      username: user.username,
+      fullname: user.fullname,
+      avatar: user.avatar,
+    website: user.website,
+    bio: user.bio,
+
+  };
+  const token = jwt.sign(payload, 'shhhhh', { expiresIn: '2d'});
+  return res.json({
+    success: true,
+    token: token,
+    user: payload
+   });
+  }
+
 module.exports.retrieveUser = async (req, res, next) => {
   const { username } = req.params;
   const requestingUser = res.locals.user;
@@ -25,8 +45,8 @@ module.exports.retrieveUser = async (req, res, next) => {
   try {
     const user = await User.findOne(
       { username },
-      'username fullname avatar bio fullname _id logs logCount'
-    );
+      'username fullname avatar bio fullname _id logCount website'
+    ).populate({ path: "logs", select: "image thumbnail rating timestamp" });
     if (!user) {
       return res
         .status(404)
@@ -501,8 +521,18 @@ module.exports.changeAvatar = async (req, res, next) => {
       .status(400)
       .send({ error: 'Please provide the image to upload.' });
   }
-  console.log(req.files);
-  console.log(JSON.stringify(req.body));
+  console.log('changing avatar', req.file);
+  try {
+    await User.findByIdAndUpdate(req.user._id, {
+      avatar: req.file.location
+    });
+    res.send([req.file.location]);
+  } catch(e){
+    return res
+    .status(404)
+    .send({ error: 'Trouble updating your picture, try again later' });
+  }
+  
 
   /*cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -554,6 +584,7 @@ module.exports.removeAvatar = async (req, res, next) => {
 module.exports.updateProfile = async (req, res, next) => {
   const user = res.locals.user;
   const { fullName, username, website, bio, email } = req.body;
+  console.log('this is what we are updateing', fullName, username, website, bio, email);
   let confirmationToken = undefined;
   let updatedFields = {};
   try {
@@ -620,8 +651,9 @@ module.exports.updateProfile = async (req, res, next) => {
         updatedFields = { ...updatedFields, email, confirmed: false };
       }
     }
+    console.log(updatedFields);
     const updatedUser = await userDocument.save();
-    res.send(updatedFields);
+     createTokenSendResponse(updatedUser, res, next);
     /*if (email && email !== user.email) {
       sendConfirmationEmail(
         updatedUser.username,

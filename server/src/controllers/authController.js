@@ -24,7 +24,11 @@ const createTokenSendResponse = (user, res, next) => {
     _id: user._id,
       email: user.email,
       username: user.username,
+      fullname: user.fullname,
       avatar: user.avatar,
+    website: user.website,
+    bio: user.bio,
+
   };
   const token = jwt.sign(payload, 'shhhhh', { expiresIn: '2d'});
   return res.json({
@@ -70,6 +74,7 @@ module.exports.verifyJwt = (token) => {
 
 module.exports.requireAuth = async (req, res, next) => {
   let token;
+
   const { authorization } = req.headers;
   console.log("req auth here", authorization, req.headers);
   if (!authorization) return res.status(401).send({ error: 'Not authorized login.' });
@@ -94,7 +99,7 @@ module.exports.requireAuth = async (req, res, next) => {
     // Allow other middlewares to access the authenticated user details.
     res.locals.user = user;
     req.user = user;
-    console.log('made it done requireauth');
+    console.log('made it done requireauth', req.body, req.data);
     next();
   } catch (err) {
     return res.status(401).send({ error: `New error: ${err}` });
@@ -333,4 +338,15 @@ module.exports.changePassword = async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
+};
+
+module.exports.me = async (req, res, next) => { 
+  console.log('getting the users data', req.user);
+  const { avatar, username, fullname, email, _id, website, bio } = req.user;
+  res
+    .status(200)
+    .json({
+      success: true,
+      data: { avatar, username, fullname, email, _id, website, bio },
+    });
 };

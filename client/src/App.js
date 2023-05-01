@@ -8,6 +8,7 @@ import LogEntryForm from './components/form/LogEntryForm';
 import LoginPage from './pages/AuthPage/LoginPage';
 import RegisterPage from './pages/AuthPage/RegisterPage';
 import ProfilePage from './pages/Profile/ProfilePage';
+import EditProfilePage from './pages/EditProfile/EditProfilePage';
 import {
   BrowserRouter as Router,
   Switch,
@@ -30,7 +31,9 @@ class App extends React.Component{
                 <Route exact path='/' component={Map}/>
                 <Route exact path='/test' component={LoginPage} />
                 <Route exact path='/test2' component={RegisterPage} />
+                <Route path="/edit" component={EditProfilePage} />
                 <Route path="/:username" component={ProfilePage} />
+                
             </Switch>
           </Router>
         </div>

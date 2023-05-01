@@ -88,6 +88,7 @@ const Map = () => {
       <div >
         
        <NavigationBar/>
+      
       <ReactMapGl
       ref={myMap}
       {...viewport}
