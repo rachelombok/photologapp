@@ -39,12 +39,14 @@ const ProfilePage = () => {
         )
       }
       return (
-
+<div> <Button as={Link} to='/'>Back to Map</Button>
         <div className="profile-page grid">
+            
             <ProfileHeader profile={profile} />
             
 
     <ProfilePostSection logs={profile.logs}/>
+        </div>
         </div>
       )
     

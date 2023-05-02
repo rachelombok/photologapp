@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { listLogEntries } from './services/postService';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import LogEntryForm from './components/form/LogEntryForm';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import LoginPage from './pages/AuthPage/LoginPage';
 import RegisterPage from './pages/AuthPage/RegisterPage';
 import ProfilePage from './pages/Profile/ProfilePage';
@@ -16,7 +18,7 @@ import {
 } from "react-router-dom";
 import Map from './components/map/map.js';
 import { UserContext } from './context/UserContext';
-
+import '../src/css/misc/toast.css';
 class App extends React.Component{
   //const { user } = useContext(UserContext);
   static contextType = UserContext;
@@ -25,6 +27,7 @@ class App extends React.Component{
   render(){
     return(
         <div>
+          <ToastContainer autoClose={4000} closeButton={false} closeOnClick theme='dark' />
           {console.log(this.context)}
           <Router>
             <Switch>

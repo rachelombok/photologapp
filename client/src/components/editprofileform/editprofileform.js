@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 //import { UserContext } from '../../context/UserContext.js';
  import { listLogEntries, createLogEntry } from '../../services/postService.js';
  import { UserContext } from '../../context/UserContext.js';
+ import { toast } from "react-toastify";
  import { Form,FormControl,Button, Popover, OverlayTrigger, Tooltip, Modal, InputGroup, Row, Col, FloatingLabel } from 'react-bootstrap'
 import useInput from '../../hooks/useInput.js';
 import { updateUserProfile, updateUserAvatar } from '../../services/userService.js';
@@ -31,7 +32,9 @@ import { updateUserProfile, updateUserAvatar } from '../../services/userService.
 
     const handleEditProfile = async (e) =>{
         e.preventDefault();
-        
+        const nothingChanged = (fullname.value == user.fullname) && (username.value == user.username) && (bio.value == user.bio) && (website.value == user.website) && !newAvatar;
+        console.log(nothingChanged);
+        if (nothingChanged) return toast.info('Nothing to update', {hideProgressBar: true});
             try {
                 if (newAvatar){
                     let formData = new FormData();
@@ -54,8 +57,12 @@ import { updateUserProfile, updateUserAvatar } from '../../services/userService.
                 console.log('SUCESS!');
                 const redirectProfile = username.value ? username.value : user.username;
                 console.log('SUCESS!', redirectProfile);
+                toast.success('Profile updated!', {hideProgressBar: true});
                 history.push(`/${redirectProfile}`);
-            } catch(e){
+            } catch(err){
+                toast.error(err.message, {
+                    position: "top-right"
+                });
                 console.log(error.name, error.message);
             }
         
@@ -70,7 +77,9 @@ import { updateUserProfile, updateUserAvatar } from '../../services/userService.
     }
     // change fullname, password, avatar, bio, website
    return(
+    
     <Form onSubmit={handleEditProfile} encType='multipart/form-data'>
+        
         <div className="profile-page grid">
         <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
         <Form.Label column sm="2">

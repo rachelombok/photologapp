@@ -8,13 +8,18 @@ export const updateUserAvatar = async (formData, token) => {
     if (token) headers.Authorization = `Bearer ${token}`;
     console.log('wtfsetthis', headers, token);
     console.log('our data', formData);
-    await axios({
-        method: 'patch',
-        url: `${API_URL}/api/user/avatar`,
-        data: formData,
-        headers: {...headers}
-        });
-    return;
+    try {
+        await axios({
+            method: 'patch',
+            url: `${API_URL}/api/user/avatar`,
+            data: formData,
+            headers: {...headers}
+            });
+        return 'ok';
+    }catch(err){
+        throw new Error(err.response.data.error);
+    }
+    
     /*const response = await axios.patch(`${API_URL}/api/user/avatar`, formData , {
         headers: {...headers},
         data: formData
@@ -23,15 +28,17 @@ export const updateUserAvatar = async (formData, token) => {
 }
 
 export const getUserProfile = async (username, authToken) => {
-    const response = await axios.get(`${API_URL}/api/user/${username}`,
-    authToken && { headers: { authorization: authToken } }
-    );
-    /*const response = await axios.post('/api/auth/login/github', {
-        code,
-        state: sessionStorage.getItem('authState'),
-      });*/
-    console.log(response);
+    
+    try{
+        const response = await axios.get(`${API_URL}/api/user/${username}`,
+        authToken && { headers: { authorization: authToken } }
+        );
+        console.log(response);
     return response.data;
+    }catch(err){
+        throw new Error(err.response.data.error);
+    }
+    
 };
 
 export const updateUserProfile = async (data, token) => {
@@ -42,14 +49,19 @@ export const updateUserProfile = async (data, token) => {
     if (token) headers.Authorization = `Bearer ${token}`;
       console.log('we got a token', token, headers.Authorization);
       console.log('our data', data);
-      const response = await axios(`${API_URL}/api/user/edit`, {
-        method: 'patch',
-        headers: {...headers},
-        data: data
-      });
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      localStorage.setItem('jwtToken', response.data.token);
-      console.log("yazzzz updateprofile work in", JSON.stringify(response.data.user), response.data.token, localStorage);
-      return response.data;
+      try{
+        const response = await axios(`${API_URL}/api/user/edit`, {
+            method: 'patch',
+            headers: {...headers},
+            data: data
+          });
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          localStorage.setItem('jwtToken', response.data.token);
+          console.log("yazzzz updateprofile work in", JSON.stringify(response.data.user), response.data.token, localStorage);
+          return response.data;
+      }catch(err){
+        throw new Error(err.response.data.error);
+      }
+      
       
 }

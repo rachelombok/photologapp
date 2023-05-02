@@ -2,7 +2,9 @@ import React, { useState, useContext } from 'react';
  import { useForm } from 'react-hook-form';
 import { UserContext } from '../../context/UserContext.js';
  import { listLogEntries, createLogEntry } from '../../services/postService.js';
-import { Form, InputGroup, Button } from 'react-bootstrap';
+import { Form, InputGroup, Button, Spinner } from 'react-bootstrap';
+import { toast } from "react-toastify";
+
  const LogEntryForm = ({ location, onFormClose }) => {
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState('');
@@ -14,8 +16,9 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
 
    const onSubmit = async (data) => {
     try {
+      if (photo.length > 5) return toast.error('Max of 5 images', {hideProgressBar: true});
       setLoading(true);
-      
+      console.log('onsubmit', loading);
       console.log(data);
       console.log(location);
       let formData = new FormData();
@@ -41,13 +44,14 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
       console.log(data);
       console.log(formData);
       console.log(token);
+      setLoading(false);
       await createLogEntry(formData, token);
-      
+      toast.success('New entry added!', {hideProgressBar: true});
       onFormClose();
 
     } catch (error) {
       console.error(error);
-      setError(error.message);
+      toast.error(error.message, {position: "top-right"});
       setLoading(false);
     }
      /*
@@ -113,7 +117,7 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
      <Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
      <Form.Group controlId="formBasicEmail">
           <Form.Label>Place Name</Form.Label>
-          <Form.Control name='placeName' type="text" placeholder="Ex: Central Park" required ref={register}/>
+          <Form.Control name='placeName' type="text" placeholder="Ex: Central Park" required ref={register} maxLength={40}/>
         </Form.Group>
         <Form.Group>
           <Form.Label>Photographer</Form.Label>
@@ -142,10 +146,23 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
         </Form.Group>
         <Form.Group>
           <Form.Label>Visit Date</Form.Label>
-          <Form.Control name='visitDate' type="date" ref={register}/>
+          <Form.Control name='visitDate' type="date" ref={register} required/>
         </Form.Group>
-        <Button disabled={loading} type='submit' {...loading ? "Creating..." : "Created"} variant='flat' block size='lg'>
-            <b>Submit</b>
+        <Button disabled={loading} type='submit' className="d-grid gap-2" variant='flat' size='lg'>
+            {!loading ? 
+            <b>Submit</b> : 
+            <>
+            <Spinner
+          as="span"
+          animation="border"
+          size="sm"
+          role="status"
+          variant="light"
+          aria-hidden="true"
+        />{"    "}
+            <b>Creating...</b>
+            </>
+            }
 </Button>
       
        {/* 

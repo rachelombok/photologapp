@@ -26,7 +26,6 @@ export async function createLogEntry(entry, token) {
         },
   });*/
 
-  
   await axios({
     method: 'post',
     url: `${API_URL}/api/logs`,
@@ -65,15 +64,21 @@ export async function createLogEntry(entry, token) {
 export async function uploadImage(file) {
     const formData = new FormData();
     formData.append("image", file);
-    const response = await fetch(`${process.env.API_URL}/api/logs/image-upload`, {
-      method: 'POST',
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-      body: formData
-    });
-    console.log(response);
-    return response.data;
+    try{
+      const response = await fetch(`${process.env.API_URL}/api/logs/image-upload`, {
+        method: 'POST',
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+        body: formData
+      });
+      console.log(response);
+      return response.data;
+
+    }catch (e){
+      throw new Error(e.response.data.error);
+    }
+    
     
   }
 /*

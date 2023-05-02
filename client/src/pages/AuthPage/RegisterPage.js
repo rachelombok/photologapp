@@ -8,7 +8,7 @@ import {
   login,
 } from '../../services/authenticationService';
 import { UserContext } from '../../context/UserContext';
-
+import { toast } from "react-toastify";
 const RegisterPage = ({ login }) => {
   const history = useHistory();
   const { register, handleSubmit } = useForm();
@@ -59,8 +59,10 @@ const RegisterPage = ({ login }) => {
         const res = await registerUser(data.email, data.fullname, data.username, data.password);
         console.log(res);
         setUser(res.user);
+        toast.success(`📸 Welcome back ${res.user.fullname}!`, {hideProgressBar: true, progressClassName:'justshoot-notification-progress-bar'});
         history.push("/");
       } catch(error){
+        toast.error(error.message, {position: "top-right"});
         console.error(error);
       }
     }
