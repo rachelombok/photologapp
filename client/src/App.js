@@ -11,27 +11,38 @@ import LoginPage from './pages/AuthPage/LoginPage';
 import RegisterPage from './pages/AuthPage/RegisterPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import EditProfilePage from './pages/EditProfile/EditProfilePage';
+import MapPage from './pages/MapPage/MapPage';
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  useLocation
 } from "react-router-dom";
-import Map from './components/map/map.js';
+//import Map from './components/map/map.js';
 import { UserContext } from './context/UserContext';
 import '../src/css/misc/toast.css';
+
 class App extends React.Component{
   //const { user } = useContext(UserContext);
   static contextType = UserContext;
+
+
+  shouldComponentUpdate(){
+    //console.log('dontupdate man', useLocation().pathname);
+    return false;
+  }
   
   // this.context.X
+  // move all routes to a separate page ?
   render(){
     return(
         <div>
           <ToastContainer autoClose={4000} closeButton={false} closeOnClick theme='dark' />
           {console.log(this.context)}
+          
           <Router>
             <Switch>
-                <Route exact path='/' component={Map}/>
+                <Route exact path='/' component={MapPage}/>
                 <Route exact path='/test' component={LoginPage} />
                 <Route exact path='/test2' component={RegisterPage} />
                 <Route path="/edit" component={EditProfilePage} />

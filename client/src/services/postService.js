@@ -4,9 +4,13 @@ const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:133
 // https://photologapp.herokuapp.com
 // http://localhost:1337
 export async function listLogEntries(){
-    const response = await fetch(`${API_URL}/api/logs`);
+    try{
+      const response = await fetch(`${API_URL}/api/logs`);
     console.log(API_URL);
     return response.json();
+    }catch(e){
+      throw new Error(e.response.data.error);
+    }
 }
 
 export async function createLogEntry(entry, token) {
@@ -38,6 +42,7 @@ export async function createLogEntry(entry, token) {
     .catch(error => {
         console.log(error.response)
         console.log('didntworkedhere');
+        throw new Error(error.response.data.error);
     });
     
     /*.then(function (response) {

@@ -8,7 +8,7 @@ const ProfilePostSection = ({logs}) => {
             {console.log("log images", logs)}
             {logs?.map((log)=>(
                 <Col key={log._id}>
-                <Image src={log.image[0]} alt={log.rating} className='post-img' rounded >
+                <Image src={log.image[0]} alt={log.rating} className='post-img' rounded loading="lazy">
                     
                 </Image>
             </Col>

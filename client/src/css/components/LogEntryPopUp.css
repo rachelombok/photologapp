@@ -1,0 +1,16 @@
+.card-body {
+    padding: 10px 0 0 0;
+
+}
+
+.popup-carousel-img{
+    object-fit: cover;
+}
+
+.popup-description{
+    display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical; 
+  width: 230px;
+  overflow: hidden;
+}

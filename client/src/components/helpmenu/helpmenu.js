@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { NavDropdown, Button} from 'react-bootstrap'
 import { UserContext } from '../../context/UserContext';
 import { Link, useHistory } from 'react-router-dom';
@@ -16,8 +16,13 @@ const HelpMenu = () => {
         //
       };
 
+    useEffect(() => {
+        console.log('mount help menu')
+    }, [user])
+
     return (
         <>
+        {console.log('render help menu')}
         {user ? 
         <NavDropdown title={user.username} id="basic-nav-dropdown">
               <NavDropdown.Item as={Link} to={`/${user.username}`}>Profile</NavDropdown.Item>

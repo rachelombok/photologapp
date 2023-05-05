@@ -60,7 +60,7 @@ const LoginPage = () => {
         const res = await login(data.email, data.password);
         console.log(res);
         setUser(res.user);
-        toast.success(`📸 Welcome back ${res.user.fullname}!`, {hideProgressBar: true, progressClassName:'justshoot-notification-progress-bar'});
+        toast(`📸 Welcome back ${res.user.fullname}!`, {hideProgressBar: true, progressClassName:'justshoot-notification-progress-bar'});
         //localStorage.setItem("jwt",data.token)
         history.push("/");
       } catch(error){
@@ -109,11 +109,10 @@ const LoginPage = () => {
 
             
             <Form.Group controlId="formBasicEmail" className="btn-block" >
-          <Form.Label >Email address</Form.Label>
+          <Form.Label >Email address/Username</Form.Label>
           <Form.Control 
           name='email'
-          type="email" 
-          placeholder="Enter email" 
+          placeholder="Enter email or username" 
           size="lg"
           ref={register}
           //value={this.state.email}

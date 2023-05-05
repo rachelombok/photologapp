@@ -36,6 +36,7 @@ const Map = () => {
   
   
     useEffect(() => {
+      console.log("CALLING THIS????")
       getTravelEntries();
     }, []);
   
@@ -81,13 +82,8 @@ const Map = () => {
       console.log(event);
     }, []); */
   
-    
-  
     return (
       
-      <div >
-        
-       <NavigationBar/>
       
       <ReactMapGl
       ref={myMap}
@@ -96,7 +92,12 @@ const Map = () => {
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         onViewportChange={setViewport}
         onDblClick={markVisited}
+        reuseMaps={true}
+        maxZoom={10}
+        minZoom={2}
+        pitch={0}
       >
+       
         <MapMarker
           logEntries={logEntries}
           viewport={viewport}
@@ -144,13 +145,9 @@ const Map = () => {
   
       </ReactMapGl>
   
-    
-      </div>
-  
-  
       
     );
     
   };
 
-export default Map;
+export default React.memo(Map);
