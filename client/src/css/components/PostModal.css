@@ -1,0 +1,22 @@
+.carousel-post-img{
+    object-fit: contain;
+    max-height: 500px;
+}
+
+.comments-section{
+    max-height: 600px;
+    overflow-y: scroll;
+}
+
+#username > *{
+    display: inline;
+}
+
+.my-modal {
+    max-height: 200px;
+} 
+
+#post-comment-button{
+    position: absolute;
+    bottom: 0;
+}

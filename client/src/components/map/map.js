@@ -8,24 +8,29 @@ import MapMarker from './../mapmarker/mapmarker.js'
 import Geocoder from "react-map-gl-geocoder";
 import AddLocation from './../addlocation/addlocation.js';
 import NavigationBar from "../navigationbar/navigationbar";
+import { useLocation } from "react-router-dom"
 //import 'bootstrap/dist/css/bootstrap.min.css';
 const geostyle = {
   margin: '20px 20px 40px 40px',
   paddingTop: '30px'
 }
 
-const Map = () => {
+const Map = (props) => {
     const [logEntries, setLogEntries] = useState([]);
     const [showPopUp, setShowPopUp] = useState({});
     const [addLocation, setAddLocation] = useState(null);
     const [show, setShow] = useState(false);
+    const location = useLocation()
+    const long = location.long;
+    const lat = location.lat;
+    console.log('map props', location, lat, long);
   
     const [viewport, setViewport] = useState({
       width: "100vw",
       height: "100vh",
-      latitude: 37.7749,
-      longitude: -122.4194,
-      zoom: 3.5,
+      latitude: lat ? lat : 37.7749,
+      longitude: long ? long : -122.4194,
+      zoom: (long && lat) ? 5.5: 3.5,
     });
   
     const getTravelEntries = async () => {

@@ -29,6 +29,7 @@ const ProfilePage = () => {
             res.user.isMe = user._id == res.user._id ? true : false;
             setDeadend(false);
             setProfile(res.user);
+            
         }).catch((err) => setDeadend(true));
       }, [username]);
 // pass to profile header
@@ -44,7 +45,7 @@ const ProfilePage = () => {
             
             <ProfileHeader profile={profile} />
             
-
+        {console.log("fteched logs", profile.logs)}
     <ProfilePostSection logs={profile.logs}/>
         </div>
         </div>

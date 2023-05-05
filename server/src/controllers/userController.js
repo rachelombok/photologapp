@@ -46,7 +46,7 @@ module.exports.retrieveUser = async (req, res, next) => {
     const user = await User.findOne(
       { username },
       'username fullname avatar bio fullname _id logCount website'
-    ).populate({ path: "logs", select: "image thumbnail rating timestamp" });
+    ).populate({ path: "logs", select: "image thumbnail rating timestamp author placeName description photographer tags visitDate createdAt latitude longitude", options: { sort: { 'createdAt': -1}} });
     if (!user) {
       return res
         .status(404)
