@@ -5,8 +5,8 @@
       padding: 10px;
       border: 5px solid crimson;
     overflow-x: hidden;
-    overflow-y: visible;
-    height: 900px;
+    overflow-y: visible !important;
+    height: 100vh;
   }
   
   .profile-header{

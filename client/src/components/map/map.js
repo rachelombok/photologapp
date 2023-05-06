@@ -12,8 +12,12 @@ import { useLocation } from "react-router-dom"
 //import 'bootstrap/dist/css/bootstrap.min.css';
 const geostyle = {
   margin: '20px 20px 40px 40px',
-  paddingTop: '30px'
+  paddingTop: '30px',
+  color: 'teal',
+  fill: 'teal',
+  backgroundColor: 'teal'
 }
+
 
 const Map = (props) => {
     const [logEntries, setLogEntries] = useState([]);
@@ -126,6 +130,8 @@ const Map = (props) => {
               onViewportChange={setViewport}
               mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
               viewport={viewport}
+              showUserLocation={false}
+              minLength={3}
               //onSelected={this.onSelected}
               //queryParams={queryParams}
               //hideOnSelect={true}

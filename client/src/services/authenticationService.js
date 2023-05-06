@@ -109,20 +109,26 @@ export const registerUser = async (email, fullname, username, password) => {
  * @param {string} authToken A user's auth token
  */
 export const changePassword = async (oldPassword, newPassword, authToken) => {
+  const headers ={
+    'Content-Type': 'application/json'
+  };
+
+if (authToken) headers.Authorization = `Bearer ${authToken}`;
+const data= {
+  oldPassword: oldPassword,
+  newPassword: newPassword
+}
   try {
-    await axios.put(
-        `${API_URL}/api/auth/login`,
-      {
-        oldPassword,
-        newPassword,
-      },
-      {
-        headers: {
-          authorization: authToken,
-        },
-      }
-    );
+    
+    await axios({
+      method: 'patch',
+      url: `${API_URL}/api/auth/password`,
+      data: data,
+      headers: {...headers}
+      });
   } catch (err) {
+    console.log(err.response);
+    if (err.response.data?.message) throw new Error(err.response.data?.message);
     throw new Error(err.response.data.error);
   }
 };

@@ -110,9 +110,18 @@ module.exports.optionalAuth = async (req, res, next) => {
   const { authorization } = req.headers;
   if (authorization) {
     try {
-      const user = await this.verifyJwt(authorization);
+      //const user = await this.verifyJwt(authorization);
+      const decoded = jwt.verify(token, 'shhhhh'); //turn key to env secret
+      console.log('decode optional', decoded);
+      const user = await User.findById(decoded._id).select("-password");
+    console.log('found user optional', user);
+    if (!user) {
+      return next({ message: `No user found for ID ${decoded._id}` });
+    }
       // Allow other middlewares to access the authenticated user details.
       res.locals.user = user;
+      req.user = user;
+    console.log('made it done optionalauth', req.body, req.data);
     } catch (err) {
       return res.status(401).send({ error: err });
     }
@@ -313,8 +322,9 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
 };
 
 module.exports.changePassword = async (req, res, next) => {
+  console.log(req.body)
   const { oldPassword, newPassword } = req.body;
-  const user = res.locals.user;
+  const user = req.user;
   let currentPassword = undefined;
 
   try {
@@ -322,17 +332,18 @@ module.exports.changePassword = async (req, res, next) => {
     currentPassword = userDocument.password;
 
     const result = await bcrypt.compare(oldPassword, currentPassword);
+    console.log('track passowrds', result, currentPassword);
     if (!result) {
-      return res.status('401').send({
+      return res.status(401).send({
         error: 'Your old password was entered incorrectly, please try again.',
       });
     }
-
+    
     const newPasswordError = validatePassword(newPassword);
     if (newPasswordError)
       return res.status(400).send({ error: newPasswordError });
-
-    userDocument.password = newPassword;
+    const hashPassword = await bcrypt.hash(newPassword, 10);
+    userDocument.password = hashPassword;
     await userDocument.save();
     return res.send();
   } catch (err) {

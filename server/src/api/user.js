@@ -20,6 +20,16 @@ const {
   } = require('../controllers/userController');
 const { requireAuth, optionalAuth } = require('../controllers/authController');
 
+router.get('/', async (req, res, next) => {
+  try{
+      const users = await User.find();
+      res.json(users);
+      
+  } catch (error){
+      next(error);
+  }
+  
+});
 
 router.get('/suggested/:max?', requireAuth, retrieveSuggestedUsers);
 router.get('/:username', optionalAuth, retrieveUser);

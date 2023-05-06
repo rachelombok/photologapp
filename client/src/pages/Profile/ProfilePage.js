@@ -22,8 +22,8 @@ const ProfilePage = () => {
     const { user, setUser } = useContext(UserContext);
     const [deadend, setDeadend] = useState(false);
 
-    useEffect(() => {
-        getUserProfile(username, token).then((res) => {
+    useEffect(async() => {
+        await getUserProfile(username, token).then((res) => {
             console.log('setting profile', res)
             console.log(console.log(user._id, res.user._id))
             res.user.isMe = user._id == res.user._id ? true : false;
@@ -40,7 +40,7 @@ const ProfilePage = () => {
         )
       }
       return (
-<div> <Button as={Link} to='/'>Back to Map</Button>
+<div style={{overflow: 'visible !important'}}> <Button as={Link} to='/'>Back to Map</Button>
         <div className="profile-page grid">
             
             <ProfileHeader profile={profile} />

@@ -16,6 +16,6 @@ authRouter.post('/login/github', githubLoginAuthentication);
 authRouter.post('/login', loginAuthentication);
 authRouter.post('/register', register);
 authRouter.get('/me', requireAuth, me);
-authRouter.put('/password', requireAuth, changePassword);
+authRouter.patch('/password', requireAuth, changePassword);
 
 module.exports = authRouter;

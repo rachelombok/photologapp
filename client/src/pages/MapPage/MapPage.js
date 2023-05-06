@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Map from '../../components/map/map'
 import NavigationBar from '../../components/navigationbar/navigationbar';
+import '../../css/pages/MapPage.css';
 const MapPage = () => {
 
     useEffect(() => {
