@@ -13,14 +13,17 @@ import ProfileHeader from '../../components/profileheader/profileheader';
 import ProfilePostSection from '../../components/profilepostsection/profilepostsection';
 import '../../css/pages/ProfilePage.css';
 import pic from '../../assets/images/defaultavi.jpeg';
-const ProfilePage = () => {
+const ProfilePage = ({url}) => {
     // profile header
     // profile post content
-    const { username } = useParams();
+    console.log(url);
+    let { username } = useParams();
     const [profile, setProfile] = useState({});
     const token = localStorage.getItem('token'); // we can also usecontext isntead
     const { user, setUser } = useContext(UserContext);
     const [deadend, setDeadend] = useState(false);
+    if (!username) username = url;
+    console.log('arewegetting params?', username);
 
     useEffect(async() => {
         await getUserProfile(username, token).then((res) => {
@@ -31,7 +34,7 @@ const ProfilePage = () => {
             setProfile(res.user);
             
         }).catch((err) => setDeadend(true));
-      }, [username]);
+      }, [username, url]);
 // pass to profile header
 // localStorage.get('user')
       if (deadend){
@@ -40,7 +43,8 @@ const ProfilePage = () => {
         )
       }
       return (
-<div style={{overflow: 'visible !important'}}> <Button as={Link} to='/'>Back to Map</Button>
+<div style={{overflow: 'visible !important'}}> 
+<Button as={Link} to='/'>Back to Map</Button>
         <div className="profile-page grid">
             
             <ProfileHeader profile={profile} />

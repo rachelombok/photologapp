@@ -30,7 +30,7 @@ const Map = (props) => {
     console.log('map props', location, lat, long);
   
     const [viewport, setViewport] = useState({
-      width: "100vw",
+      width: "100vw", // window.innerWidth
       height: "100vh",
       latitude: lat ? lat : 37.7749,
       longitude: long ? long : -122.4194,

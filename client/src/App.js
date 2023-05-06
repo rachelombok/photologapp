@@ -18,6 +18,7 @@ import EditProfilePage from './pages/EditProfile/EditProfilePage';
 import MapPage from './pages/MapPage/MapPage';
 import NotFoundPage from './pages/NotFoundPage/NotFound';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
+import HomePage from './pages/HomePage/HomePage';
 import {
   BrowserRouter as Router,
   Switch,
@@ -51,9 +52,11 @@ class App extends React.Component{
                 <Route exact path='/' component={MapPage}/>
                 <Route exact path='/test' component={LoginPage} />
                 <Route exact path='/test2' component={RegisterPage} />
-                <Route exact path='/settings' component={SettingsPage} />
+                <Route exact path='/:anyUrl' component={HomePage}/>
+                {/*<Route exact path='/settings' component={SettingsPage} />
+                <Route exact path='/home' component={HomePage}/>
                 <Route path="/edit" component={EditProfilePage} />
-                <Route path="/:username" component={ProfilePage} />
+    <Route path="/:username" component={ProfilePage} />*/}
                 <Route path="/*" component={NotFoundPage} />
                 
             </Switch>
