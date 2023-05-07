@@ -28,10 +28,16 @@ export const updateUserAvatar = async (formData, token) => {
 }
 
 export const getUserProfile = async (username, authToken) => {
-    
+  const headers ={};
+
+if (authToken) headers.Authorization = `Bearer ${authToken}`;
     try{
-        const response = await axios.get(`${API_URL}/api/user/${username}`,
-        authToken && { headers: { authorization: authToken } }
+      console.log('heders', authToken)
+        const response = await axios(`${API_URL}/api/user/${username}`,
+        {
+          method: 'GET',
+          headers: {...headers }
+        } 
         );
         console.log(response);
     return response.data;
