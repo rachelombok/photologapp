@@ -19,7 +19,7 @@ const ProfilePage = ({url}) => {
     console.log(url);
     let { username } = useParams();
     const [profile, setProfile] = useState({});
-    const token = localStorage.getItem('token'); // we can also usecontext isntead
+    const token = localStorage.getItem('jwtToken'); // we can also usecontext isntead
     const { user, setUser } = useContext(UserContext);
     const [deadend, setDeadend] = useState(false);
     if (!username) username = url;
@@ -30,6 +30,7 @@ const ProfilePage = ({url}) => {
             console.log('setting profile', res)
             console.log(console.log(user._id, res.user._id))
             res.user.isMe = user._id == res.user._id ? true : false;
+            res.user.isFollowing = res.isFollowing;
             setDeadend(false);
             setProfile(res.user);
             

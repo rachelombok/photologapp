@@ -106,9 +106,15 @@ module.exports.requireAuth = async (req, res, next) => {
   }
 };
 
-module.exports.optionalAuth = async (req, res, next) => {
+module.exports.optionalAuth = async (req, res, next) => { // fix this func
+  let token;
   const { authorization } = req.headers;
+  if (authorization && authorization.startsWith("Bearer")) {
+    token = authorization.split(" ")[1];
+  }
+  console.log(authorization);
   if (authorization) {
+    console.log('yes auth op!');
     try {
       //const user = await this.verifyJwt(authorization);
       const decoded = jwt.verify(token, 'shhhhh'); //turn key to env secret
@@ -123,6 +129,7 @@ module.exports.optionalAuth = async (req, res, next) => {
       req.user = user;
     console.log('made it done optionalauth', req.body, req.data);
     } catch (err) {
+      // better return error fix
       return res.status(401).send({ error: err });
     }
   }

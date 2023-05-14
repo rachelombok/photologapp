@@ -1,14 +1,46 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavDropdown, Button, Card, Image} from 'react-bootstrap'
 import { UserContext } from '../../context/UserContext';
 import { Link, useHistory } from 'react-router-dom';
 import defaultavi from '../../assets/images/defaultavi.jpeg';
-
+import UserListModal from '../userlistmodal/userlistmodal';
+import { followUser } from '../../services/profileService';
+import { toast } from "react-toastify";
 const ProfileHeader = ({profile}) => {
+    const [showFollowersModal, setFollowersModal] = useState(false);
+    const [showFollowingModal, setFollowingModal] = useState(false);
+    const token = localStorage.getItem('jwtToken');
 // avatar, following, followers, post #
 // edit profile or following/follow button
 //  useContext is for checking if logged in or not
 // get(/:username) is for fetching user
+// dont allow click on following/follower unless authenticated
+
+const follow = async () => {
+    try{
+        // check if user exists, if not redirect to login page/register page
+        const alreadyFollowing = profile?.isFollowing;
+        await followUser(profile?._id, token);
+        //if (alreadyFollowing) toast.success('')
+        //toast.success('you followed them!');
+        window.location.reload(); //figure out how to refresh
+    }catch(err){
+        toast.error(err.message);
+    }
+}
+
+    useEffect(() => {
+        console.log("we'll need to update when a user follows someone");
+    }, [profile?.followersCount, profile?.followingCount, profile?.isFollowing])
+
+const toggleModal = (e) => {
+    // console.log(e.target.id, e);
+    //console.log(getDisplayLog(e.target.id));
+    //setModalLog(getDisplayLog(e.target.id));
+    setFollowersModal(false);
+    setFollowingModal(false);
+  };
+
 
     return (
         <>
@@ -47,27 +79,35 @@ const ProfileHeader = ({profile}) => {
       <Image src={profile?.avatar} className='avatar'/>
       <div>
         <Card.Title as='h2' style={{ margin: '10px 0 0 0' }}>{profile?.fullname}
+
         {profile.isMe ? (
             
             <Button style={{ margin: '10px' }} size='sm' href='/edit'>Edit Profile</Button>
             
-            ) : (
+            ) : profile?.isFollowing ? 
+            (
+                <Button style={{ margin: '10px' }} size='sm' onClick={follow}>Unfollow</Button>
+            )
+            : (
             
-                <Button style={{ margin: '10px' }} size='sm' disabled>Follow</Button>
+                <Button style={{ margin: '10px' }} size='sm' onClick={follow}>Follow</Button>
            
             )}
         </Card.Title>
         
         <Card.Subtitle className="mb-2 text-muted">@{profile?.username}</Card.Subtitle>
-        <Card.Link href="#">{profile?.logCount} posts</Card.Link>
-        <Card.Link href="#">0 followers</Card.Link>
-        <Card.Link href="#">0 following</Card.Link>
+        <Card.Link onClick={() => console.log('this link was clicked')}>{profile?.logCount} posts</Card.Link>
+        <Card.Link onClick={() => setFollowersModal(true)}>{profile?.followersCount} followers</Card.Link>
+        <Card.Link onClick={() => setFollowingModal(true)}>{profile?.followingCount} following</Card.Link>
+        
         <Card.Text>
         {profile?.bio}
          </Card.Text>
         <Card.Link href={profile?.website}>{profile?.website}</Card.Link><br></br>
         
         </div>
+        {showFollowersModal && profile?.followersCount ? <UserListModal userId={profile?._id} token={token} userListName={'Followers'} userListCount={profile?.followersCount} show={showFollowersModal} setShow={setFollowersModal}/> : null}
+        {showFollowingModal && profile?.followingCount ? <UserListModal userId={profile?._id} token={token} userListName={'Following'} userListCount={profile?.followersCount} show={showFollowingModal} setShow={setFollowingModal}/> : null}
       </Card.Body>
     </Card>
         </>

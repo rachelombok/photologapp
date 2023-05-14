@@ -17,6 +17,7 @@ const PostModal = ({modal, setModal, logEntry}) => {
     // pass logentry to Modal, check if on profile or on map, also send profile info
     // only update if logentry or show prop changes
     // new endpoint to just get avatar / username
+    // if displaying modal on Map page, dont put Link to "see this on map"
 
     // DISPLAY
     // carousel of all images (lazy loaded) ✅

@@ -17,6 +17,7 @@ const {
   validateBio,
   validateWebsite,
 } = require('../utils/validation');
+const { request } = require('http');
 //const { sendConfirmationEmail } = require('../utils/controllerUtils');
 
 const createTokenSendResponse = (user, res, next) => {
@@ -40,19 +41,19 @@ const createTokenSendResponse = (user, res, next) => {
 
 module.exports.retrieveUser = async (req, res, next) => {
   const { username } = req.params;
-  const requestingUser = res.locals.user;
+  const requestingUser = req.user;
   //console.log('req user', res, req);
   try {
     const user = await User.findOne(
       { username },
-      'username fullname avatar bio fullname _id logCount website'
+      'username fullname avatar bio fullname _id logCount website followingCount followersCount'
     ).populate({ path: "logs", select: "image thumbnail rating timestamp author placeName description photographer tags visitDate createdAt latitude longitude", options: { sort: { 'createdAt': -1}} });
     if (!user) {
       return res
         .status(404)
         .send({ error: 'Could not find a user with that username.' });
     }
-
+    console.log(user);
     /*const posts = await Post.aggregate([
       {
         $facet: {
@@ -120,7 +121,7 @@ module.exports.retrieveUser = async (req, res, next) => {
           postCount: '$postCount.postCount',
         },
       },
-    ]);
+    ]);*/
 
     const followersDocument = await Followers.findOne({
       user: ObjectId(user._id),
@@ -128,20 +129,30 @@ module.exports.retrieveUser = async (req, res, next) => {
 
     const followingDocument = await Following.findOne({
       user: ObjectId(user._id),
-    });*/
+    });
     //user.isMe = req.user.id === user._id.toString();
+    console.log(`getting following for ${user.fullname}`, followersDocument.followers, followingDocument.following);
     user.isMe = res.locals.user === user._id.toString();
-
+    //user.followingLength =followingDocument.following?.length;
+    //user.followerLength = followersDocument.followers?.length;
+    user.isFollowing = requestingUser ? !!followersDocument.followers?.find((follower) => String(follower.user) === String(requestingUser._id)) : false;
+    console.log('is following in retirve ia', user.isFollowing, requestingUser);
+    // user if profile
+    /*user.isFollowing = requestingUser
+    ? !!followersDocument.followers.find(
+        (follower) => String(follower.user) === String(requestingUser._id)
+      )
+    : false;*/
     return res.send({
       user,
-      //followers: followersDocument.followers.length,
-      //following: followingDocument.followers.length,
+      followers: followersDocument.followers?.length,
+      following: followingDocument.following?.length,
       // Check if the requesting user follows the retrieved user
-      /*isFollowing: requestingUser
-        ? !!followersDocument.followers.find(
+      isFollowing: requestingUser
+        ? !!followersDocument.followers?.find(
             (follower) => String(follower.user) === String(requestingUser._id)
           )
-        : false,*/
+        : false,
       //posts: posts[0],
     });
   } catch (err) {
@@ -245,26 +256,33 @@ module.exports.bookmarkPost = async (req, res, next) => {
 };
 
 module.exports.followUser = async (req, res, next) => {
-  const { userId } = req.params;
-  const user = res.locals.user;
+  console.log('starting to follow user');
+  
+  const { userId } = req.params; // id of user we are trying to follow
+  const user = res.locals.user; // id of user making the request
 
   try {
     const userToFollow = await User.findById(userId);
+    
     if (!userToFollow) {
       return res
         .status(400)
         .send({ error: 'Could not find a user with that id.' });
     }
-
+    console.log(`${user.fullname} is trying to follow ${userToFollow.fullname}`);
+    // rachel follows someonelese 
+    // rachel = user._id
+    //someoneelse = userId
     const followerUpdate = await Followers.updateOne(
       { user: userId, 'followers.user': { $ne: user._id } },
       { $push: { followers: { user: user._id } } }
-    );
+    ); // add Rachel to someoneleses followers 'list'
 
     const followingUpdate = await Following.updateOne(
       { user: user._id, 'following.user': { $ne: userId } },
       { $push: { following: { user: userId } } }
     );
+    // add someone else to Rachels following 'list
 
     if (!followerUpdate.nModified || !followingUpdate.nModified) {
       if (!followerUpdate.ok || !followingUpdate.ok) {
@@ -274,26 +292,45 @@ module.exports.followUser = async (req, res, next) => {
       }
       // Nothing was modified in the above query meaning that the user is already following
       // Unfollow instead
+
+      // Rachel = user._id,
       const followerUnfollowUpdate = await Followers.updateOne(
         {
           user: userId,
         },
         { $pull: { followers: { user: user._id } } }
-      );
+      ); // remove Rachel from someone else followers list
 
       const followingUnfollowUpdate = await Following.updateOne(
         { user: user._id },
         { $pull: { following: { user: userId } } }
-      );
+      ); // remove someone else from Rachels following list
       if (!followerUnfollowUpdate.ok || !followingUnfollowUpdate.ok) {
         return res
           .status(500)
           .send({ error: 'Could not follow user please try again later.' });
       }
+      await User.findByIdAndUpdate(userId, {
+        $pull: { followers: user._id },
+        $inc: { followersCount: -1 },
+      });
+      await User.findByIdAndUpdate(user._id, {
+        $pull: { following: userId },
+        $inc: { followingCount: -1 },
+      });
+      
       return res.send({ success: true, operation: 'unfollow' });
     }
 
-    const notification = new Notification({
+    await User.findByIdAndUpdate(userId, {
+      $push: { followers: user._id },
+      $inc: { followersCount: 1 },
+    });
+    await User.findByIdAndUpdate(user._id, {
+      $push: { following: userId },
+      $inc: { followingCount: 1 },
+    });
+   /* const notification = new Notification({
       notificationType: 'follow',
       sender: user._id,
       receiver: userId,
@@ -317,7 +354,7 @@ module.exports.followUser = async (req, res, next) => {
       receiver: userId,
       date: notification.date,
       isFollowing: !!isFollowing,
-    });
+    });*/
 
     res.send({ success: true, operation: 'follow' });
   } catch (err) {
@@ -336,7 +373,110 @@ module.exports.followUser = async (req, res, next) => {
  * @returns {array} Array of users
  */
 const retrieveRelatedUsers = async (user, userId, offset, followers) => {
-  const pipeline = [
+  const reqUserFollowing = await Following.findOne(
+    { user: user._id },
+    'user following'
+  );
+  if (followers){
+    const followersDocument = await Followers.findOne(
+      { user: userId },
+      'user followers'
+    ).populate({ path: 'followers.user', select: 'username avatar fullname isFollowing'});
+    //console.log(followersDocument, reqUserFollowing.following);
+    const followersList = {user: followersDocument.user, users: []};
+    followersDocument.followers.forEach((followerUser)=>{
+    
+      // if followed userid is in my following list, isfollowing is true
+      followerUser.user.isFollowing = false;
+      if (reqUserFollowing.following.find((follower) => String(follower.user) == String(followerUser.user._id))){
+        followerUser.user.isFollowing = true;
+      }
+      followersList.users.push({
+        user: {
+          _id: followerUser.user._id,
+          username: followerUser.user.username,
+          isFollowing: followerUser.user.isFollowing,
+          avatar: followerUser.user.avatar,
+          fullname: followerUser.user.fullname
+        }
+      })
+      
+    });
+    return followersList;
+  } else{
+    const followingDocument = await Following.findOne(
+      { user: userId },
+      'user following'
+    ).populate({ path: 'following.user', select: 'username avatar fullname isFollowing'});
+    console.log('following doc', followingDocument, userId, followingDocument.following);
+    const followingList = {user: followingDocument.user, users: []};
+    followingDocument.following.forEach((followingUser)=>{
+    
+      // if followed userid is in my following list, isfollowing is true
+      followingUser.user.isFollowing = false;
+      if (reqUserFollowing.following.find((follower) => String(follower.user) == String(followingUser.user._id))){
+        followingUser.user.isFollowing = true;
+      }
+      followingList.users.push({
+        user: {
+          _id: followingUser.user._id,
+          username: followingUser.user.username,
+          isFollowing: followingUser.user.isFollowing,
+          avatar: followingUser.user.avatar,
+          fullname: followingUser.user.fullname
+        }
+      })
+      
+    });
+    return followingList;
+  }
+  
+  
+  
+  //ollowersDocument.justbc = "YPE";
+ // user.isFollowing = requestingUser ? !!followersDocument.followers?.find((follower) => String(follower.user) === String(requestingUser._id)) : false;
+    
+  /*if (followers){
+    console.log('we are looking for dollowers', userId);
+    //const followersList = await Followers.findOne({ userId }, 'user');
+    const followersDocument = await Followers.findOne(
+      { user: userId },
+      'user followers'
+    ).populate({ path: 'followers', populate: {
+      path: 'user',
+      select: 'fullname avatar username'
+    } });
+    if (!followersDocument) {
+      console.log('empty list', followersDocument);
+      return;
+    }
+    console.log('did i find the follow list?', followersDocument.followers);
+    const followedUsers = new Set();
+    // user.isFollowing = requestingUser ? !!followersDocument.followers?.find((follower) => String(follower.user) === String(requestingUser._id)) : false;
+    
+    followersDocument.followers.forEach((followerUser)=>{
+      followerUser.isFollowing = false;
+      // console.log(followerUser.user._id, usr)
+      if(String(followerUser.user._id) === String(user._id)) {
+        followerUser.isFollowing = true;
+      }
+      console.log('add the field?',user, followerUser);
+    });
+    return followersDocument;
+  }
+  else {
+    const followinggDocument = await Following.findOne(
+      { user: userId },
+      'user following'
+    ).populate({ path: 'following', populate: {
+      path: 'user',
+      select: 'fullname avatar username'
+    } });
+  }*/
+
+  
+  
+  /*const pipeline = [
     {
       $match: { user: ObjectId(userId) },
     },
@@ -367,7 +507,7 @@ const retrieveRelatedUsers = async (user, userId, offset, followers) => {
     {
       $lookup: {
         from: 'followers',
-        localField: 'users._id',
+        localField: 'user._id',
         foreignField: 'user',
         as: 'userFollowers',
       },
@@ -377,16 +517,16 @@ const retrieveRelatedUsers = async (user, userId, offset, followers) => {
         'users._id': true,
         'users.username': true,
         'users.avatar': true,
-        'users.fullName': true,
         userFollowers: true,
       },
     },
   ];
 
+
   const aggregation = followers
     ? await Followers.aggregate(pipeline)
     : await Following.aggregate(pipeline);
-
+  console.log('aggie', aggregation[0].users);
   // Make a set to store the IDs of the followed users
   const followedUsers = new Set();
   // Loop through every follower and add the id to the set if the user's id is in the array
@@ -404,15 +544,17 @@ const retrieveRelatedUsers = async (user, userId, offset, followers) => {
   aggregation[0].users.forEach((followingUser) => {
     followingUser.isFollowing = followedUsers.has(String(followingUser._id));
   });
+console.log('getting followerspls', aggregation, followedUsers);
+  return aggregation[0].users;*/
 
-  return aggregation[0].users;
+  
 };
 
 module.exports.retrieveFollowing = async (req, res, next) => {
   const { userId, offset = 0 } = req.params;
   const user = res.locals.user;
   try {
-    const users = await retrieveRelatedUsers(user, userId, offset);
+    const users = await retrieveRelatedUsers(user, userId, offset, false);
     return res.send(users);
   } catch (err) {
     next(err);
@@ -421,12 +563,13 @@ module.exports.retrieveFollowing = async (req, res, next) => {
 
 module.exports.retrieveFollowers = async (req, res, next) => {
   const { userId, offset = 0 } = req.params;
-  const user = res.locals.user;
+  const user = req.user;
 
   try {
     const users = await retrieveRelatedUsers(user, userId, offset, true);
     return res.send(users);
   } catch (err) {
+    console.log('we failed here11');
     next(err);
   }
 };
