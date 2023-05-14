@@ -19,8 +19,10 @@ const ProfileHeader = ({profile}) => {
 const follow = async () => {
     try{
         // check if user exists, if not redirect to login page/register page
+        const alreadyFollowing = profile?.isFollowing;
         await followUser(profile?._id, token);
-        toast.success('you followed them!');
+        //if (alreadyFollowing) toast.success('')
+        //toast.success('you followed them!');
         window.location.reload(); //figure out how to refresh
     }catch(err){
         toast.error(err.message);
