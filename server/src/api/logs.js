@@ -2,6 +2,7 @@ const { Router } = require('express');
 
 const router = Router();
 const LogEntry = require('../models/LogEntry');
+const LogEntryLikes = require('../models/LogEntryLikes');
 const upload = require("../services/file-upload");
 const {
     requireAuth,
@@ -10,7 +11,7 @@ const {
 const User = require('../models/User');
 //const fs = require('fs');
 //const path = require('path');
-const { retrieveComments, createComment, deleteComment } = require('../controllers/logController');
+const { retrieveComments, createComment, deleteComment, toggleLike, retrieveLogEntryLikes } = require('../controllers/logController');
 
 router.get('/', async (req, res, next) => {
     try{
@@ -23,6 +24,9 @@ router.get('/', async (req, res, next) => {
     }
     
 });
+
+router.post('/:logId/likes', requireAuth, toggleLike);
+router.get('/:logId/likes', retrieveLogEntryLikes);
 
 router.post('/:logId/comments', requireAuth, createComment);
 router.get('/:logId/comments', retrieveComments);
@@ -59,9 +63,14 @@ router.post('/', requireAuth, upload.array("image", 5), async (req, res, next) =
             $push: { logs: logEntry._id },
             $inc: { logCount: 1 },
           });
+        const logEntryLikes = new LogEntryLikes({
+            logEntry: logEntry._id,
+          });
         console.log('bloop', logEntry);
+        
         const createdEntry = await logEntry.save();
         console.log(createdEntry);
+        await logEntryLikes.save();
         //const createdEntry = await logentry.save();
         res.json(createdEntry);
     

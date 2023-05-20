@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
    const { register, handleSubmit } = useForm();
    const { user } = useContext(UserContext);
    const token = localStorage.getItem('jwtToken');
+   // add tags n rating input too, then change dis play of these in postmodal
 
    const onSubmit = async (data) => {
     try {

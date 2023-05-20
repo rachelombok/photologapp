@@ -132,6 +132,34 @@ export const getComments = async (logId) => {
     throw new Error(err);
   }
 };
+
+export async function toggleLike(logId, token) {
+  const headers = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+  try{
+    const response = await axios(`${API_URL}/api/logs/${logId}/likes`, {
+      method: 'POST',
+      headers: {...headers}
+    });
+    console.log(response);
+    return response.data;
+
+  }catch (e){
+    console.log(e.response);
+    throw new Error(e.response.data.error);
+  }
+}
+
+export const getLogEntryLikes = async (logId) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/logs/${logId}/likes`
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
 /*
 export async function uploadImage(file) {
   const formData = new FormData();

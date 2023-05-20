@@ -1,5 +1,6 @@
 const Comment = require('../models/Comment');
 const LogEntry = require('../models/LogEntry');
+const LogEntryLikes = require('../models/LogEntryLikes');
 const socketHandler = require('../handlers/socketHandler');
 const ObjectId = require('mongoose').Types.ObjectId;
 const fs = require('fs');
@@ -16,6 +17,7 @@ const {
 const { request } = require('http');
 
 // create comment, retrieve comments
+// toggle like, get likes
 
 module.exports.createComment = async (req, res, next) => {
   console.log("comment body", req.body);
@@ -108,6 +110,57 @@ module.exports.deleteComment = async (req, res, next) => {
   }
 }
 
+module.exports.toggleLike = async (req, res, next) => {
+  const { logId } = req.params;
+  const user = req.user;
+
+  try{
+    const logEntry = await LogEntry.findById(logId);
+    if (!logEntry) {
+      return next({
+        message: `No post found for id ${logId}`,
+        statusCode: 404,
+      });
+    }
+    // Update the vote array if the user has not already liked the post
+    const logEntryLikeUpdate = await LogEntryLikes.updateOne(
+      { logEntry: logId, 'likes.author': { $ne: user._id } },
+      {
+        $push: { likes: { author: user._id } },
+      }
+    );
+    if (!logEntryLikeUpdate.nModified) {
+      if (!logEntryLikeUpdate.ok) {
+        return res.status(500).send({ error: 'Could not vote on the post. :(' });
+      }
+      // Nothing was modified in the previous query meaning that the user has already liked the post
+      // Remove the user's like
+      const logEntryDislikeUpdate = await LogEntryLikes.updateOne(
+        { logEntry: logId },
+        { $pull: { likes: { author: user._id } } }
+      );
+
+      if (!logEntryDislikeUpdate.nModified) {
+        return res.status(500).send({ error: 'Could not vote on the post. :)' });
+      }
+    }
+    
+    if (logEntry.likes.includes(req.user._id)) {
+      const index = logEntry.likes.indexOf(req.user._id);
+      logEntry.likes.splice(index, 1);
+      logEntry.likesCount = logEntry.likesCount - 1;
+      await logEntry.save();
+    } else {
+      logEntry.likes.push(req.user._id);
+      logEntry.likesCount = logEntry.likesCount + 1;
+      await logEntry.save();
+    }
+    return res.send({ success: true });
+  } catch(e){
+    next(err);
+  }
+}
+
 module.exports.retrieveComments = async (req, res, next) => {
   const { logId } = req.params;
   try {
@@ -115,6 +168,19 @@ module.exports.retrieveComments = async (req, res, next) => {
     const comments = await Comment.find({ logEntry: logId }).populate({ path: 'author', select: 'username avatar'});
     console.log(comments);
     return res.send(comments);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.retrieveLogEntryLikes = async (req, res, next) => {
+  const { logId } = req.params;
+  try {
+    //const comments = await retrieveComments(postId, offset, exclude);
+    const likes = await LogEntryLikes.findOne({ logEntry: logId }).populate({ path: 'likes.author', select: 'username avatar'});
+    console.log(likes.likes);
+    
+    return res.send(likes.likes);
   } catch (err) {
     next(err);
   }

@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const logEntryLikesSchema = new Schema({
-    post: {
+    logEntry: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Post',
+        ref: 'LogEntry',
     },
     likes: [
         {

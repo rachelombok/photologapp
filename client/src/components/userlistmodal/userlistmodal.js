@@ -47,7 +47,6 @@ const UserListModal = ({ userId, token, userListName, userListCount, show, setSh
             <div>{user.user.username} and they are following? {user.user.isFollowing ? 'true' : 'false'} is me? {reqUserName == user.user.username ? 'yes its me' : 'no its some else'}</div>
             </>))}
             </Modal.Body>
-                {console.log()}
        
         </Modal>
     );

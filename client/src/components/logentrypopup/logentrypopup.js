@@ -84,7 +84,7 @@ const LogEntryPopUp = ({logEntry, setShowPopUp}) => {
       </Card.Body>
             </Card>
 
-            {modal ? <PostModal modal={modal} setModal={setModal} logEntry={logEntry}/> : null }
+            {modal ? <PostModal modal={modal} setModal={setModal} logEntry={logEntry} fromMap={true}/> : null }
         </Popup>
     );
 };

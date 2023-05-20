@@ -5,14 +5,22 @@ import { Link, useHistory } from 'react-router-dom';
 import defaultavi from '../../assets/images/defaultavi.jpeg';
 import '../../css/components/PostModal.css';
 import { calculateTimeDifference, formatDateString, calculateCommentTimeDifference } from '../../utils/logEntry';
-import {Rating, Avatar} from '@mui/material';
+import {Rating, Avatar, AvatarGroup } from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { toast } from "react-toastify";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import IconButton from '@mui/material/IconButton';
 import CommentForm from '../commentform/commentform';
-import { getComments } from '../../services/postService';
+import { getComments, getLogEntryLikes, toggleLike } from '../../services/postService';
 
-const PostModal = ({modal, setModal, logEntry}) => {
+const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
     const [comments, setComments] = useState([]);
-    const [refetch, setRefetch] = useState(false)
+    const [likes, setLikes] = useState([]);
+    const [isLogLiked, setIsLogLiked] = useState(false);
+    const [refetch, setRefetch] = useState(false);
+    const { user } = useContext(UserContext);
     console.log('PostModal rendered', logEntry);
+    const token = localStorage.getItem('jwtToken');
     const date = new Date();
     //modal, setModal,
     
@@ -24,6 +32,8 @@ const PostModal = ({modal, setModal, logEntry}) => {
     // new endpoint to just get avatar / username
     // if displaying modal on Map page, dont put Link to "see this on map"
     // dont allow someone to comment if not logged in 
+    // fetch who liked the post, use refetch here too
+    // list of who liked, userlistmodal
 
     // DISPLAY
     // carousel of all images (lazy loaded) ✅
@@ -38,19 +48,66 @@ const PostModal = ({modal, setModal, logEntry}) => {
     // add key to carousel.item
     // add avatar to each comment
     // add href link to username subtitle, no underline or blue color
+    // if comment section is empty, put an 'add your comment' message
+    // add border to like list avatars
+
 
     const toggleModal = () => {
         setModal(!modal);
+      };
+    
+    const handleLike = async (e) =>{
+        e.preventDefault();
+        
+        try {
+            //const res = await createComment(logId, commentMessage.value, token);
+            const res = await toggleLike(logEntry._id, token);
+            toast.success("liked!");
+            setIsLogLiked(!isLogLiked);
+            setRefetch(true);
+        } catch(e){
+            setRefetch(false);
+            toast.error(e.message);
+        }
+        // wrap this all around try n catch
+        // also grey out submit button if no comment
+        // grey out if only spaces, strip comment message
+
+        
+          // call function to create comment
+          // toast success
+          //
+    }
+
+    const isLiked = () => {
+        let found = false;
+        if (user && token && likes){
+            likes.forEach((like)=>{
+                if (like.author._id == user._id){
+                    console.log('found our user in list of likes!');
+                    found = true
+                    setIsLogLiked(true);
+                    setRefetch(false);
+                    return;
+                }
+            })
+        }
+        if (!found){
+            console.log('shouldnt make it here if user has liked')
+            setIsLogLiked(false);
+        }
       };
 
     useEffect( async () => {
         // retrieve comments here w logId
         const commentList = await getComments(logEntry._id);
-    
-        console.log('only mount this once when clicked', commentList);
+        const likeList = await getLogEntryLikes(logEntry._id);
+        console.log('only mount this once when clicked', commentList, likeList);
         setComments(commentList);
+        setLikes(likeList);
+        isLiked();
         setRefetch(false);
-    }, [comments.length, refetch])
+    }, [comments.length, likes?.length, refetch])
 
     return(
         <Modal show={modal} onHide={toggleModal} size='lg' >
@@ -90,8 +147,7 @@ const PostModal = ({modal, setModal, logEntry}) => {
                     Description
                 </Card.Title>
                 {logEntry.description} 
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-            <Card.Title>
+                  <Card.Title>
                         Tags
             </Card.Title>
             <Button variant="outline-dark">#tag1</Button>
@@ -106,9 +162,29 @@ const PostModal = ({modal, setModal, logEntry}) => {
             
             <Card.Title>Rating</Card.Title>
             <Rating name="read-only" value={logEntry.rating} readOnly />
-            <Link to={{ pathname: "/", lat: logEntry.latitude, long: logEntry.longitude  }}> See this post on the map</Link>
-            </Col>
+            {!fromMap ? <Link to={{ pathname: "/", lat: logEntry.latitude, long: logEntry.longitude  }}> See this post on the map</Link> : null}
+            
+            
+            <Card.Title>Liked By</Card.Title>
+            <div>
+           {likes ? (
+            <AvatarGroup max={10} appearance="stack" sx={{display: 'inline-flex'}}>
+                
+                {likes.map((like) => (
+                    <Avatar src={`${like.author.avatar}`}/>
+                ))}
+            </AvatarGroup>
+           ) : null
 
+           }</div>
+            {/*{likes ? 
+            ( <AvatarGroup max={5}>
+                {likes.likes.map((like) => (
+                    <Avatar src={`${like.author.avatar}`}/>
+                ))}
+             </AvatarGroup>) : null }
+            </Col>*/}
+</Col>
             
             <Col xs={6} md={4} >
             <Card.Title>Comments</Card.Title>
@@ -145,7 +221,19 @@ const PostModal = ({modal, setModal, logEntry}) => {
 </Modal.Body>
 
 <Modal.Footer>
-
+    {console.log('likestatus', isLogLiked)}
+                <p className='mr-auto'>
+                <IconButton onClick={handleLike}>
+                    {isLogLiked ? (
+                        <FavoriteIcon sx={{ color: '#ba53f1'}}/>
+                    ) : (
+                        
+                    <FavoriteBorderIcon sx={{ color: '#ba53f1'}}/>
+                    
+                    ) }
+                    </IconButton>
+                    {isLogLiked ? 'You liked this.' : ''}
+                    </p>
     <small>{calculateTimeDifference(logEntry.createdAt, date)}</small>
 </Modal.Footer>
         </Modal>
