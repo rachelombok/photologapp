@@ -130,6 +130,7 @@ module.exports.retrieveUser = async (req, res, next) => {
     const followingDocument = await Following.findOne({
       user: ObjectId(user._id),
     });
+    
     //user.isMe = req.user.id === user._id.toString();
     console.log(`getting following for ${user.fullname}`, followersDocument.followers, followingDocument.following);
     user.isMe = res.locals.user === user._id.toString();

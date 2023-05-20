@@ -86,6 +86,52 @@ export async function uploadImage(file) {
     
     
   }
+
+export async function createComment(logId, message, token) {
+  let data = new FormData();
+  data.append('message', message);
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  try{
+    const response = await axios(`${API_URL}/api/logs/${logId}/comments`, {
+      method: 'POST',
+      headers: {...headers},
+      data: { message }
+    });
+    console.log(response);
+    return response.data;
+
+  }catch (e){
+    console.log(e.response);
+    throw new Error(e.response.data.error);
+  }
+}
+
+export const deleteComment = async (commentId, logId, token) => {
+  const headers = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    await axios(`${API_URL}/api/logs/${commentId}/${logId}/comments`, {
+      method: 'DELETE',
+      headers: {...headers},
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export const getComments = async (logId) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/logs/${logId}/comments`
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
 /*
 export async function uploadImage(file) {
   const formData = new FormData();

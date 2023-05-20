@@ -9,6 +9,7 @@ const LogEntryPopUp = ({logEntry, setShowPopUp}) => {
     const [modal, setModal] = useState(false);
     // new Date().toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) 
 // "Friday, Jul 2, 2021"
+// add key to carousels
     const date = new Date();
 
     const toggleModal = () => {

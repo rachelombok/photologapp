@@ -10,10 +10,12 @@ const {
 const User = require('../models/User');
 //const fs = require('fs');
 //const path = require('path');
+const { retrieveComments, createComment, deleteComment } = require('../controllers/logController');
 
 router.get('/', async (req, res, next) => {
     try{
         const entries = await LogEntry.find();
+        //populate commwents here
         res.json(entries);
         
     } catch (error){
@@ -21,6 +23,10 @@ router.get('/', async (req, res, next) => {
     }
     
 });
+
+router.post('/:logId/comments', requireAuth, createComment);
+router.get('/:logId/comments', retrieveComments);
+router.delete('/:commentId/:logId/comments', requireAuth, deleteComment);
 
 router.post('/', requireAuth, upload.array("image", 5), async (req, res, next) => {
     console.log('did we make tit after auth?');

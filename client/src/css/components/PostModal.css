@@ -6,10 +6,11 @@
 .comments-section{
     max-height: 600px;
     overflow-y: scroll;
+    padding-bottom: 30px;
 }
 
 #username > *{
-    display: inline;
+    display: inline-flex;
 }
 
 .my-modal {

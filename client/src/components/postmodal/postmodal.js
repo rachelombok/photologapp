@@ -4,10 +4,15 @@ import { UserContext } from '../../context/UserContext';
 import { Link, useHistory } from 'react-router-dom';
 import defaultavi from '../../assets/images/defaultavi.jpeg';
 import '../../css/components/PostModal.css';
-import { calculateTimeDifference, formatDateString } from '../../utils/logEntry';
-import {Rating} from '@mui/material';
+import { calculateTimeDifference, formatDateString, calculateCommentTimeDifference } from '../../utils/logEntry';
+import {Rating, Avatar} from '@mui/material';
+import CommentForm from '../commentform/commentform';
+import { getComments } from '../../services/postService';
+
 const PostModal = ({modal, setModal, logEntry}) => {
-    console.log('PostModal rendered');
+    const [comments, setComments] = useState([]);
+    const [refetch, setRefetch] = useState(false)
+    console.log('PostModal rendered', logEntry);
     const date = new Date();
     //modal, setModal,
     
@@ -18,6 +23,7 @@ const PostModal = ({modal, setModal, logEntry}) => {
     // only update if logentry or show prop changes
     // new endpoint to just get avatar / username
     // if displaying modal on Map page, dont put Link to "see this on map"
+    // dont allow someone to comment if not logged in 
 
     // DISPLAY
     // carousel of all images (lazy loaded) ✅
@@ -29,13 +35,22 @@ const PostModal = ({modal, setModal, logEntry}) => {
     // avi of user 
     // show hash tags (when ready)
     // border around carousel
+    // add key to carousel.item
+    // add avatar to each comment
+    // add href link to username subtitle, no underline or blue color
+
     const toggleModal = () => {
         setModal(!modal);
       };
 
-    useEffect(() => {
-        console.log('only mount this once when clicked')
-    }, [])
+    useEffect( async () => {
+        // retrieve comments here w logId
+        const commentList = await getComments(logEntry._id);
+    
+        console.log('only mount this once when clicked', commentList);
+        setComments(commentList);
+        setRefetch(false);
+    }, [comments.length, refetch])
 
     return(
         <Modal show={modal} onHide={toggleModal} size='lg' >
@@ -99,26 +114,25 @@ const PostModal = ({modal, setModal, logEntry}) => {
             <Card.Title>Comments</Card.Title>
             
          <div className='comments-section grid'>
-            <div id='username'>
-            <Card.Subtitle>@{logEntry.photographer}</Card.Subtitle> <small>3d</small>
-            </div>
-           
-            
-           <p>This is a cool photo!
+            {comments ? comments.map((comment) => (
+                <div >
+                    <div style={{ display: 'inline-flex'}}>
+                 <Avatar src={comment.author.avatar} sx={{ width: 24, height: 24, marginRight: '3px' }}/>
+                <div id='username'>
+               
+                <Card.Subtitle >@{comment.author.username}</Card.Subtitle>{' '}
+                <small>{calculateCommentTimeDifference(comment.createdAt,date)}</small>
+                </div>
+                </div>
 
-           Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus ella vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. A
-           </p>
-           
-            
+                <p>{comment.message}</p>
+                </div>
+            )): null}
+
            
            </div>
            
-            <Form id='post-comment-button'>
-                <InputGroup>
-                <Form.Control placeholder='Comment your reaction!' type='text' size='sm'/>
-                <Button size='sm'>Comment</Button>
-                </InputGroup>
-                </Form>
+            <CommentForm logId={logEntry._id} setRefetch={setRefetch}/>
             </Col>
            
           </Row>

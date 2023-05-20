@@ -47,7 +47,7 @@ const logEntrySchema = new Schema({
         required: true,
         type: Date,
       },
-  /*likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   likesCount: {
     type: Number,
     default: 0,
@@ -56,7 +56,7 @@ const logEntrySchema = new Schema({
   commentsCount: {
     type: Number,
     default: 0,
-  },*/
+  },
       
 }, {
   timestamps: true,
