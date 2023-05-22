@@ -1,6 +1,7 @@
 const Comment = require('../models/Comment');
 const LogEntry = require('../models/LogEntry');
 const LogEntryLikes = require('../models/LogEntryLikes');
+const Following = require('../models/Following');
 const socketHandler = require('../handlers/socketHandler');
 const ObjectId = require('mongoose').Types.ObjectId;
 const fs = require('fs');
@@ -178,10 +179,28 @@ module.exports.retrieveLogEntryLikes = async (req, res, next) => {
   try {
     //const comments = await retrieveComments(postId, offset, exclude);
     const likes = await LogEntryLikes.findOne({ logEntry: logId }).populate({ path: 'likes.author', select: 'username avatar'});
-    console.log(likes.likes);
-    
-    return res.send(likes.likes);
+    return res.send(likes?.likes);
   } catch (err) {
     next(err);
   }
 };
+
+module.exports.retrievePostFeed = async (req, res, next) => {
+  const user = req.user
+  const { offset } = req.params;
+
+  try {
+    const followingDocument = await Following.findOne({ user: user._id });
+    if (!followingDocument) {
+      return res.status(404).send({ error: 'Could not find any posts.' });
+    }
+    const following = followingDocument.following.map(
+      (following) => following.user
+    );
+
+    const feedPosts = await LogEntry.find({ author: { $in: following}}).sort({createdAt: -1});
+      return res.send(feedPosts);
+  } catch (e){
+    next(err);
+  }
+}

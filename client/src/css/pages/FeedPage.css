@@ -1,0 +1,24 @@
+.carousel-feed-post-img{
+    object-fit: contain;
+    max-height: 500px;
+}
+
+.date-posted{
+    margin: 0px 10px 0px auto;
+}
+
+.feed-page {
+    overflow-wrap: break-word;
+    margin: auto;
+    
+    max-width: 900px;
+      padding: 10px 10px 100px 10px;
+      border: 5px solid crimson;
+    overflow-x: hidden;
+    overflow-y: visible !important;
+    height: 100vh;
+  }
+.feed-post{
+    padding-bottom: 20px;
+    
+}

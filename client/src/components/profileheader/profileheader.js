@@ -6,9 +6,10 @@ import defaultavi from '../../assets/images/defaultavi.jpeg';
 import UserListModal from '../userlistmodal/userlistmodal';
 import { followUser } from '../../services/profileService';
 import { toast } from "react-toastify";
-const ProfileHeader = ({profile}) => {
+const ProfileHeader = ({profile, setRefetch}) => {
     const [showFollowersModal, setFollowersModal] = useState(false);
     const [showFollowingModal, setFollowingModal] = useState(false);
+    
     const token = localStorage.getItem('jwtToken');
 // avatar, following, followers, post #
 // edit profile or following/follow button
@@ -23,7 +24,8 @@ const follow = async () => {
         await followUser(profile?._id, token);
         //if (alreadyFollowing) toast.success('')
         //toast.success('you followed them!');
-        window.location.reload(); //figure out how to refresh
+        //window.location.reload(); //figure out how to refresh
+       setRefetch(true);
     }catch(err){
         toast.error(err.message);
     }
@@ -31,6 +33,7 @@ const follow = async () => {
 
     useEffect(() => {
         console.log("we'll need to update when a user follows someone");
+        // use refetch instead when a user follows
     }, [profile?.followersCount, profile?.followingCount, profile?.isFollowing])
 
 const toggleModal = (e) => {

@@ -4,7 +4,7 @@ to push to server:
 `git subtree push --prefix server heroku master`
 
 to push client
-`git push origin testheroku`
+`git push origin master`
 
 to start server:
 `cd server, npm run dev`

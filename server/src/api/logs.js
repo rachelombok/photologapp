@@ -11,7 +11,7 @@ const {
 const User = require('../models/User');
 //const fs = require('fs');
 //const path = require('path');
-const { retrieveComments, createComment, deleteComment, toggleLike, retrieveLogEntryLikes } = require('../controllers/logController');
+const { retrieveComments, createComment, deleteComment, toggleLike, retrieveLogEntryLikes, retrievePostFeed } = require('../controllers/logController');
 
 router.get('/', async (req, res, next) => {
     try{
@@ -31,6 +31,8 @@ router.get('/:logId/likes', retrieveLogEntryLikes);
 router.post('/:logId/comments', requireAuth, createComment);
 router.get('/:logId/comments', retrieveComments);
 router.delete('/:commentId/:logId/comments', requireAuth, deleteComment);
+
+router.get('/feed/:offset', requireAuth, retrievePostFeed);
 
 router.post('/', requireAuth, upload.array("image", 5), async (req, res, next) => {
     console.log('did we make tit after auth?');

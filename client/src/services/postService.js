@@ -160,6 +160,22 @@ export const getLogEntryLikes = async (logId) => {
     throw new Error(err);
   }
 };
+
+export const getFeed = async (token, offset=10) => {
+  const headers = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    const response = await axios(
+      `${API_URL}/api/logs/feed/${offset}`, {
+        method: 'GET',
+      headers: {...headers}
+      }
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
 /*
 export async function uploadImage(file) {
   const formData = new FormData();

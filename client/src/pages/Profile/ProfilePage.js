@@ -13,6 +13,7 @@ import ProfileHeader from '../../components/profileheader/profileheader';
 import ProfilePostSection from '../../components/profilepostsection/profilepostsection';
 import '../../css/pages/ProfilePage.css';
 import pic from '../../assets/images/defaultavi.jpeg';
+
 const ProfilePage = ({url}) => {
     // profile header
     // profile post content
@@ -22,6 +23,7 @@ const ProfilePage = ({url}) => {
     const token = localStorage.getItem('jwtToken'); // we can also usecontext isntead
     const { user, setUser } = useContext(UserContext);
     const [deadend, setDeadend] = useState(false);
+    const [refetch, setRefetch] = useState(false);
     if (!username) username = url;
     console.log('arewegetting params?', username);
 
@@ -35,7 +37,8 @@ const ProfilePage = ({url}) => {
             setProfile(res.user);
             
         }).catch((err) => setDeadend(true));
-      }, [username, url]);
+        setRefetch(false);
+      }, [refetch, username, url]);
 // pass to profile header
 // localStorage.get('user')
       if (deadend){
@@ -48,7 +51,7 @@ const ProfilePage = ({url}) => {
 <Button as={Link} to='/'>Back to Map</Button>
         <div className="profile-page grid">
             
-            <ProfileHeader profile={profile} />
+            <ProfileHeader profile={profile} setRefetch={setRefetch}/>
             
         {console.log("fteched logs", profile.logs)}
     <ProfilePostSection logs={profile.logs}/>

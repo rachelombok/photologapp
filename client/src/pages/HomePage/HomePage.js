@@ -6,6 +6,7 @@ import { Link, useHistory, useParams, Route } from 'react-router-dom';
 import ProfilePage from '../Profile/ProfilePage';
 import EditProfilePage from '../EditProfile/EditProfilePage';
 import SettingsPage from '../SettingsPage/SettingsPage';
+import FeedPage from '../FeedPage/FeedPage';
 import { UserContext } from '../../context/UserContext';
 const HomePage = ({match}) => {
     const { user } = useContext(UserContext);
@@ -36,6 +37,11 @@ const HomePage = ({match}) => {
             <Row>
                <Col sm={3}>
                <Nav variant="pills" className="flex-column">
+
+               <Nav.Item>
+              <Nav.Link eventKey='feed'>Feed</Nav.Link>
+            </Nav.Item>
+
                <Nav.Item>
               <Nav.Link eventKey='edit' >Edit</Nav.Link>
             </Nav.Item>
@@ -57,19 +63,27 @@ const HomePage = ({match}) => {
                <Tab.Content>
 
 
-                
-            {
+                {console.log(key)}
+            {Boolean(key) ?
+            key == 'feed' ? <Tab.Pane eventKey='feed'>
+              <FeedPage/>
+            </Tab.Pane> :
                 key == 'settings' ? <Tab.Pane eventKey='settings'>
                 <SettingsPage/>
                     </Tab.Pane> : key == 'edit' ? <Tab.Pane eventKey='edit'>
         <EditProfilePage/>
-            </Tab.Pane> : key == user.username ? <Tab.Pane eventKey={`${user.username}`}>
+            </Tab.Pane> : key == 'feed' ? <Tab.Pane eventKey='feed'>
+              <FeedPage/>
+            </Tab.Pane> :
+            
+            
+            key == user.username ? <Tab.Pane eventKey={`${user.username}`}>
         <ProfilePage url={key}/>
             </Tab.Pane> : <Tab.Pane eventKey={`${key}`}>
                 {console.log('you try her?')}
             <ProfilePage url={key}/>
             </Tab.Pane>
-            }
+            : null}
 
                </Tab.Content>
                </Col>
