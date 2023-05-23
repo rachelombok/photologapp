@@ -23,7 +23,9 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useLocation
+  useLocation,
+  Redirect,
+  withRouter
 } from "react-router-dom";
 //import Map from './components/map/map.js';
 import { UserContext } from './context/UserContext';
@@ -31,28 +33,43 @@ import '../src/css/misc/toast.css';
 
 class App extends React.Component{
   //const { user } = useContext(UserContext);
-  static contextType = UserContext;
+  constructor(props) {
+    super(props);
 
+    this.token = localStorage.getItem('jwtToken');
+
+    this.user = localStorage.getItem('user');
+
+    this.pathName = this.props.location;
+  }
 
   shouldComponentUpdate(){
     //console.log('dontupdate man', useLocation().pathname);
+
     return false;
   }
-  
+
+
   // this.context.X
   // move all routes to a separate page ?
+  // redirect if settings or edit or feed, allow for profile page or posts
   render(){
     return(
         <div>
           <ToastContainer autoClose={4000} closeButton={false} closeOnClick theme='dark' />
-          {console.log(this.context)}
-          
+          {console.log('userscont', this.context)}
           <Router>
             <Switch>
                 <Route exact path='/' component={MapPage}/>
-                <Route exact path='/test' component={LoginPage} />
-                <Route exact path='/test2' component={RegisterPage} />
-                <Route exact path='/:anyUrl' component={HomePage}/>
+                
+                
+                {Boolean(this.user && this.token) ? <Route exact path='/:anyUrl' component={HomePage}/> :
+                <> 
+                <Route exact path='/login' component={LoginPage} />
+                <Route exact path='/register' component={RegisterPage} />
+                <Route exact path='/:anyUrl' render={(props) =>(<ProfilePage url={props.match.params.anyUrl}/>)}/>
+                
+                </>}
                 {/*<Route exact path='/settings' component={SettingsPage} />
                 <Route exact path='/home' component={HomePage}/>
                 <Route path="/edit" component={EditProfilePage} />

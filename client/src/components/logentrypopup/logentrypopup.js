@@ -4,6 +4,8 @@ import { Card, Carousel, Button, Figure } from 'react-bootstrap';
 import '../../css/components/LogEntryPopUp.css';
 import PostModal from "../postmodal/postmodal";
 import { calculateTimeDifference } from "../../utils/logEntry";
+import { Link, useHistory } from 'react-router-dom';
+
 const LogEntryPopUp = ({logEntry, setShowPopUp}) => {
     const [log, setLog] = useState();
     const [modal, setModal] = useState(false);
@@ -79,8 +81,8 @@ const LogEntryPopUp = ({logEntry, setShowPopUp}) => {
           {logEntry.description}Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis nat 
          
         </Card.Text>
-        <Figure.Caption>By: {logEntry.photographer} </Figure.Caption>
-        <Button variant="primary" onClick={toggleModal}>See more</Button>
+        <Figure.Caption style={{ marginBottom: '10px'}}>By: <Link to={`${logEntry.photographer}`}>{logEntry.photographer}</Link></Figure.Caption>{' '}
+        <Button variant="primary" onClick={toggleModal} style={{alignContent: 'flex-end'}}>See more</Button>
       </Card.Body>
             </Card>
 

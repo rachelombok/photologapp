@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom";
  import { Form,FormControl,Button, Popover, OverlayTrigger, Tooltip, Modal, InputGroup, Row, Col, FloatingLabel } from 'react-bootstrap'
 import useInput from '../../hooks/useInput.js';
 import { createComment } from '../../services/postService.js';
-const CommentForm = ({ logId, setRefetch }) => {
+const CommentForm = ({ logId, setRefetch, user }) => {
     // user, logid
     const history = useHistory();
     const formRef = useRef(null);
@@ -19,6 +19,7 @@ const CommentForm = ({ logId, setRefetch }) => {
         console.log('you commented!', commentMessage);
         if (commentMessage.value.length == 0) return;
         try {
+            if (!Boolean(user)) return toast.error('Must have an account to leave a comment.',  {hideProgressBar: true});
             const res = await createComment(logId, commentMessage.value, token);
         console.log(res);
             toast.success("Commented!");

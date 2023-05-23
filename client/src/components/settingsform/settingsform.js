@@ -53,7 +53,7 @@ import { validatePassword } from '../../utils/validation.js';
           Old Password
         </Form.Label>
         <Col sm={10}>
-          <Form.Control type="password"  placeholder="Old Password" defaultValue={oldPassword.value} onChange={oldPassword.onChange}/>
+          <Form.Control type="password"  placeholder="Old Password" defaultValue={oldPassword.value} onChange={oldPassword.onChange} required/>
         </Col>
       </Form.Group>
 
@@ -62,7 +62,7 @@ import { validatePassword } from '../../utils/validation.js';
           New Password
         </Form.Label>
         <Col sm={10}>
-          <Form.Control type="password"  placeholder="New Password" defaultValue={newPassword.value} onChange={newPassword.onChange}/>
+          <Form.Control type="password"  placeholder="New Password" defaultValue={newPassword.value} onChange={newPassword.onChange} required/>
         </Col>
       </Form.Group>
       <Button variant="primary" type="submit" disabled={loading}>

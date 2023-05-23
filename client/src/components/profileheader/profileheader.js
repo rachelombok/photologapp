@@ -6,6 +6,7 @@ import defaultavi from '../../assets/images/defaultavi.jpeg';
 import UserListModal from '../userlistmodal/userlistmodal';
 import { followUser } from '../../services/profileService';
 import { toast } from "react-toastify";
+import { Avatar } from '@mui/material';
 const ProfileHeader = ({profile, setRefetch}) => {
     const [showFollowersModal, setFollowersModal] = useState(false);
     const [showFollowingModal, setFollowingModal] = useState(false);
@@ -79,7 +80,8 @@ const toggleModal = (e) => {
         <Card border="light" >
       <Card.Body className='profile-header'>
       
-      <Image src={profile?.avatar} className='avatar'/>
+      
+      <Avatar src={profile?.avatar} className='avatar'/>
       <div>
         <Card.Title as='h2' style={{ margin: '10px 0 0 0' }}>{profile?.fullname}
 

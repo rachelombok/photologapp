@@ -60,6 +60,7 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
         e.preventDefault();
         
         try {
+            if (!Boolean(user)) return toast.error('Must have an account to leave a like.', {hideProgressBar: true});
             //const res = await createComment(logId, commentMessage.value, token);
             const res = await toggleLike(logEntry._id, token);
             toast.success("liked!");
@@ -165,18 +166,21 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
             {!fromMap ? <Link to={{ pathname: "/", lat: logEntry.latitude, long: logEntry.longitude  }}> See this post on the map</Link> : null}
             
             
+            {likes ? (<>
             <Card.Title>Liked By</Card.Title>
             <div>
-           {likes ? (
+           
             <AvatarGroup max={10} appearance="stack" sx={{display: 'inline-flex'}}>
                 
                 {likes.map((like) => (
                     <Avatar src={`${like.author.avatar}`}/>
                 ))}
             </AvatarGroup>
-           ) : null
+           </div></>) : null
 
-           }</div>
+                    }
+            <br></br> <br></br>
+            <Button target="_blank" rel="noopener noreferrer" href={`http://maps.google.com?q=${logEntry.latitude},${logEntry.longitude}&z=6`}> Get Directions</Button>
             {/*{likes ? 
             ( <AvatarGroup max={5}>
                 {likes.likes.map((like) => (
@@ -208,7 +212,7 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
            
            </div>
            
-            <CommentForm logId={logEntry._id} setRefetch={setRefetch}/>
+            <CommentForm logId={logEntry._id} setRefetch={setRefetch} user={user}/>
             </Col>
            
           </Row>

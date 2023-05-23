@@ -12,3 +12,5 @@ to start server:
 to start client:
 `cd client, npm start`
 
+to lint client:
+`npx eslint`

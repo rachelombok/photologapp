@@ -13,7 +13,7 @@ const RegisterPage = ({ login }) => {
   const history = useHistory();
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
     /*constructor (props) {
         super(props);
         this.state = {
@@ -21,6 +21,12 @@ const RegisterPage = ({ login }) => {
         }
         this.changeState = this.changeState.bind(this);
     }*/
+
+    useEffect(()=>{
+      if(Boolean(user)){
+        history.push('/');
+      }
+    }, [user]);
 
 
     const changeState = () => {
@@ -94,7 +100,7 @@ const RegisterPage = ({ login }) => {
                 <button onClick={this.changeState}>Stop / Start</button>
           */}
           <div >
-          <Link to="/test"><Button variant="outline-light" className='switch-btn'>Login</Button>{' '}</Link>
+          <Link to="/login"><Button variant="outline-light" className='switch-btn'>Login</Button>{' '}</Link>
           </div>
 
           <div className='center'>

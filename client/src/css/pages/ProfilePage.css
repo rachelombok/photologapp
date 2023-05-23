@@ -22,15 +22,12 @@
   }
 
   .avatar {
-    width: 10rem;
+    width: 10rem !important;
     object-fit: cover;
-      height: 10rem;
+      height: 10rem !important;
       border-radius: 50%;
   }
   
-  .post-grid{
-    
-  }
 
   .card-text {
     color: green;
@@ -53,6 +50,17 @@
     width: 17rem;
     height: 17rem;
     cursor: pointer;
+    transition: '1s ease-in';
+    -webkit-filter: brightness(100%);
+  }
+
+  .post-img:hover, .post-img:focus-within {
+    -webkit-filter: brightness(70%);
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
   }
   
   .profile-buttons {
@@ -105,3 +113,38 @@
     line-height: 3.5rem;
     padding: 0 2rem;
   }
+.like-overlay{
+  position: absolute;
+  top: 8.5rem;
+  bottom: 8.5rem;
+  left: 6rem;
+  right: 8.5rem;
+  visibility: hidden;
+  opacity: 0;
+  color: white;
+  /* transition effect. not necessary */
+  transition: opacity .2s, visibility .2s;
+}
+
+.post-grid > *:hover .like-overlay{
+  visibility: visible;
+  opacity: 1;
+}
+
+.comment-overlay{
+  position: absolute;
+  top: 8.5rem;
+  bottom: 8.5rem;
+  left: 8.5rem;
+  right: 2rem;
+  visibility: hidden;
+  color: white;
+  opacity: 0;
+  /* transition effect. not necessary */
+  transition: opacity .2s, visibility .2s;
+}
+
+.post-grid > *:hover .comment-overlay{
+  visibility: visible;
+  opacity: 1;
+}

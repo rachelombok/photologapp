@@ -1,6 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { NavDropdown, Button, Row, Col, Image } from 'react-bootstrap'
 import PostModal from '../postmodal/postmodal';
+import { Box } from '@mui/joy';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ChatIcon from '@mui/icons-material/Chat';
 
 const ProfilePostSection = ({logs}) => {
 
@@ -30,7 +33,8 @@ const ProfilePostSection = ({logs}) => {
             {logs?.map((log)=>(
                 <Col key={log._id}>
                 <Image src={log.image[0]} alt={log.rating} className='post-img' rounded loading="lazy" onClick={toggleModal} id={log._id}/>
-                    
+                   {/*} <ChatIcon className='comment-overlay' fontSize="large"/>
+                    <FavoriteIcon className='like-overlay' fontSize="large"/> */}
                 
 
             </Col>

@@ -10,8 +10,8 @@ const HelpMenu = () => {
     const handleLogout = () => {
         setUser(null);
         localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        history.push("/test");
+        localStorage.removeItem("jwtToken");
+        history.push("/login");
         //toast.success("You are logged out");
         //
       };

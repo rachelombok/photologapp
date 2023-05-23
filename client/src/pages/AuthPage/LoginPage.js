@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import './authpage.css';
 import { Card, Form, Button } from 'react-bootstrap'
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, Redirect } from 'react-router-dom';
 import {
   registerUser,
   login,
@@ -14,7 +14,13 @@ const LoginPage = () => {
   const history = useHistory();
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+
+  useEffect(()=>{
+    if(Boolean(user)){
+      history.push('/');
+    }
+  }, [user]);
     /*constructor (props) {
         super(props);
         this.state = {
@@ -96,7 +102,7 @@ const LoginPage = () => {
                 <button onClick={this.changeState}>Stop / Start</button>
           */}
           <div >
-          <Link to="/test2"><Button variant="outline-light" className='switch-btn'>Sign Up</Button>{' '}</Link>
+          <Link to="/register"><Button variant="outline-light" className='switch-btn'>Sign Up</Button>{' '}</Link>
           </div>
 
           <div className='center'>

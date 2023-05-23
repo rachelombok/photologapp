@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Component } from "react";
+import React, { useState, useEffect, useCallback, Component, useContext } from "react";
 import ReactMapGl,{ Marker, Popup, NavigationControl} from "react-map-gl";
 //import { listLogEntries } from './API';
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
@@ -10,6 +10,9 @@ import AddLocation from './../addlocation/addlocation.js';
 import NavigationBar from "../navigationbar/navigationbar";
 import { useLocation } from "react-router-dom"
 //import 'bootstrap/dist/css/bootstrap.min.css';
+import { UserContext } from '../../context/UserContext.js';
+import LoginModal from "../loginModal/loginModal";
+
 const geostyle = {
   margin: '20px 20px 40px 40px',
   paddingTop: '30px',
@@ -24,9 +27,12 @@ const Map = (props) => {
     const [showPopUp, setShowPopUp] = useState({});
     const [addLocation, setAddLocation] = useState(null);
     const [show, setShow] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
     const location = useLocation()
     const long = location.long;
     const lat = location.lat;
+    const { user } = useContext(UserContext);
+    const storageUser = localStorage.getItem('user');
     console.log('map props', location, lat, long);
   
     const [viewport, setViewport] = useState({
@@ -50,6 +56,7 @@ const Map = (props) => {
     }, []);
   
     const markVisited = (event) => {
+      if (user || storageUser){
       const [longitude, latitude] = event.lngLat;
       setAddLocation({
         latitude,
@@ -58,6 +65,9 @@ const Map = (props) => {
       setShow({
        show: true
       });
+      } else{
+        setShowLoginModal(true);
+      }
     };
   
     const mapRef = React.createRef();
@@ -153,6 +163,8 @@ const Map = (props) => {
           setShow={setShow}
           getTravelEntries={getTravelEntries}
         />
+
+        {showLoginModal ? <LoginModal modal={showLoginModal} setModal={setShowLoginModal}/> : null}
   
       </ReactMapGl>
   

@@ -2,7 +2,7 @@ import axios from 'axios';
 const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:1337' : 'https://photologapp.herokuapp.com';
 
 export const signOut = () => () => {
-  localStorage.removeItem('token');
+  localStorage.removeItem('jwtToken');
 };
 
 export const signInSuccess = (response) => {

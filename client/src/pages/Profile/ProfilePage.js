@@ -13,10 +13,11 @@ import ProfileHeader from '../../components/profileheader/profileheader';
 import ProfilePostSection from '../../components/profilepostsection/profilepostsection';
 import '../../css/pages/ProfilePage.css';
 import pic from '../../assets/images/defaultavi.jpeg';
-
+import NotFoundPage from '../NotFoundPage/NotFound';
 const ProfilePage = ({url}) => {
     // profile header
     // profile post content
+    // set up this page to work for without authentication
     console.log(url);
     let { username } = useParams();
     const [profile, setProfile] = useState({});
@@ -30,20 +31,22 @@ const ProfilePage = ({url}) => {
     useEffect(async() => {
         await getUserProfile(username, token).then((res) => {
             console.log('setting profile', res)
-            console.log(console.log(user._id, res.user._id))
+            console.log(console.log(user._id, res.user._id)); // this causes ou deadend
             res.user.isMe = user._id == res.user._id ? true : false;
             res.user.isFollowing = res.isFollowing;
             setDeadend(false);
             setProfile(res.user);
             
-        }).catch((err) => setDeadend(true));
+        }).catch((err) => {setDeadend(true); console.log(err);});
         setRefetch(false);
       }, [refetch, username, url]);
 // pass to profile header
 // localStorage.get('user')
+
       if (deadend){
+        console.log('wdeasdaend',deadend);
         return (
-            <div> The username you searched does not exist, try another</div>
+            <NotFoundPage/>
         )
       }
       return (
