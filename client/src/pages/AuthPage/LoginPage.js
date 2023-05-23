@@ -111,7 +111,7 @@ const LoginPage = () => {
             onSubmit={handleSubmit(onSubmit)}
             encType='multipart/form-data'
             >
-              <h3>login</h3>
+              <h3>Login</h3>
 
             
             <Form.Group controlId="formBasicEmail" className="btn-block" >
@@ -141,10 +141,7 @@ const LoginPage = () => {
           required
           minLength={8}
           />
-        </Form.Group>
-        <Form.Group controlId="formBasicCheckbox" >
-          <Form.Check type="checkbox" label="Remember Me" />
-        </Form.Group>
+        </Form.Group><br></br>
         
         <Button variant="light" type="submit" block size='md'>
           Submit

@@ -50,11 +50,11 @@ const FeedbackForm = () => {
           Message
         </Form.Label>
         <Col sm={10}>
-          <Form.Control as="textarea" placeholder="Message" name='message' required/>
+          <Form.Control as="textarea" placeholder="Feedback? Feature request? Support questions? Contact us here!" name='message' required/>
         </Col>
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button variant="dark" type="submit" className='justshoot-btn'>
         Send
       </Button>
         </Form>

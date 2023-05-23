@@ -12,7 +12,9 @@ const ProfileHeader = ({profile, setRefetch}) => {
     const [showFollowersModal, setFollowersModal] = useState(false);
     const [showFollowingModal, setFollowingModal] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const [isAuthenticatedUser, setIsAuthenticatedUser] = useState(false);
     const { user } = useContext(UserContext);
+
     const token = localStorage.getItem('jwtToken');
 // avatar, following, followers, post #
 // edit profile or following/follow button
@@ -42,6 +44,11 @@ const follow = async () => {
 }
 
     useEffect(() => {
+        if (user && token){
+            setIsAuthenticatedUser(true);
+        }else{
+            setIsAuthenticatedUser(false);
+        }
         console.log("we'll need to update when a user follows someone");
         // use refetch instead when a user follows
     }, [profile?.followersCount, profile?.followingCount, profile?.isFollowing])
@@ -86,7 +93,7 @@ const toggleModal = (e) => {
             
             
         </header>*/}
-        <Card border="light" >
+        <Card border="dark" >
       <Card.Body className='profile-header'>
       
       
@@ -96,28 +103,30 @@ const toggleModal = (e) => {
 
         {profile.isMe ? (
             
-            <Button style={{ margin: '10px' }} size='sm' href='/edit'>Edit Profile</Button>
+            <Button variant='dark' style={{ margin: '10px' }} size='sm' href='/edit' className='justshoot-btn'>Edit Profile</Button>
             
             ) : profile?.isFollowing ? 
             (
-                <Button style={{ margin: '10px' }} size='sm' onClick={follow}>Unfollow</Button>
+                <Button variant='dark' style={{ margin: '10px' }} size='sm' onClick={follow} className='justshoot-btn'>Unfollow</Button>
             )
             : (
             
-                <Button style={{ margin: '10px' }} size='sm' onClick={follow}>Follow</Button>
+                <Button variant='dark' style={{ margin: '10px' }} size='sm' onClick={follow} className='justshoot-btn'>Follow</Button>
            
             )}
+
+            {!isAuthenticatedUser && <Button variant='dark' as={Link} to='/' size='sm' className='justshoot-btn'>Back to Map</Button>}
         </Card.Title>
         
         <Card.Subtitle className="mb-2 text-muted">@{profile?.username}</Card.Subtitle>
-        <Card.Link onClick={() => console.log('this link was clicked')}>{profile?.logCount} posts</Card.Link>
-        <Card.Link onClick={() => setFollowersModal(true)}>{profile?.followersCount} followers</Card.Link>
-        <Card.Link onClick={() => setFollowingModal(true)}>{profile?.followingCount} following</Card.Link>
+        <Card.Link onClick={() => console.log('this link was clicked')} className='justshoot-link'>{profile?.logCount} posts</Card.Link>
+        <Card.Link onClick={() => setFollowersModal(true)} className='justshoot-link' style={{cursor: 'pointer'}}>{profile?.followersCount} followers</Card.Link>
+        <Card.Link onClick={() => setFollowingModal(true)} className='justshoot-link' style={{cursor: 'pointer'}}>{profile?.followingCount} following</Card.Link>
         
         <Card.Text>
         {profile?.bio}
          </Card.Text>
-        <Card.Link href={profile?.website}>{profile?.website}</Card.Link><br></br>
+        <Card.Link href={profile?.website} target="_blank" rel="noopener noreferrer" className='justshoot-link'>{profile?.website}</Card.Link><br></br>
         
         </div>
         {showFollowersModal && profile?.followersCount ? <UserListModal userId={profile?._id} token={token} userListName={'Followers'} userListCount={profile?.followersCount} show={showFollowersModal} setShow={setFollowersModal}/> : null}

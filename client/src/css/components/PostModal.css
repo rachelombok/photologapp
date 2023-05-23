@@ -21,3 +21,21 @@
     position: absolute;
     bottom: 0;
 }
+
+.post-modal .modal-content{
+    background-color: rgb(28, 29, 29);
+}
+
+
+.post-modal-title{
+    color: white;
+}
+
+.post-modal-card{
+    background-color:rgb(28, 29, 29) ;
+    color: white;
+}
+
+.post-modal-text{
+    color: white;
+}

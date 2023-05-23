@@ -150,7 +150,7 @@ import { updateUserProfile, updateUserAvatar } from '../../services/userService.
         <Form.Control type="text" placeholder="Website" defaultValue={website.value} onChange={website.onChange}/>
         </Col>
       </Form.Group>
-      <Button variant="primary" type="submit">
+      <Button variant="dark" type="submit" className='justshoot-btn'>
         Update Profile
       </Button>
       </div>

@@ -111,19 +111,19 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
     }, [comments.length, likes?.length, refetch])
 
     return(
-        <Modal show={modal} onHide={toggleModal} size='lg' >
+        <Modal show={modal} onHide={toggleModal} size='lg' className='post-modal' >
 
 
 <Modal.Header closeButton>
-<Modal.Title>{logEntry.placeName}</Modal.Title> 
+<Modal.Title className='post-modal-title'>{logEntry.placeName}</Modal.Title> 
 </Modal.Header>
 <Modal.Body>
 {logEntry.image ? logEntry.image.length > 1 ? 
-                    <Carousel fade variant='dark'>
+                    <Carousel fade variant='light'>
                         {logEntry.image.map(function(e, i) {
                             return (
                             
-                            <Carousel.Item>
+                            <Carousel.Item key ={i}>
                                 <img
                                   className="d-block w-100 carousel-post-img"
                                   src={e}
@@ -138,56 +138,56 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
                     : null }
 
         
-<Card >
+<Card className='post-modal-card'>
 
 <Container >
           <Row>
-          <Figure.Caption >Posted by <Link to={`/${logEntry.photographer}`}>{logEntry.photographer}</Link></Figure.Caption>
-            <Col xs={12} md={8}>
-                <Card.Title>
+          <Figure.Caption >Posted by <Link to={`/${logEntry.photographer}`} className='justshoot-link'>{logEntry.photographer}</Link></Figure.Caption>
+            <Col xs={12} md={8} style={{borderLeft: '2px solid #999999', borderRight: '2px solid #999999'}}>
+                <Card.Title className='post-modal-title'>
                     Description
                 </Card.Title>
-                {logEntry.description} 
+                <p>{logEntry.description} </p>
                   
             {logEntry.tags ? 
             
             <>
-    <Card.Title>
+    <Card.Title className='post-modal-title'>
                         Tags
             </Card.Title>
             <Stack direction="row" spacing={1}>
             {logEntry.tags.split(',').map((tag) =>(
-                <Chip label={`${tag}`} clickable/>
+                <Chip label={`${tag}`} clickable key={tag}/>
             ))}
             </Stack>
             </>: null}
 
-            <Card.Title>
+            <Card.Title className='post-modal-title'>
                         Visit Date
             </Card.Title>
             <p>{formatDateString(logEntry.visitDate)}
              </p>
             
-            <Card.Title>Rating</Card.Title>
+            <Card.Title className='post-modal-title'>Rating</Card.Title>
             <Rating name="read-only" value={logEntry.rating} readOnly />
             {!fromMap ? <Link to={{ pathname: "/", lat: logEntry.latitude, long: logEntry.longitude  }}> See this post on the map</Link> : null}
             
             
-            {likes ? (<>
-            <Card.Title>Liked By</Card.Title>
+            {likes?.length > 1 ? (<>
+            <Card.Title className='post-modal-title'>Liked By</Card.Title>
             <div>
            
             <AvatarGroup max={10} appearance="stack" sx={{display: 'inline-flex'}}>
                 
                 {likes.map((like) => (
-                    <Avatar src={`${like.author.avatar}`}/>
+                    <Avatar src={`${like.author.avatar}`} key={like}/>
                 ))}
             </AvatarGroup>
            </div></>) : null
 
                     }
             <br></br> <br></br>
-            <Button target="_blank" rel="noopener noreferrer" href={`http://maps.google.com?q=${logEntry.latitude},${logEntry.longitude}&z=6`}> Get Directions</Button>
+            <Button variant='dark' target="_blank" rel="noopener noreferrer" href={`http://maps.google.com?q=${logEntry.latitude},${logEntry.longitude}&z=6`} className="justshoot-btn"> Get Directions</Button>
             {/*{likes ? 
             ( <AvatarGroup max={5}>
                 {likes.likes.map((like) => (
@@ -201,20 +201,20 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
             <Card.Title>Comments</Card.Title>
             
          <div className='comments-section grid'>
-            {comments ? comments.map((comment) => (
+            {comments?.length > 0 ? comments.map((comment) => (
                 <div >
                     <div style={{ display: 'inline-flex'}}>
                  <Avatar src={comment.author.avatar} sx={{ width: 24, height: 24, marginRight: '3px' }}/>
                 <div id='username'>
                
-                <Card.Subtitle >@{comment.author.username}</Card.Subtitle>{' '}
+                <Card.Subtitle ><Link to={`${comment.author.username}`} className='justshoot-link'> @{comment.author.username}</Link></Card.Subtitle>{' '}
                 <small>{calculateCommentTimeDifference(comment.createdAt,date)}</small>
                 </div>
                 </div>
 
                 <p>{comment.message}</p>
                 </div>
-            )): null}
+            )): <h6 style={{bottom: 0}}>Add the first comment!</h6>}
 
            
            </div>
@@ -245,7 +245,7 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
                     </IconButton>
                     {isLogLiked ? 'You liked this.' : ''}
                     </p>
-    <small>{calculateTimeDifference(logEntry.createdAt, date)}</small>
+    <small className='post-modal-title'>{calculateTimeDifference(logEntry.createdAt, date)}</small>
 </Modal.Footer>
         </Modal>
     );

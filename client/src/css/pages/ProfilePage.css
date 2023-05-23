@@ -3,10 +3,12 @@
     margin: auto;
     max-width: 900px;
       padding: 10px;
-      border: 5px solid crimson;
+      
     overflow-x: hidden;
     overflow-y: visible !important;
     height: 100vh;
+    background-color: rgb(28, 29, 29);
+    color: white;
   }
   
   .profile-header{
@@ -15,7 +17,7 @@
     grid-template-columns: min-content 1fr;
     grid-column-gap: 1rem;
     justify-items: start;
-    
+    background-color: rgb(28, 29, 29);
     padding: 0px 10rem 2rem 0rem;
     border-bottom: 1px solid grey;
   
@@ -26,11 +28,12 @@
     object-fit: cover;
       height: 10rem !important;
       border-radius: 50%;
+      margin-bottom: 25px;
   }
   
 
   .card-text {
-    color: green;
+    color: white;
     word-wrap: break-word;
     margin:5px 0 5px 0;
   }
@@ -147,4 +150,8 @@
 .post-grid > *:hover .comment-overlay{
   visibility: visible;
   opacity: 1;
+}
+
+.form-control-plaintext{
+  color: white;
 }

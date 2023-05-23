@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Carousel, Button, Figure } from 'react-bootstrap';
-import { Card, CardHeader, CardMedia, CardContent, CardActions, Avatar, IconButton, Typography, Menu, MenuItem, Chip } from '@mui/material';
+import { Card, CardHeader, CardMedia, CardContent, CardActions, Avatar, IconButton, Typography, Menu, MenuItem, Chip, Stack } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -79,7 +79,7 @@ const FeedPost = ({logEntry}) => {
 
     useEffect(async()=>{
         const likeList = await getLogEntryLikes(logEntry._id);
-        console.log('only mount this once when clicked', likeList);
+        console.log('only mount this once when clicked', likeList, logEntry);
         setLikes(likeList);
         isLiked();
         setRefetch(false);
@@ -93,10 +93,10 @@ const FeedPost = ({logEntry}) => {
 
     return(
         <div className='feed-post'>
-        <Card>
+        <Card sx={{backgroundColor: '#242424', border: '2px solid white', color:'white'}}>
             <CardHeader
         avatar={
-          <Avatar aria-label="recipe" > 
+          <Avatar aria-label="recipe" src={logEntry.author.avatar}> 
             R
           </Avatar>
         }
@@ -106,7 +106,7 @@ const FeedPost = ({logEntry}) => {
             </IconButton>
           }
         title={logEntry.placeName}
-        subheader={`Visited on ${formatDateString(logEntry.visitDate)}`}
+        subheader={<span style={{color: 'white'}}>Visited on {formatDateString(logEntry.visitDate)}</span>}
       />
       <Menu
     id="long-menu"
@@ -121,10 +121,10 @@ const FeedPost = ({logEntry}) => {
      </MenuItem>
    </Menu>
    {logEntry.image ? logEntry.image.length > 1 ? 
-        <Carousel variant='dark' interval={null}>
+        <Carousel variant='light' interval={null}>
             {logEntry.image.map(function(e, i) {
                             return (
-                            <Carousel.Item interval={null} data-bs-interval="false">
+                            <Carousel.Item interval={null} data-bs-interval="false" key={i}>
                                 <img
                                   className="d-block w-100 carousel-feed-post-img"
                                   src={e}
@@ -141,11 +141,16 @@ const FeedPost = ({logEntry}) => {
       
       <CardContent>
       
-        <Typography variant="body2" color="text.secondary">
-        <Link to={`${logEntry.photographer}`}><b>{logEntry.photographer}</b></Link> {logEntry.description}
+        <Typography variant="body2" color="white">
+        <Link to={`${logEntry.photographer}`} className='justshoot-link'><b>{logEntry.photographer}</b></Link> {logEntry.description}
         </Typography>
-        <Chip label="#tag1" variant="outlined"/>{' '}
-        <Chip label="#tag2" variant="outlined"/>
+        {logEntry.tags > 0 ? 
+        <Stack direction="row" spacing={1}>
+        {logEntry.tags.split(',').map((tag) =>(
+            <Chip label={`${tag}`} clickable key={tag} variant='outlined'/>
+        ))}
+        </Stack>
+: null }
       </CardContent>
       <CardActions disableSpacing>
       <IconButton onClick={handleLike}>
@@ -159,7 +164,7 @@ const FeedPost = ({logEntry}) => {
                     </IconButton>
                     <small>{formatLikeMessage(likes.length)}</small>
         <IconButton aria-label="add to favorites" onClick={toggleModal}>
-         <ChatIcon />
+         <ChatIcon sx={{ color: '#ba53f1'}}/>
         </IconButton>
         <div className='date-posted'>
             {calculateTimeDifference(logEntry.createdAt, date)}

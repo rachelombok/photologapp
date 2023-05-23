@@ -52,15 +52,15 @@ const LogEntryPopUp = ({logEntry, setShowPopUp}) => {
               maxWidth='200px'
               className="popup"
         >
-            <Card>
+            <Card className="popup-card">
                 
                 {console.log('map marker level 3 call?')}
                     {logEntry.image ? logEntry.image.length > 1 ? 
-                    <Carousel fade>
+                    <Carousel fade style={{border: '2px solid #8641da'}}>
                         {logEntry.image.map(function(e, i) {
                             return (
                             
-                            <Carousel.Item>
+                            <Carousel.Item key={`${e}-${i}`}>
                                 <img
                                   className="d-block w-100 popup-carousel-img"
                                   src={e}
@@ -75,14 +75,14 @@ const LogEntryPopUp = ({logEntry, setShowPopUp}) => {
             
             
       <Card.Body>
-        <Card.Title>{logEntry.placeName}</Card.Title>
+        <Card.Title className="popup-title">{logEntry.placeName}</Card.Title>
         <Figure.Caption>{calculateTimeDifference(logEntry.createdAt, date)}</Figure.Caption>
         <Card.Text className="popup-description">
           {logEntry.description}Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis nat 
          
         </Card.Text>
-        <Figure.Caption style={{ marginBottom: '10px'}}>By: <Link to={`${logEntry.photographer}`}>{logEntry.photographer}</Link></Figure.Caption>{' '}
-        <Button variant="primary" onClick={toggleModal} style={{alignContent: 'flex-end'}}>See more</Button>
+        <Figure.Caption style={{ marginBottom: '10px'}}>By: <Link to={`${logEntry.photographer}`} className='justshoot-link'>{logEntry.photographer}</Link></Figure.Caption>{' '}
+        <Button variant="dark" onClick={toggleModal} className="justshoot-btn">See more</Button>
       </Card.Body>
             </Card>
 

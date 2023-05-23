@@ -25,10 +25,12 @@ const ProfilePage = ({url}) => {
     const { user, setUser } = useContext(UserContext);
     const [deadend, setDeadend] = useState(false);
     const [refetch, setRefetch] = useState(false);
+    const history = useHistory();
     if (!username) username = url;
     console.log('arewegetting params?', username);
 
     useEffect(async() => {
+      
         await getUserProfile(username, token).then((res) => {
             console.log('setting profile', res)
             // console.log(console.log(user._id, res.user._id)); // this causes ou deadend
@@ -53,7 +55,6 @@ const ProfilePage = ({url}) => {
       }
       return (
 <div style={{overflow: 'visible !important'}}> 
-<Button as={Link} to='/'>Back to Map</Button>
         <div className="profile-page grid">
             
             <ProfileHeader profile={profile} setRefetch={setRefetch}/>
@@ -61,6 +62,7 @@ const ProfilePage = ({url}) => {
         {console.log("fteched logs", profile.logs)}
     <ProfilePostSection logs={profile.logs}/>
         </div>
+       
         </div>
       )
     

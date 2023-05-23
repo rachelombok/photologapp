@@ -13,4 +13,33 @@
   -webkit-box-orient: vertical; 
   width: 230px;
   overflow: hidden;
+  color: white;
+}
+
+.popup-card{
+    background-color: rgb(28, 29, 29);
+    padding: 4px;
+}
+
+.popup-title{
+    color: white;
+}
+.justshoot-btn{
+    background-color: rgb(133, 65, 218);
+    align-content: flex-end;
+  }
+
+.mapboxgl-popup-content{
+    border: 2px black;
+  background-color: rgb(28, 29, 29);
+  border-radius: 3;
+}
+
+.mapboxgl-popup-close-button{
+    color: white;
+}
+
+
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip{
+border-bottom-color:rgb(28, 29, 29);
 }

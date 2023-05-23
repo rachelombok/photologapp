@@ -173,16 +173,13 @@ const RegisterPage = ({ login }) => {
           minLength={8}
           maxLength={30}
           />
-        </Form.Group>
-        <Form.Group controlId="formBasicCheckbox" >
-          <Form.Check type="checkbox" label="Remember Me" />
-        </Form.Group>
+        </Form.Group><br></br>
         
         <Button variant="light" type="submit" block size='md'>
           Submit
         </Button>
         <Form.Label muted className="text-right">
-        <span onClick={login}>Login</span>
+       
       </Form.Label>
                 
         </Form>

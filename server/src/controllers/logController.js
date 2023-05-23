@@ -198,7 +198,8 @@ module.exports.retrievePostFeed = async (req, res, next) => {
       (following) => following.user
     );
 
-    const feedPosts = await LogEntry.find({ author: { $in: following}}).sort({createdAt: -1});
+    const feedPosts = await LogEntry.find({ author: { $in: following}}).populate({ path: 'author', select: 'avatar'})
+    .sort({createdAt: -1});
       return res.send(feedPosts);
   } catch (e){
     next(err);

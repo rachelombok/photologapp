@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useContext } from 'react';
 // import TabSidebar from '../../components/tabsidebar/tabsidebar';
-import { Tab, Nav, Row, Col, Tabs } from 'react-bootstrap'
+import { Tab, Nav, Row, Col, Tabs, Button } from 'react-bootstrap'
 import { Link, useHistory, useParams, Route, Redirect } from 'react-router-dom';
 import ProfilePage from '../Profile/ProfilePage';
 import EditProfilePage from '../EditProfile/EditProfilePage';
@@ -70,10 +70,13 @@ const HomePage = ({match}) => {
             </Tab>
         </Tabs>*/}
           <Tab.Container activeKey={tab} onSelect={nextTab => history.replace(nextTab)}>
-            <Row>
-               <Col sm={3}>
-               <Nav variant="pills" className="flex-column">
-              
+            <Row className='justshoot-main'>
+               <Col sm={3} >
+               <Nav variant="pills" className="flex-column justshoot-tabs" >
+
+               <Nav.Item>
+            <Nav.Link eventKey='map'>Back to Map</Nav.Link>
+          </Nav.Item>
 
            <Nav.Item>
             <Nav.Link eventKey='feed' >Feed</Nav.Link>
@@ -90,6 +93,7 @@ const HomePage = ({match}) => {
           <Nav.Item>
             <Nav.Link eventKey='feedback'>Feedback</Nav.Link>
           </Nav.Item>
+          
 
           {user && <Nav.Item>
             <Nav.Link eventKey={`${user.username}`} to={`/${user.username}`}>MyProfile</Nav.Link>
@@ -102,9 +106,9 @@ const HomePage = ({match}) => {
                </Nav>
                </Col >
                <Col sm={9}>
-               <Tab.Content>
+               <Tab.Content >
 
-
+            <div style={{paddingTop: '20px'}}>
                 {console.log(key)}
                
             {Boolean(key) ?
@@ -121,7 +125,7 @@ const HomePage = ({match}) => {
 
             key == 'register' || key == 'login' ? <Redirect to='/'/>:
             
-            
+            key == 'map' ? <Tab.Pane eventKey='map' as={Redirect} to='/'/> :
             
             key == user.username ? <Tab.Pane eventKey={`${user.username}`}>
         <ProfilePage url={key}/>
@@ -131,7 +135,9 @@ const HomePage = ({match}) => {
             </Tab.Pane>
             : null}
 
+</div>
                </Tab.Content>
+               
                </Col>
             </Row>
           </Tab.Container>

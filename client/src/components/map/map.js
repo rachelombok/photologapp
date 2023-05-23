@@ -130,7 +130,7 @@ const Map = (props) => {
               display: "flex",
               alignItems: "center",
               paddingLeft: 20,
-              paddingTop: 95
+              paddingTop: 135
         }}/>
   
             <Geocoder

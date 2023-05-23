@@ -43,8 +43,8 @@ const CommentForm = ({ logId, setRefetch, user }) => {
     return(
         <Form id='post-comment-button' ref={formRef} onSubmit={handleComment}>
                 <InputGroup>
-                <Form.Control placeholder='Comment your reaction!' type='text' size='sm' onChange={commentMessage.onChange}/>
-                <Button size='sm' type="submit">Comment!</Button>
+                <Form.Control placeholder='...' type='text' size='sm' onChange={commentMessage.onChange}/>
+                <Button size='sm' type="submit" className="justshoot-btn" variant='dark'>Comment</Button>
                 </InputGroup>
         </Form>
     );

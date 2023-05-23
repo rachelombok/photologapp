@@ -65,7 +65,7 @@ import { validatePassword } from '../../utils/validation.js';
           <Form.Control type="password"  placeholder="New Password" defaultValue={newPassword.value} onChange={newPassword.onChange} required/>
         </Col>
       </Form.Group>
-      <Button variant="primary" type="submit" disabled={loading}>
+      <Button variant="dark" className='justshoot-btn' type="submit" disabled={loading}>
         Update Profile
       </Button>
 </div>

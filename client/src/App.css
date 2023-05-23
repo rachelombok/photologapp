@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: rgb(28, 29, 29);
 }
 
 .App-logo {
@@ -71,13 +72,10 @@
 
 .marker {
   transform: translate(-50%, -100%);
-  stroke: rgb(107, 10, 171);
+  stroke:  rgb(210, 139, 248);
   cursor: pointer;
 }
-.popup {
-  width: 30vw;
-  padding: 1rem;
-}
+
 
 .entry-form label,
 .entry-form input,
