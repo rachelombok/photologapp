@@ -1,7 +1,4 @@
-import React, { useRef } from 'react';
-import { useForm } from 'react-hook-form';
-import { Card, Form, Button, Image } from 'react-bootstrap'
-import { Link, useHistory, useParams } from 'react-router-dom';
+import React from 'react';
 import FeedbackForm
  from '../../components/feedbackform/feedbackform';
  import { Typography } from '@mui/material'

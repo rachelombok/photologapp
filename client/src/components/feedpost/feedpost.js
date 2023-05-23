@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Carousel, Button, Figure } from 'react-bootstrap';
-import { Card, CardHeader, CardMedia, CardContent, CardActions, Avatar, IconButton, Typography, Menu, MenuItem, Chip, Stack } from '@mui/material';
+import { Carousel, } from 'react-bootstrap';
+import { Card, CardHeader,  CardContent, CardActions, Avatar, IconButton, Typography, Menu, MenuItem, Chip, Stack } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -9,7 +9,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PostModal from '../postmodal/postmodal';
 import '../../css/pages/FeedPage.css';
 import { formatDateString, calculateTimeDifference,formatLikeMessage } from '../../utils/logEntry';
-import { getComments, getLogEntryLikes, toggleLike } from '../../services/postService';
+import {  getLogEntryLikes, toggleLike } from '../../services/postService';
 import { UserContext } from '../../context/UserContext';
 const FeedPost = ({logEntry}) => {
     console.log('o[pys')
@@ -28,12 +28,8 @@ const FeedPost = ({logEntry}) => {
        };
     const handleClose = (callback) => {
         setAnchorEl(null);
-        // callback && callback();
     };
     const toggleModal = (e) => {
-        //console.log(e.target.id, e);
-        //console.log(getDisplayLog(e.target.id));
-        //setModalLog(getDisplayLog(e.target.id));
         setModal(!modal);
       };
 
@@ -41,7 +37,6 @@ const FeedPost = ({logEntry}) => {
         e.preventDefault();
         
         try {
-            //const res = await createComment(logId, commentMessage.value, token);
             const res = await toggleLike(logEntry._id, token);
             setIsLogLiked(!isLogLiked);
             setRefetch(true);

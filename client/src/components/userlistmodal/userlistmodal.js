@@ -1,14 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Modal, Carousel, Figure, Container, Col, Row, Card, Form, InputGroup, Button } from 'react-bootstrap'
+import { Modal, Container } from 'react-bootstrap'
 import { UserContext } from '../../context/UserContext';
-import { Link, useHistory } from 'react-router-dom';
-import defaultavi from '../../assets/images/defaultavi.jpeg';
 import '../../css/components/PostModal.css';
-import { calculateTimeDifference, formatDateString } from '../../utils/logEntry';
-import {Rating} from '@mui/material';
 import { retrieveUserFollowers, retrieveUserFollowing } from '../../services/profileService';
 import { toast } from "react-toastify";
-const UserListModal = ({ userId, token, userListName, userListCount, show, setShow }) => {
+import UserListItem from '../userlistitem/userlistitem';
+const UserListModal = ({ userId, token, userListName, userListCount, show, setShow, follow }) => {
     const [listOfUsers, setListOfUsers] = useState({user: {}, users: []});
     // listOfUsers = following or followers ids?
     // string saying which list 'Followers' or 'Following'
@@ -26,12 +23,10 @@ const UserListModal = ({ userId, token, userListName, userListCount, show, setSh
         try{
             const response = userListName == 'Following' ? await retrieveUserFollowing(userId, userListCount, token) :
             await retrieveUserFollowers(userId, userListCount, token);
-            //if (userId != response.user) throw new Error('Request user and response user are not the same.')
+            
             console.log('thsi is our studd', response);
 
             setListOfUsers(response);
-            //console.log(`this is our ${userListName} :`, response);
-            //if (userListName == 'Following')
         }catch(err){
             toast.error(err.message);
         }
@@ -39,13 +34,16 @@ const UserListModal = ({ userId, token, userListName, userListCount, show, setSh
     }, [listOfUsers.users.length]);
 
     return(
-        <Modal show={show} onHide={toggleModal}>
-            <Modal.Header closeButton><Modal.Title>{userListName}</Modal.Title></Modal.Header>
-            <Modal.Body>This is the users {userListName}, {userListCount}
+        <Modal show={show} onHide={toggleModal} className='post-modal'>
+            <Modal.Header closeButton><Modal.Title className='post-modal-title'>{userListName}</Modal.Title></Modal.Header>
+            <Modal.Body className='post-modal-title'>
+            
             {listOfUsers.users?.map((user) => (
-                <>{console.log(user.user._id)}
-            <div>{user.user.username} and they are following? {user.user.isFollowing ? 'true' : 'false'} is me? {reqUserName == user.user.username ? 'yes its me' : 'no its some else'}</div>
-            </>))}
+              
+                <UserListItem user={user.user} reqUserName={reqUserName} follow={follow}/>
+                
+             ))}
+            
             </Modal.Body>
        
         </Modal>

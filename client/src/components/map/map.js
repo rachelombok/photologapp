@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useCallback, Component, useContext } from "react";
-import ReactMapGl,{ Marker, Popup, NavigationControl} from "react-map-gl";
-//import { listLogEntries } from './API';
+import React, { useState, useEffect,  useContext } from "react";
+import ReactMapGl,{  NavigationControl} from "react-map-gl";
+
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { listLogEntries } from "../../services/postService";
 import MapMarker from './../mapmarker/mapmarker.js'
 import Geocoder from "react-map-gl-geocoder";
 import AddLocation from './../addlocation/addlocation.js';
-import NavigationBar from "../navigationbar/navigationbar";
 import { useLocation } from "react-router-dom"
-//import 'bootstrap/dist/css/bootstrap.min.css';
 import { UserContext } from '../../context/UserContext.js';
 import LoginModal from "../loginModal/loginModal";
 
@@ -33,7 +31,6 @@ const Map = (props) => {
     const lat = location.lat;
     const { user } = useContext(UserContext);
     const storageUser = localStorage.getItem('user');
-    console.log('map props', location, lat, long);
   
     const [viewport, setViewport] = useState({
       width: "100vw", 
@@ -71,7 +68,6 @@ const Map = (props) => {
     };
   
     const mapRef = React.createRef();
-    //const geocoderContainerRef = React.useRef();
   
     const handleViewportChange = viewport => {
       this.setState({
@@ -95,11 +91,9 @@ const Map = (props) => {
     };
   
   
-    const myMap = React.useRef()
+    const myMap = React.useRef();
     const geocoderContainerRef = React.useRef();
-    /* const setCoordinate = useCallback((event) => {
-      console.log(event);
-    }, []); */
+
   
     return (
       
@@ -142,17 +136,13 @@ const Map = (props) => {
               viewport={viewport}
               showUserLocation={false}
               minLength={3}
-              //onSelected={this.onSelected}
-              //queryParams={queryParams}
-              //hideOnSelect={true}
+             
               position="top-left"
             />
   <div style={{position: 'absolute', right: 10}}>
             <NavigationControl />
           </div>
             
-  
-  {/*<Search setViewport={setViewport} />*/}
   
         
         <AddLocation

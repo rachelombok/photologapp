@@ -1,15 +1,14 @@
 import React, { useState, useContext } from 'react';
  import { useForm } from 'react-hook-form';
 import { UserContext } from '../../context/UserContext.js';
- import { listLogEntries, createLogEntry } from '../../services/postService.js';
+ import {  createLogEntry } from '../../services/postService.js';
 import { Form, InputGroup, Button, Spinner } from 'react-bootstrap';
 import { toast } from "react-toastify";
 import { Rating } from '@mui/material';
 
  const LogEntryForm = ({ location, onFormClose }) => {
    const [loading, setLoading] = useState(false);
-   const [error, setError] = useState('');
-   //const [file, setFileName] = useState(null);
+  
    const [photo, setPhoto] = useState(null);
    const [ratingValue, setRatingValue] = useState(0);
    const { register, handleSubmit } = useForm();
@@ -30,7 +29,6 @@ import { Rating } from '@mui/material';
       formData.append('placeName', data.placeName);
       formData.append('description', data.description);
       formData.append('photographer', data.photographer);
-      //formData.append('image', photo);
       for ( let i = 0; i < photo.length; i++ ) {
 				formData.append( 'image', photo[ i ], photo[ i ].name );
 			}
@@ -40,16 +38,7 @@ import { Rating } from '@mui/material';
       formData.append('longitude', location.longitude);
       formData.append('visitDate', data.visitDate);
       
-      //for (var key of formData.entries()) {
-        //console.log(key[0] + ', ' + key[1])
-      //}
-      
-      //data.latitude = location.latitude;
-      //data.longitude = location.longitude;
-      //data.image = photo;
-      console.log(data);
-      console.log(formData);
-      console.log(token);
+     
       setLoading(false);
       await createLogEntry(formData, token);
       toast.success('New entry added!', {hideProgressBar: true});
@@ -106,20 +95,6 @@ import { Rating } from '@mui/material';
     `}
 
     </style>
-     {/*<form onSubmit={handleSubmit(onSubmit)} className="entry-form" encType='multipart/form-data'>
-       { error ? <h3 className="error">{error}</h3> : null}
-       <label htmlFor="placeName">Title</label>
-       <input name="placeName" required ref={register} />
-       <label htmlFor="photographer">Photograher</label>
-       <textarea name="photographer" rows={3} ref={register}></textarea>
-       <label htmlFor="description">Description</label>
-       <textarea name="description" rows={3} ref={register}></textarea>
-       <label htmlFor="image">Image</label>
-       <input name="image" type='file' multiple onChange={setFile} placeholder="Pase an image URL" ref={register} />
-       <label htmlFor="visitDate">Visit Date</label>
-       <input name="visitDate" type="date" required ref={register} />
-       <button disabled={loading}>{loading ? 'Loading...' : 'Create Entry'}</button>
-  </form>*/}
      <Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
      <Form.Group controlId="formBasicEmail">
           <Form.Label>Place Name</Form.Label>
@@ -177,11 +152,6 @@ import { Rating } from '@mui/material';
             }
 </Button>
       
-       {/* 
-        
-        <Button disabled={loading} type='submit' {...loading ? "Creating..." : "Created"} variant='flat' block size='lg'>
-            <b>Submit</b>
-</Button>*/}
      </Form>
      </div>
    );

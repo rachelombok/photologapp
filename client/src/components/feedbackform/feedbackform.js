@@ -1,14 +1,13 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, {  useContext, useRef } from 'react';
 import { useHistory } from "react-router-dom";
- import { useForm } from 'react-hook-form';
-import { Form,FormControl,Button, Popover, OverlayTrigger, Tooltip, Modal, InputGroup, Row, Col, FloatingLabel } from 'react-bootstrap'
+import { Form,Button,  Row, Col,  } from 'react-bootstrap'
 import emailjs from '@emailjs/browser';
 import { UserContext } from '../../context/UserContext.js';
 import { toast } from "react-toastify";
 
 const FeedbackForm = () => {
     const form = useRef();
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const history = useHistory();
 
     const sendEmail = (e) => {
@@ -63,16 +62,3 @@ const FeedbackForm = () => {
 
 export default FeedbackForm;
 
-/* 
-
-New message from {{from_name}}
-
-Hello {{to_name}},
-
-You got a new message from {{from_name}} (via CovidForecasts):
-
-{{message}}
-
-Best wishes,
-EmailJS team
-*/

@@ -1,8 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Modal, Carousel, Figure, Container, Col, Row, Card, Form, InputGroup, Button } from 'react-bootstrap'
+import { Modal, Carousel, Figure, Container, Col, Row, Card, Button } from 'react-bootstrap'
 import { UserContext } from '../../context/UserContext';
-import { Link, useHistory } from 'react-router-dom';
-import defaultavi from '../../assets/images/defaultavi.jpeg';
+import { Link } from 'react-router-dom';
 import '../../css/components/PostModal.css';
 import { calculateTimeDifference, formatDateString, calculateCommentTimeDifference } from '../../utils/logEntry';
 import {Rating, Avatar, AvatarGroup, Chip, Stack } from '@mui/material';

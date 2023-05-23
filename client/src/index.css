@@ -58,7 +58,7 @@ code {
 }
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
   color: #fff;
-  background-color: rgb(210, 139, 248);
+  background-color: rgb(210, 139, 248) !important;
 }
 .popup img {
   height: 200px;

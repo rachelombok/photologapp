@@ -12,8 +12,7 @@ const HelpMenu = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("jwtToken");
         history.push("/login");
-        //toast.success("You are logged out");
-        //
+
       };
 
     useEffect(() => {

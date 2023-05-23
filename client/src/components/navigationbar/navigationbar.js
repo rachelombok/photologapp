@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navbar,Nav,Button, Popover, OverlayTrigger, NavDropdown} from 'react-bootstrap'
 import './navigationbar.css';
-//import logo from '../../assets/images/digcamtrans.jpeg';
 import logo from '../../assets/images/digicamtrans.jpeg';
 import HelpMenu from '../helpmenu/helpmenu';
  

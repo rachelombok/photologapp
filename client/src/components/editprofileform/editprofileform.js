@@ -1,16 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from "react-router-dom";
- import { useForm } from 'react-hook-form';
-//import { UserContext } from '../../context/UserContext.js';
- import { listLogEntries, createLogEntry } from '../../services/postService.js';
  import { UserContext } from '../../context/UserContext.js';
  import { toast } from "react-toastify";
- import { Form,FormControl,Button, Popover, OverlayTrigger, Tooltip, Modal, InputGroup, Row, Col, FloatingLabel } from 'react-bootstrap'
+ import { Form,Button,  InputGroup, Row, Col } from 'react-bootstrap'
 import useInput from '../../hooks/useInput.js';
 import { updateUserProfile, updateUserAvatar } from '../../services/userService.js';
- const EditProfileForm = ({ location, onFormClose }) => {
+ const EditProfileForm = () => {
     const history = useHistory();
-    const [loading, setLoading] = useState(false);
    const [error, setError] = useState('');
    const [newAvatar, setNewAvatar] = useState("");
    const { user, setUser } = useContext(UserContext);
@@ -105,16 +101,6 @@ import { updateUserProfile, updateUserAvatar } from '../../services/userService.
           <Form.Control type="text" placeholder="Name" defaultValue={fullname.value} onChange={fullname.onChange}/>
         </Col>
       </Form.Group>
-
-      {/*<Form.Group as={Row} className="mb-3" controlId="formHorizontalPassword">
-        <Form.Label column sm={2}>
-          Password
-        </Form.Label>
-        <Col sm={10}>
-          <Form.Control type="password" placeholder="Password" autoComplete='new-password'/>
-        </Col>
-   </Form.Group>*/}
-
       
 
       <Form.Group as={Row} className="mb-3" controlId="formHorizontalName">

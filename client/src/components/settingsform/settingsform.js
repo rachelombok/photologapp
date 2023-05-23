@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from "react-router-dom";
- import { useForm } from 'react-hook-form';
  import { UserContext } from '../../context/UserContext.js';
  import { toast } from "react-toastify";
- import { Form,FormControl,Button, Popover, OverlayTrigger, Tooltip, Modal, InputGroup, Row, Col, FloatingLabel } from 'react-bootstrap'
+ import { Form, Button,  Row, Col } from 'react-bootstrap'
 import useInput from '../../hooks/useInput.js';
 import { changePassword } from '../../services/authenticationService.js';
 import { validatePassword } from '../../utils/validation.js';
@@ -12,14 +11,10 @@ import { validatePassword } from '../../utils/validation.js';
     const history = useHistory();
     const [loading, setLoading] = useState(false);
    const [error, setError] = useState('');
-   //const [newPassword, setNewPassword] = useState("");
    const { user, setUser } = useContext(UserContext);
-   //const [oldPassword, setOldPassword] = useState('');
    const token = localStorage.getItem('jwtToken');
    const newPassword = useInput("");
   const oldPassword = useInput("");
-  // const bio = useInput(user.bio);
-  // const website = useInput(user.website);
   
   const handleSubmit = async (event) => {
     event.preventDefault();
