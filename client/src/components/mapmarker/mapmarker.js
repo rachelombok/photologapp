@@ -1,5 +1,5 @@
 import React, {memo, useMemo} from "react";
-import { Marker, Popup } from "react-map-gl";
+import { Marker } from "react-map-gl";
 import LogEntryPopUp from "../logentrypopup/logentrypopup";
 
 const MapMarker = (props) => {
@@ -31,7 +31,7 @@ const MapMarker = (props) => {
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
           </Marker>
-          {console.log('marker opps up?', props.showPopUp[entry._id])}
+        
           {props.showPopUp[entry._id] ? (
             
             <LogEntryPopUp logEntry={entry} setShowPopUp={props.setShowPopUp}/>

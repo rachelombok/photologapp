@@ -1,18 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useForm } from 'react-hook-form';
-import { Card, Form, Button, Image } from 'react-bootstrap'
-import { Link, useHistory, useParams } from 'react-router-dom';
-import {
-  registerUser,
-  login,
-} from '../../services/authenticationService';
+import { useHistory, useParams } from 'react-router-dom';
+
 import { UserContext } from '../../context/UserContext';
 import { getUserProfile
  } from '../../services/userService';
 import ProfileHeader from '../../components/profileheader/profileheader';
 import ProfilePostSection from '../../components/profilepostsection/profilepostsection';
 import '../../css/pages/ProfilePage.css';
-import pic from '../../assets/images/defaultavi.jpeg';
 import NotFoundPage from '../NotFoundPage/NotFound';
 const ProfilePage = ({url}) => {
     // profile header
@@ -27,13 +21,13 @@ const ProfilePage = ({url}) => {
     const [refetch, setRefetch] = useState(false);
     const history = useHistory();
     if (!username) username = url;
-    console.log('arewegetting params?', username);
+   
 
     useEffect(async() => {
       
         await getUserProfile(username, token).then((res) => {
             console.log('setting profile', res)
-            // console.log(console.log(user._id, res.user._id)); // this causes ou deadend
+            
             if (Boolean(user)){ // if user is authenticated
               res.user.isMe = user._id == res.user._id ? true : false;
               res.user.isFollowing = res.isFollowing;
@@ -43,12 +37,9 @@ const ProfilePage = ({url}) => {
             
         }).catch((err) => {setDeadend(true); console.log(err);});
         setRefetch(false);
-      }, [refetch, username, url]);
-// pass to profile header
-// localStorage.get('user')
+      }, [refetch, username, url, token]);
 
       if (deadend){
-        console.log('wdeasdaend',deadend);
         return (
             <NotFoundPage/>
         )
@@ -59,7 +50,7 @@ const ProfilePage = ({url}) => {
             
             <ProfileHeader profile={profile} setRefetch={setRefetch}/>
             
-        {console.log("fteched logs", profile.logs)}
+       
     <ProfilePostSection logs={profile.logs}/>
         </div>
        

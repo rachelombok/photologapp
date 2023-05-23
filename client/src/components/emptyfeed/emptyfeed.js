@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { Typography } from '@mui/material';
 
 const EmptyFeed = () => {
 
     return(
-        <>
-        <h1>Your feed is empty :(</h1>
-        <div>When you follow others, their most recent posts will show up here!</div>
-        <Link to="/" className="link">
-          Go back to JustShoot.
-        </Link>
-        </>
+       
+        <div className='not-found'>
+       <Typography variant='h1' color={'white'} align='center'>Your feed is empty</Typography><br></br>
+       <Typography variant='subtitle1' color={'white'} align='center'>When you follow others, their most recent posts will show up here!</Typography><br></br>
+        </div>
+        
     )
 };
 

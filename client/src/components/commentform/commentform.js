@@ -1,9 +1,7 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState,  useRef } from 'react';
 import { useHistory } from "react-router-dom";
- import { useForm } from 'react-hook-form';
- import { UserContext } from '../../context/UserContext.js';
  import { toast } from "react-toastify";
- import { Form,FormControl,Button, Popover, OverlayTrigger, Tooltip, Modal, InputGroup, Row, Col, FloatingLabel } from 'react-bootstrap'
+ import { Form,Button,  InputGroup,  } from 'react-bootstrap'
 import useInput from '../../hooks/useInput.js';
 import { createComment } from '../../services/postService.js';
 const CommentForm = ({ logId, setRefetch, user }) => {

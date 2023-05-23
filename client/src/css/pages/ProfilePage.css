@@ -23,6 +23,19 @@
   
   }
 
+  .user-list{
+    grid-column: center-start / center-end;
+    display: -webkit-inline-box;
+    grid-template-columns: min-content 1fr;
+    grid-column-gap: 1rem;
+    justify-items: start;
+  }
+
+  .user-btn{
+    float: right;
+    display: flex;
+  }
+
   .avatar {
     width: 10rem !important;
     object-fit: cover;

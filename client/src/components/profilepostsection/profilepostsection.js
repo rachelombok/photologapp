@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { NavDropdown, Button, Row, Col, Image } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react';
+import {  Row, Col, Image } from 'react-bootstrap'
 import PostModal from '../postmodal/postmodal';
 import { Box } from '@mui/joy';
 import FavoriteIcon from '@mui/icons-material/Favorite';
