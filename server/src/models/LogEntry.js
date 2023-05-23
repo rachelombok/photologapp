@@ -23,10 +23,10 @@ const logEntrySchema = new Schema({
   photographer: String,
   image: {type: Array},
   thumbnail: String,
-  tags: [{
+  tags: {
       type: String,
       lowercase: true,
-  }],
+  },
   rating: {
       type: Number,
           min: 0,

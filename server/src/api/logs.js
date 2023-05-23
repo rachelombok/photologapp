@@ -38,7 +38,7 @@ router.post('/', requireAuth, upload.array("image", 5), async (req, res, next) =
     console.log('did we make tit after auth?');
     try{
         const reqUser = req.user._id;
-        console.log('files', req.user, req);
+        // console.log('files', req.user, req);
         let fileArray = req.files,fileLocation;
         console.log('filearray', fileArray);
         console.log(JSON.stringify(req.body));
@@ -59,6 +59,7 @@ router.post('/', requireAuth, upload.array("image", 5), async (req, res, next) =
             longitude: req.body.longitude,
             image: galleryImgLocationArray,
             author: reqUser,
+            tags: req.body.tags
             //image: req.file.location, 
         });
         await User.findByIdAndUpdate(reqUser, {

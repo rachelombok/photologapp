@@ -4,12 +4,14 @@ import { UserContext } from '../../context/UserContext.js';
  import { listLogEntries, createLogEntry } from '../../services/postService.js';
 import { Form, InputGroup, Button, Spinner } from 'react-bootstrap';
 import { toast } from "react-toastify";
+import { Rating } from '@mui/material';
 
  const LogEntryForm = ({ location, onFormClose }) => {
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState('');
    //const [file, setFileName] = useState(null);
    const [photo, setPhoto] = useState(null);
+   const [ratingValue, setRatingValue] = useState(0);
    const { register, handleSubmit } = useForm();
    const { user } = useContext(UserContext);
    const token = localStorage.getItem('jwtToken');
@@ -17,6 +19,8 @@ import { toast } from "react-toastify";
 
    const onSubmit = async (data) => {
     try {
+      const listOfTags = data.tags?.trim().replace(/\s+/g, '#').split('#');
+      if (listOfTags.length > 10) return toast.error('Too many tags');
       if (photo.length > 5) return toast.error('Max of 5 images', {hideProgressBar: true});
       setLoading(true);
       console.log('onsubmit', loading);
@@ -30,7 +34,8 @@ import { toast } from "react-toastify";
       for ( let i = 0; i < photo.length; i++ ) {
 				formData.append( 'image', photo[ i ], photo[ i ].name );
 			}
-      formData.append('rating', 5);
+      formData.append('rating', ratingValue);
+      formData.append('tags', listOfTags);
       formData.append('latitude', location.latitude);
       formData.append('longitude', location.longitude);
       formData.append('visitDate', data.visitDate);
@@ -140,10 +145,16 @@ import { toast } from "react-toastify";
         </Form.Group>
         <Form.Group>
           <Form.Label>Tags</Form.Label>
-          <Form.Control name='tags' placeholder='landscape NYC nature sun' />
+          <Form.Control name='tags' placeholder='landscape NYC nature sun' ref={register}/>
           <Form.Text className="text-muted">
             Separate by whitespace, up to 10 tags.
           </Form.Text>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Rating</Form.Label><br></br>
+          <Rating name="rating" defaultValue={0} precision={0.5} size='large' value={ratingValue} onChange={(event, newValue) => {
+          setRatingValue(newValue);
+        }}/>
         </Form.Group>
         <Form.Group>
           <Form.Label>Visit Date</Form.Label>

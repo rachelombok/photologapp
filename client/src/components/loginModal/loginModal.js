@@ -13,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import CommentForm from '../commentform/commentform';
 import { getComments, getLogEntryLikes, toggleLike } from '../../services/postService';
 
-const LoginModal = ({modal, setModal}) => {
+const LoginModal = ({modal, setModal, message}) => {
 
     const toggleModal = () => {
         setModal(!modal);
@@ -23,7 +23,7 @@ const LoginModal = ({modal, setModal}) => {
         <Modal show={modal} onHide={toggleModal} size='lg' centered>
             <Modal.Header closeButton/>
             <Modal.Body>
-          <p>You must have an account to add a Log Entry.</p>
+          <p>{message}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button as={Link} to='/register' variant="secondary">Register</Button>

@@ -4,13 +4,15 @@ import { UserContext } from '../../context/UserContext';
 import { Link, useHistory } from 'react-router-dom';
 import defaultavi from '../../assets/images/defaultavi.jpeg';
 import UserListModal from '../userlistmodal/userlistmodal';
+import LoginModal from '../loginModal/loginModal';
 import { followUser } from '../../services/profileService';
 import { toast } from "react-toastify";
 import { Avatar } from '@mui/material';
 const ProfileHeader = ({profile, setRefetch}) => {
     const [showFollowersModal, setFollowersModal] = useState(false);
     const [showFollowingModal, setFollowingModal] = useState(false);
-    
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const { user } = useContext(UserContext);
     const token = localStorage.getItem('jwtToken');
 // avatar, following, followers, post #
 // edit profile or following/follow button
@@ -21,12 +23,19 @@ const ProfileHeader = ({profile, setRefetch}) => {
 const follow = async () => {
     try{
         // check if user exists, if not redirect to login page/register page
+        if (user || token){
+            
+        
         const alreadyFollowing = profile?.isFollowing;
         await followUser(profile?._id, token);
         //if (alreadyFollowing) toast.success('')
         //toast.success('you followed them!');
         //window.location.reload(); //figure out how to refresh
        setRefetch(true);
+        }
+        else{
+            setShowLoginModal(true);
+        }
     }catch(err){
         toast.error(err.message);
     }
@@ -113,6 +122,7 @@ const toggleModal = (e) => {
         </div>
         {showFollowersModal && profile?.followersCount ? <UserListModal userId={profile?._id} token={token} userListName={'Followers'} userListCount={profile?.followersCount} show={showFollowersModal} setShow={setFollowersModal}/> : null}
         {showFollowingModal && profile?.followingCount ? <UserListModal userId={profile?._id} token={token} userListName={'Following'} userListCount={profile?.followersCount} show={showFollowingModal} setShow={setFollowingModal}/> : null}
+            {showLoginModal ? <LoginModal modal={showLoginModal} setModal={setShowLoginModal} message="You must have an account to follow others."/> : null}
       </Card.Body>
     </Card>
         </>

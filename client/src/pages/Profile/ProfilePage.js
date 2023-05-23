@@ -31,9 +31,11 @@ const ProfilePage = ({url}) => {
     useEffect(async() => {
         await getUserProfile(username, token).then((res) => {
             console.log('setting profile', res)
-            console.log(console.log(user._id, res.user._id)); // this causes ou deadend
-            res.user.isMe = user._id == res.user._id ? true : false;
-            res.user.isFollowing = res.isFollowing;
+            // console.log(console.log(user._id, res.user._id)); // this causes ou deadend
+            if (Boolean(user)){ // if user is authenticated
+              res.user.isMe = user._id == res.user._id ? true : false;
+              res.user.isFollowing = res.isFollowing;
+            }
             setDeadend(false);
             setProfile(res.user);
             

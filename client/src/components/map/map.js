@@ -164,7 +164,7 @@ const Map = (props) => {
           getTravelEntries={getTravelEntries}
         />
 
-        {showLoginModal ? <LoginModal modal={showLoginModal} setModal={setShowLoginModal}/> : null}
+        {showLoginModal ? <LoginModal modal={showLoginModal} setModal={setShowLoginModal} message="You must have an account to add a Log Entry."/> : null}
 
       </ReactMapGl>
   

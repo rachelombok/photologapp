@@ -5,7 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import defaultavi from '../../assets/images/defaultavi.jpeg';
 import '../../css/components/PostModal.css';
 import { calculateTimeDifference, formatDateString, calculateCommentTimeDifference } from '../../utils/logEntry';
-import {Rating, Avatar, AvatarGroup } from '@mui/material';
+import {Rating, Avatar, AvatarGroup, Chip, Stack } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { toast } from "react-toastify";
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -148,13 +148,20 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
                     Description
                 </Card.Title>
                 {logEntry.description} 
-                  <Card.Title>
+                  
+            {logEntry.tags ? 
+            
+            <>
+    <Card.Title>
                         Tags
             </Card.Title>
-            <Button variant="outline-dark">#tag1</Button>
-            <Button variant="outline-dark">#tag2</Button>
-            <Card.Link>#tag3</Card.Link>
-            <Card.Link>#tag4</Card.Link>
+            <Stack direction="row" spacing={1}>
+            {logEntry.tags.split(',').map((tag) =>(
+                <Chip label={`${tag}`} clickable/>
+            ))}
+            </Stack>
+            </>: null}
+
             <Card.Title>
                         Visit Date
             </Card.Title>

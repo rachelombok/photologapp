@@ -91,9 +91,9 @@ const HomePage = ({match}) => {
             <Nav.Link eventKey='feedback'>Feedback</Nav.Link>
           </Nav.Item>
 
-          <Nav.Item>
+          {user && <Nav.Item>
             <Nav.Link eventKey={`${user.username}`} to={`/${user.username}`}>MyProfile</Nav.Link>
-          </Nav.Item>
+          </Nav.Item>}
               
 
             <Nav.Item hidden>
