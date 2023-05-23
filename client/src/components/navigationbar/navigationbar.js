@@ -58,7 +58,7 @@ class NavigationBar extends React.Component{
                      {console.log('render navbar')}
                       <OverlayTrigger trigger="click" placement="right" overlay={popover}>
     <Button variant="light" style={{border: '2px solid black'}}><strong>Click me!</strong></Button>
-          </OverlayTrigger>
+          </OverlayTrigger>{' '}
 
 
           <HelpMenu/>

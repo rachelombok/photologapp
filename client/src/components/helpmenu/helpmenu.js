@@ -21,7 +21,7 @@ const HelpMenu = () => {
     }, [user])
 
     return (
-        <>
+        <>{' '}
         {console.log('render help menu')}
         {user ? 
         <NavDropdown title={user.username} id="basic-nav-dropdown">
@@ -35,7 +35,7 @@ const HelpMenu = () => {
                 Sign Out
               </NavDropdown.Item>
             </NavDropdown>
-            : <Button variant="light" style={{border: '2px solid black'}} href='/test'>Sign in</Button>}</>
+            : <Button variant="light" style={{border: '2px solid black', marginLeft: '10px'}} href='/login'>Sign in</Button>}</>
     );
 }
 export default HelpMenu;

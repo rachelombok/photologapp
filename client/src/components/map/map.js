@@ -165,10 +165,10 @@ const Map = (props) => {
         />
 
         {showLoginModal ? <LoginModal modal={showLoginModal} setModal={setShowLoginModal}/> : null}
-  
+
       </ReactMapGl>
   
-      
+        
     );
     
   };
