@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { NavDropdown, Button} from 'react-bootstrap'
 import { UserContext } from '../../context/UserContext';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, Redirect } from 'react-router-dom';
 import '../../css/components/HelpMenu.css';
 const HelpMenu = () => {
     const history = useHistory();
@@ -21,11 +21,10 @@ const HelpMenu = () => {
 
     return (
         <>{' '}
-        {console.log('render help menu')}
         {user ? 
         <NavDropdown title={user.username} id="basic-nav-dropdown">
-              <NavDropdown.Item as={Link} to={`/${user.username}`}>Profile</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to='edit'>
+              <NavDropdown.Item  onClick={() => {window.location.href=`/${user.username}`}}>Profile</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => {window.location.href="/edit"}}>
                 Edit Profile
               </NavDropdown.Item>
 

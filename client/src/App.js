@@ -46,9 +46,8 @@ class App extends React.Component{
   shouldComponentUpdate(){
     //console.log('dontupdate man', useLocation().pathname);
 
-    return false;
+    return true;
   }
-
 
   // this.context.X
   // move all routes to a separate page ?
@@ -234,5 +233,19 @@ class App extends React.Component{
 //     </ReactMapGL>
 //     </div>);
 // }
+
+function areEqual(prevProps, nextProps) {
+  console.log(nextProps, prevProps);
+  //if (nextProps.logEntries.length > prevProps.logEntries.length) return false;
+  //if (prevProps.showPopUp == nextProps.showPopUp) return true;
+  //return false;
+  // true if no rerender should occur
+  // false if should rerender
+  /*
+  return true if passing nextProps to render would return
+  the same result as passing prevProps to render,
+  otherwise return false
+  */
+}
 
 export default App;
