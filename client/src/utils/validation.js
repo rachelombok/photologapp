@@ -12,7 +12,7 @@ export const validateEmail = (email) => {
 };
   
 export const validateFullName = (fullName) => {
-    console.log('fn ', fullName);
+   
     if (!fullName) {
       return 'Enter a valid popname.';
     }

@@ -16,7 +16,7 @@ const HelpMenu = () => {
       };
 
     useEffect(() => {
-        console.log('mount help menu')
+        console.log('mount help menu');
     }, [user])
 
     return (

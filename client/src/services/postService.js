@@ -6,7 +6,7 @@ const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:133
 export async function listLogEntries(){
     try{
       const response = await fetch(`${API_URL}/api/logs`);
-    console.log(API_URL);
+   
     return response.json();
     }catch(e){
       throw new Error(e.response.data.error);
@@ -19,10 +19,8 @@ export async function createLogEntry(entry, token) {
     'Content-Type': 'multipart/form-data' 
   };
   if (token) headers.Authorization = `Bearer ${token}`;
-  console.log(headers, token);
-    for (var key of entry.entries()) {
-      console.log(key[0] + ', ' + key[1])
-    }
+
+   
     /*const response = await axios.post(`${API_URL}/api/logs`, {
       entry,
         headers: {
@@ -37,11 +35,10 @@ export async function createLogEntry(entry, token) {
     headers: {...headers}
     }).then(response => { 
       console.log(response);
-      console.log('workedhere');
     })
     .catch(error => {
         console.log(error.response)
-        console.log('didntworkedhere');
+    
         throw new Error(error.response.data.error);
     });
     
@@ -77,7 +74,6 @@ export async function uploadImage(file) {
         },
         body: formData
       });
-      console.log(response);
       return response.data;
 
     }catch (e){
@@ -100,11 +96,11 @@ export async function createComment(logId, message, token) {
       headers: {...headers},
       data: { message }
     });
-    console.log(response);
+   
     return response.data;
 
   }catch (e){
-    console.log(e.response);
+   
     throw new Error(e.response.data.error);
   }
 }
@@ -141,11 +137,11 @@ export async function toggleLike(logId, token) {
       method: 'POST',
       headers: {...headers}
     });
-    console.log(response);
+   
     return response.data;
 
   }catch (e){
-    console.log(e.response);
+  
     throw new Error(e.response.data.error);
   }
 }

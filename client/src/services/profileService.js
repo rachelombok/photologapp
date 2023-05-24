@@ -50,11 +50,11 @@ export const retrieveUserFollowing = async (userId, offset, authToken) => {
    * @param {string} authToken A user's auth token
    */
   export const retrieveUserFollowers = async (userId, offset, authToken) => {
-    console.log('starting follower retriee');
+   
     const headers ={};
 
     if (authToken) headers.Authorization = `Bearer ${authToken}`;
-    console.log(headers);
+  
     try {
       const response = await axios(
         `${API_URL}/api/user/${userId}/${offset}/followers`,
@@ -63,10 +63,10 @@ export const retrieveUserFollowing = async (userId, offset, authToken) => {
           headers: {...headers },
         }
       );
-      console.log('we got our followers!', response);
+     
       return response.data;
     } catch (err) {
-      console.log(err.response, err);
+    
       throw new Error(err.response.data.error);
     }
   };

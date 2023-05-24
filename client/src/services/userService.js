@@ -6,8 +6,7 @@ export const updateUserAvatar = async (formData, token) => {
         'Content-Type': 'multipart/form-data'
       };
     if (token) headers.Authorization = `Bearer ${token}`;
-    console.log('wtfsetthis', headers, token);
-    console.log('our data', formData);
+   
     try {
         await axios({
             method: 'patch',
@@ -32,14 +31,14 @@ export const getUserProfile = async (username, authToken) => {
 
 if (authToken) headers.Authorization = `Bearer ${authToken}`;
     try{
-      console.log('heders', authToken)
+     
         const response = await axios(`${API_URL}/api/user/${username}`,
         {
           method: 'GET',
           headers: {...headers }
         } 
         );
-        console.log(response);
+      
     return response.data;
     }catch(err){
         throw new Error(err.response.data.error);
@@ -53,8 +52,7 @@ export const updateUserProfile = async (data, token) => {
       };
 
     if (token) headers.Authorization = `Bearer ${token}`;
-      console.log('we got a token', token, headers.Authorization);
-      console.log('our data', data);
+     
       try{
         const response = await axios(`${API_URL}/api/user/edit`, {
             method: 'patch',
@@ -63,7 +61,7 @@ export const updateUserProfile = async (data, token) => {
           });
           localStorage.setItem("user", JSON.stringify(response.data.user));
           localStorage.setItem('jwtToken', response.data.token);
-          console.log("yazzzz updateprofile work in", JSON.stringify(response.data.user), response.data.token, localStorage);
+         
           return response.data;
       }catch(err){
         throw new Error(err.response.data.error);

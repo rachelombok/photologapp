@@ -18,7 +18,6 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
     const [isLogLiked, setIsLogLiked] = useState(false);
     const [refetch, setRefetch] = useState(false);
     const { user } = useContext(UserContext);
-    console.log('PostModal rendered', logEntry);
     const token = localStorage.getItem('jwtToken');
     const date = new Date();
     //modal, setModal,
@@ -84,7 +83,7 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
         if (user && token && likes){
             likes.forEach((like)=>{
                 if (like.author._id == user._id){
-                    console.log('found our user in list of likes!');
+                  
                     found = true
                     setIsLogLiked(true);
                     setRefetch(false);
@@ -93,7 +92,7 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
             })
         }
         if (!found){
-            console.log('shouldnt make it here if user has liked')
+          
             setIsLogLiked(false);
         }
       };
@@ -102,7 +101,7 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
         // retrieve comments here w logId
         const commentList = await getComments(logEntry._id);
         const likeList = await getLogEntryLikes(logEntry._id);
-        console.log('only mount this once when clicked', commentList, likeList);
+       
         setComments(commentList);
         setLikes(likeList);
         isLiked();
@@ -141,7 +140,7 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
 
 <Container >
           <Row>
-          <Figure.Caption >Posted by <Link to={`/${logEntry.photographer}`} className='justshoot-link'>{logEntry.photographer}</Link></Figure.Caption>
+          <Figure.Caption >Posted by <Link to={`${logEntry.photographer}`} className='justshoot-link'>{logEntry.photographer}</Link></Figure.Caption>
             <Col xs={12} md={8} style={{borderLeft: '2px solid #999999', borderRight: '2px solid #999999'}}>
                 <Card.Title className='post-modal-title'>
                     Description
@@ -154,12 +153,13 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
     <Card.Title className='post-modal-title'>
                         Tags
             </Card.Title>
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" spacing={1} sx={{marginBottom: '10px'}}>
             {logEntry.tags.split(',').map((tag) =>(
-                <Chip label={`${tag}`} clickable key={tag}/>
+                <Chip label={`#${tag}`} clickable key={tag} sx={{color:'white'}} variant='outlined'/>
             ))}
             </Stack>
             </>: null}
+            
 
             <Card.Title className='post-modal-title'>
                         Visit Date
@@ -231,7 +231,7 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
 </Modal.Body>
 
 <Modal.Footer>
-    {console.log('likestatus', isLogLiked)}
+   
                 <p className='mr-auto'>
                 <IconButton onClick={handleLike}>
                     {isLogLiked ? (

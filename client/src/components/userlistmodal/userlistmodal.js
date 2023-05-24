@@ -19,18 +19,15 @@ const UserListModal = ({ userId, token, userListName, userListCount, show, setSh
       };
 
     useEffect(async() => {
-        console.log('these are the params', userId, token, userListCount);
+       
         try{
             const response = userListName == 'Following' ? await retrieveUserFollowing(userId, userListCount, token) :
             await retrieveUserFollowers(userId, userListCount, token);
             
-            console.log('thsi is our studd', response);
-
             setListOfUsers(response);
         }catch(err){
             toast.error(err.message);
         }
-        console.log('only mount following/follower list this once when clicked');
     }, [listOfUsers.users.length]);
 
     return(
@@ -40,7 +37,7 @@ const UserListModal = ({ userId, token, userListName, userListCount, show, setSh
             
             {listOfUsers.users?.map((user) => (
               
-                <UserListItem user={user.user} reqUserName={reqUserName} follow={follow}/>
+                <UserListItem user={user.user} reqUserName={reqUserName} follow={follow} setShow={setShow}/>
                 
              ))}
             

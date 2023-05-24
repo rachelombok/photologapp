@@ -14,15 +14,13 @@ const CommentForm = ({ logId, setRefetch, user }) => {
 
     const handleComment = async (e) =>{
         e.preventDefault();
-        console.log('you commented!', commentMessage);
         if (commentMessage.value.length == 0) return;
         try {
             if (!Boolean(user)) return toast.error('Must have an account to leave a comment.',  {hideProgressBar: true});
             const res = await createComment(logId, commentMessage.value, token);
-        console.log(res);
-            toast.success("Commented!");
+
             commentMessage.setValue("");
-            console.log(commentMessage.value);
+           
             formRef.current.reset();
             setRefetch(true);
         } catch(e){

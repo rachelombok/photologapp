@@ -8,7 +8,6 @@ export const signOut = () => () => {
 export const signInSuccess = (response) => {
   localStorage.setItem('jwtToken', response.data.token);
   localStorage.setItem("user", JSON.stringify(response.data.user));
-  console.log("yazzzz signed in", response, localStorage);
   
 };
 
@@ -33,7 +32,7 @@ export const setAuthentication = (token) => {
  * @returns {object} The user object
  */
 export const login = async (usernameOrEmail, password, authToken) => {
-  console.log('begin login', usernameOrEmail, password, authToken);
+
   try {
     const request =
       usernameOrEmail && password
@@ -46,11 +45,11 @@ export const login = async (usernameOrEmail, password, authToken) => {
     signInSuccess(response);
     setAuthentication(response.data.token);
     //localStorage.setItem('jwtToken', response.data.token)
-    console.log("loginres", response)
+   
     // jwt.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
     return response.data;
   } catch (err) {
-    console.log("login error");
+   
     throw new Error(err.response.data.error);
   }
 };
@@ -82,7 +81,7 @@ export const githubAuthentication = async (code) => {
  * @returns {object} The user object
  */
 export const registerUser = async (email, fullname, username, password) => {
-  console.log('begin reg', email, username, password);
+ 
   try {
     const response = await axios.post(`${API_URL}/api/auth/register`, {
       email,
@@ -91,11 +90,10 @@ export const registerUser = async (email, fullname, username, password) => {
       password,
     });
     const res = await login(email, password, response.data.token);
-    console.log(response.data);
-    //response.data.token
+   
     return response.data;
   } catch (err) {
-    console.log("register error");
+   
     throw new Error(err.response.data.error);
    
   }
@@ -127,7 +125,7 @@ const data= {
       headers: {...headers}
       });
   } catch (err) {
-    console.log(err.response);
+
     if (err.response.data?.message) throw new Error(err.response.data?.message);
     throw new Error(err.response.data.error);
   }

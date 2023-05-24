@@ -42,13 +42,13 @@ const Map = (props) => {
   
     const getTravelEntries = async () => {
       const logEntries = await listLogEntries();
-      console.log('doesthisork', logEntries)
+     
       setLogEntries(logEntries);
     };
   
   
     useEffect(() => {
-      console.log("CALLING THIS????")
+      
       getTravelEntries();
     }, []);
   
@@ -77,7 +77,7 @@ const Map = (props) => {
   
     const onSelected = (viewport, item) => {
       this.setState({...this.state.viewport, ...viewport});
-      console.log('Selected: ', item);
+     
     };
   
     // if you are happy with Geocoder default settings, you can just use handleViewportChange directly

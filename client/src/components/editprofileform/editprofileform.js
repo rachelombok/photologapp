@@ -19,7 +19,7 @@ import { updateUserProfile, updateUserAvatar } from '../../services/userService.
   const setFile = (e) => {
     if (e.target.files[0]) {
         setNewAvatar(e.target.files[0]);
-        console.log(e.target.files[0].name);
+      
       /*uploadImage(e.target.files[0]).then((res) =>
         setNewAvatar(res.secure_url)
       );*/
@@ -29,16 +29,16 @@ import { updateUserProfile, updateUserAvatar } from '../../services/userService.
     const handleEditProfile = async (e) =>{
         e.preventDefault();
         const nothingChanged = (fullname.value == user.fullname) && (username.value == user.username) && (bio.value == user.bio) && (website.value == user.website) && !newAvatar;
-        console.log(nothingChanged);
+
         if (nothingChanged) return toast.info('Nothing to update', {hideProgressBar: true});
             try {
                 if (newAvatar){
                     let formData = new FormData();
                 formData.append('image', newAvatar, newAvatar.name);
-                console.log(formData, newAvatar);
+                
                 await updateUserAvatar(formData, token);
                 }
-                console.log('oke we needa do this too');
+              
                 const body = {
                     fullName: fullname.value,
                     username: username.value,
@@ -49,17 +49,14 @@ import { updateUserProfile, updateUserAvatar } from '../../services/userService.
                   };
                 const res = await updateUserProfile(body, token);
                 setUser(res.user);
-                console.log(body);
-                console.log('SUCESS!');
                 const redirectProfile = username.value ? username.value : user.username;
-                console.log('SUCESS!', redirectProfile);
+               
                 toast.success('Profile updated!', {hideProgressBar: true});
                 history.push(`/${redirectProfile}`);
             } catch(err){
                 toast.error(err.message, {
                     position: "top-right"
                 });
-                console.log(error.name, error.message);
             }
         
         

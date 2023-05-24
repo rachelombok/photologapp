@@ -12,7 +12,7 @@ const ProfilePage = ({url}) => {
     // profile header
     // profile post content
     // set up this page to work for without authentication
-    console.log(url);
+
     let { username } = useParams();
     const [profile, setProfile] = useState({});
     const token = localStorage.getItem('jwtToken'); // we can also usecontext isntead
@@ -26,7 +26,6 @@ const ProfilePage = ({url}) => {
     useEffect(async() => {
       
         await getUserProfile(username, token).then((res) => {
-            console.log('setting profile', res)
             
             if (Boolean(user)){ // if user is authenticated
               res.user.isMe = user._id == res.user._id ? true : false;

@@ -15,11 +15,10 @@ const FeedbackForm = () => {
     
         emailjs.sendForm('service_mwhljm6', 'template_nbyedsl', form.current, 'user_2wBZ9qESfc8nrcHgF0SKm')
           .then((result) => {
-              console.log(result.text);
+            
               toast.success("Thanks for your feedback!");
             history.push('/feed');
           }, (error) => {
-              console.log(error.text);
               toast.error(`${error.text}`)
           });
     };

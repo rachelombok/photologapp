@@ -54,7 +54,7 @@ class NavigationBar extends React.Component{
                   <Navbar className='navgradient' fixed="top">
                   <Navbar.Brand style={{fontSize:'30px', color:'white'}} className='navfont' ><a href='/'><img src={logo} width='60px' alt='logo'></img></a> JustShoot </Navbar.Brand>
                       <Nav className='mr-auto'>
-                     {console.log('render navbar')}
+                   
                       <OverlayTrigger trigger="click" placement="right" overlay={popover}>
     <Button variant="light" style={{border: '2px solid black'}}><strong>Click me!</strong></Button>
           </OverlayTrigger>{' '}

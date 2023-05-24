@@ -28,10 +28,10 @@ const RegisterPage = ({ login }) => {
     };
 
     const onSubmit = async (data) => {
-      console.log(data);
+     
       try{
         const res = await registerUser(data.email, data.fullname, data.username, data.password);
-        console.log(res);
+     
         setUser(res.user);
         toast(`📸 Welcome ${res.user.fullname}!`, {hideProgressBar: true, progressClassName:'justshoot-notification-progress-bar'});
         history.push("/");

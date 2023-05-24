@@ -12,7 +12,7 @@ import { formatDateString, calculateTimeDifference,formatLikeMessage } from '../
 import {  getLogEntryLikes, toggleLike } from '../../services/postService';
 import { UserContext } from '../../context/UserContext';
 const FeedPost = ({logEntry}) => {
-    console.log('o[pys')
+
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const date = new Date();
@@ -58,7 +58,7 @@ const FeedPost = ({logEntry}) => {
         if (user && token && likes){
             likes.forEach((like)=>{
                 if (like.author._id == user._id){
-                    console.log('found our user in list of likes!');
+                 
                     found = true
                     setIsLogLiked(true);
                     setRefetch(false);
@@ -67,14 +67,14 @@ const FeedPost = ({logEntry}) => {
             })
         }
         if (!found){
-            console.log('shouldnt make it here if user has liked')
+       
             setIsLogLiked(false);
         }
       };
 
     useEffect(async()=>{
         const likeList = await getLogEntryLikes(logEntry._id);
-        console.log('only mount this once when clicked', likeList, logEntry);
+       
         setLikes(likeList);
         isLiked();
         setRefetch(false);

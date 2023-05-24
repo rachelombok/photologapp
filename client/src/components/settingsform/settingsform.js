@@ -18,7 +18,7 @@ import { validatePassword } from '../../utils/validation.js';
   
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(oldPassword, newPassword);
+  
     const newPasswordError = validatePassword(newPassword.value);
     if (newPasswordError) return toast.error(newPasswordError);
     
@@ -32,7 +32,7 @@ import { validatePassword } from '../../utils/validation.js';
         history.push(`${user.username}`)
     }catch(e){
         // toast.error
-        console.log(e.message);
+      
         toast.error(e.message, {
             position: "top-right"
         });

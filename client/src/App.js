@@ -56,7 +56,7 @@ class App extends React.Component{
     return(
         <div>
           <ToastContainer autoClose={4000} closeButton={false} closeOnClick theme='dark' />
-          {console.log('userscont', this.context)}
+         
           <Router>
             <Switch>
                 <Route exact path='/' component={MapPage}/>

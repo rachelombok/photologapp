@@ -13,10 +13,10 @@ const NewLogEntryForm = (props) => {
     const { register, handleSubmit } = useForm();
   
     const onSubmit = async (data) => {
-      console.log(data);
+     
       if (data.images.length > 5){
           window.alert('Do not submit more than 5 images.')
-          console.log("failure")
+         
         
 
       }

@@ -22,9 +22,7 @@ import { Rating } from '@mui/material';
       if (listOfTags.length > 10) return toast.error('Too many tags');
       if (photo.length > 5) return toast.error('Max of 5 images', {hideProgressBar: true});
       setLoading(true);
-      console.log('onsubmit', loading);
-      console.log(data);
-      console.log(location);
+ 
       let formData = new FormData();
       formData.append('placeName', data.placeName);
       formData.append('description', data.description);

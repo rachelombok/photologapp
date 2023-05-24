@@ -3,9 +3,8 @@ import { Button, Container, Col, Row } from 'react-bootstrap'
 import { Box, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-const UserListItem = ({user, reqUserName, follow}) => {
+const UserListItem = ({user, reqUserName, follow, setShow}) => {
     const [showLoginModal, setShowLoginModal] = useState(false);
-    console.log(user);
     return(
       <Box component="span" sx={{ display: 'flex', bgcolor: 'black', color: 'grey', borderRadius: 2,p: 1,
       m: 0, marginBottom: '5px'}}>
@@ -14,7 +13,7 @@ const UserListItem = ({user, reqUserName, follow}) => {
         </Box>
         <Box sx={{ flexGrow: 1, paddingLeft: '8px' }}>
         
-        <Link to={user?.username} className='justshoot-link'>@{user?.username}</Link><br></br>
+        <Link to={user?.username} className='justshoot-link' onClick={() => setShow(false)}>@{user?.username}</Link><br></br>
         {user?.fullname}
         </Box>
         <Box sx={{ alignSelf: 'center'}}>

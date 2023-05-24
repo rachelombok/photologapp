@@ -30,10 +30,10 @@ const LoginPage = () => {
     };
 
     const onSubmit = async (data) => {
-      console.log(data);
+    
       try{
         const res = await login(data.email, data.password);
-        console.log(res);
+       
         setUser(res.user);
         toast(`📸 Welcome back ${res.user.fullname}!`, {hideProgressBar: true, progressClassName:'justshoot-notification-progress-bar'});
         history.push("/");

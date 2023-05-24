@@ -49,7 +49,7 @@ const follow = async () => {
         }else{
             setIsAuthenticatedUser(false);
         }
-        console.log("we'll need to update when a user follows someone");
+       
         // use refetch instead when a user follows
     }, [profile?.followersCount, profile?.followingCount, profile?.isFollowing])
 

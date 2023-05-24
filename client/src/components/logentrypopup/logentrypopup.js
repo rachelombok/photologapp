@@ -39,7 +39,6 @@ const LogEntryPopUp = ({logEntry, setShowPopUp}) => {
         >
             <Card className="popup-card">
                 
-                {console.log('map marker level 3 call?')}
                     {logEntry.image ? logEntry.image.length > 1 ? 
                     <Carousel fade style={{border: '2px solid #8641da'}}>
                         {logEntry.image.map(function(e, i) {

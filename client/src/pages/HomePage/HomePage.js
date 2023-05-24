@@ -27,7 +27,6 @@ const HomePage = ({match}) => {
     const history = useHistory();
 
     useEffect(() => {
-        console.log('paramssssssss', match.params.anyUrl, key);
         setKey(match.params.anyUrl);
         handleLogout();
     }, [match.params.anyUrl, user, token]);
@@ -41,7 +40,7 @@ const HomePage = ({match}) => {
       if (isAuthenticatedUser()){
         const decodedJwt = parseJwt(token);
         if (decodedJwt.exp * 1000 < Date.now()) {
-          console.log(decodedJwt);
+         
           setUser(null);
           localStorage.removeItem("user");
           localStorage.removeItem("jwtToken");
@@ -101,7 +100,6 @@ const HomePage = ({match}) => {
                <Tab.Content >
 
             <div style={{paddingTop: '20px'}}>
-                {console.log(key)}
                
             {Boolean(key) ?
             key == 'feed' ? <Tab.Pane eventKey='feed'>
