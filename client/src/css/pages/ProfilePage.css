@@ -2,16 +2,16 @@
     overflow-wrap: break-word;
     margin: auto;
     max-width: 900px;
-      padding: 10px;
-      
+    padding: 10px;
+
     overflow-x: hidden;
     overflow-y: visible !important;
     height: 100vh;
     background-color: rgb(28, 29, 29);
     color: white;
-  }
-  
-  .profile-header{
+}
+
+.profile-header {
     grid-column: center-start / center-end;
     display: grid;
     grid-template-columns: min-content 1fr;
@@ -20,105 +20,98 @@
     background-color: rgb(28, 29, 29);
     padding: 0px 10rem 2rem 0rem;
     border-bottom: 1px solid grey;
-  
-  }
+}
 
-  .user-list{
+.user-list {
     grid-column: center-start / center-end;
     display: -webkit-inline-box;
     grid-template-columns: min-content 1fr;
     grid-column-gap: 1rem;
     justify-items: start;
-  }
+}
 
-  .user-btn{
+.user-btn {
     float: right;
     display: flex;
-  }
+}
 
-  .avatar {
+.avatar {
     width: 10rem !important;
     object-fit: cover;
-      height: 10rem !important;
-      border-radius: 50%;
-      margin-bottom: 25px;
-  }
-  
+    height: 10rem !important;
+    border-radius: 50%;
+    margin-bottom: 25px;
+}
 
-  .card-text {
+.card-text {
     color: white;
     word-wrap: break-word;
-    margin:5px 0 5px 0;
-  }
+    margin: 5px 0 5px 0;
+}
 
-  .card {
+.card {
     margin: 5px;
     border: none;
-  }
+}
 
-  .col {
+.col {
     padding-bottom: 15px;
     padding-top: 15px;
-  }
+}
 
-  .post-img{
+.post-img {
     object-fit: cover;
     width: 17rem;
     height: 17rem;
     cursor: pointer;
-    transition: '1s ease-in';
+    transition: "1s ease-in";
     -webkit-filter: brightness(100%);
-  }
+}
 
-  .post-img:hover, .post-img:focus-within {
+.post-img:hover,
+.post-img:focus-within {
     -webkit-filter: brightness(70%);
     -webkit-transition: all 1s ease;
     -moz-transition: all 1s ease;
     -o-transition: all 1s ease;
     -ms-transition: all 1s ease;
     transition: all 1s ease;
-  }
-  
-  .profile-buttons {
+}
+
+.profile-buttons {
     display: flex;
     align-items: center;
     width: 100%;
-  
-  }
-  
-  .profile-stats {
+}
+
+.profile-stats {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 50%;
-  
-  }
-  
-  .profile-categories {
+}
+
+.profile-categories {
     grid-column: center-start / center-end;
     display: flex;
     justify-content: center;
     transform: translateY(-1px);
     color: black;
-  
-  
-  }
-  
-  .profile-images {
+}
+
+.profile-images {
     display: grid;
     grid-column: center-start / center-end;
     grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 2.5rem;
     grid-row-gap: 2.5rem;
-  
-  }
-  
-  .profile-image {
+}
+
+.profile-image {
     height: 100%;
-  
-  }
-  
-  .profile-empty {
+}
+
+.profile-empty {
     grid-column: center-start / center-end;
     display: flex;
     flex-direction: column;
@@ -128,43 +121,43 @@
     height: 25rem;
     line-height: 3.5rem;
     padding: 0 2rem;
-  }
-.like-overlay{
-  position: absolute;
-  top: 8.5rem;
-  bottom: 8.5rem;
-  left: 6rem;
-  right: 8.5rem;
-  visibility: hidden;
-  opacity: 0;
-  color: white;
-  /* transition effect. not necessary */
-  transition: opacity .2s, visibility .2s;
+}
+.like-overlay {
+    position: absolute;
+    top: 8.5rem;
+    bottom: 8.5rem;
+    left: 6rem;
+    right: 8.5rem;
+    visibility: hidden;
+    opacity: 0;
+    color: white;
+    /* transition effect. not necessary */
+    transition: opacity 0.2s, visibility 0.2s;
 }
 
-.post-grid > *:hover .like-overlay{
-  visibility: visible;
-  opacity: 1;
+.post-grid > *:hover .like-overlay {
+    visibility: visible;
+    opacity: 1;
 }
 
-.comment-overlay{
-  position: absolute;
-  top: 8.5rem;
-  bottom: 8.5rem;
-  left: 8.5rem;
-  right: 2rem;
-  visibility: hidden;
-  color: white;
-  opacity: 0;
-  /* transition effect. not necessary */
-  transition: opacity .2s, visibility .2s;
+.comment-overlay {
+    position: absolute;
+    top: 8.5rem;
+    bottom: 8.5rem;
+    left: 8.5rem;
+    right: 2rem;
+    visibility: hidden;
+    color: white;
+    opacity: 0;
+    /* transition effect. not necessary */
+    transition: opacity 0.2s, visibility 0.2s;
 }
 
-.post-grid > *:hover .comment-overlay{
-  visibility: visible;
-  opacity: 1;
+.post-grid > *:hover .comment-overlay {
+    visibility: visible;
+    opacity: 1;
 }
 
-.form-control-plaintext{
-  color: white;
+.form-control-plaintext {
+    color: white;
 }

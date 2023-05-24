@@ -1,27 +1,27 @@
-import axios from 'axios';
-const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:1337' : 'https://photologapp.herokuapp.com';
+import axios from "axios";
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:1337"
+        : "https://photologapp.herokuapp.com";
 
 export const signOut = () => () => {
-  localStorage.removeItem('jwtToken');
+    localStorage.removeItem("jwtToken");
 };
 
 export const signInSuccess = (response) => {
-  localStorage.setItem('jwtToken', response.data.token);
-  localStorage.setItem("user", JSON.stringify(response.data.user));
-  
+    localStorage.setItem("jwtToken", response.data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
 };
 
-export const signInFailure = (err) => ({
-  
-});
+export const signInFailure = (err) => ({});
 
 export const setAuthentication = (token) => {
-	if (token) {
-		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-	} else {
-		axios.defaults.headers.common['Authorization'] = null
-	}
-}
+    if (token) {
+        axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+    } else {
+        axios.defaults.headers.common["Authorization"] = null;
+    }
+};
 
 /**
  * Logs a user in with the provided credentials
@@ -32,26 +32,24 @@ export const setAuthentication = (token) => {
  * @returns {object} The user object
  */
 export const login = async (usernameOrEmail, password, authToken) => {
+    try {
+        const request =
+            usernameOrEmail && password
+                ? { data: { usernameOrEmail, password } }
+                : { headers: { authorization: authToken } };
+        const response = await axios(`${API_URL}/api/auth/login`, {
+            method: "POST",
+            ...request,
+        });
+        signInSuccess(response);
+        setAuthentication(response.data.token);
+        //localStorage.setItem('jwtToken', response.data.token)
 
-  try {
-    const request =
-      usernameOrEmail && password
-        ? { data: { usernameOrEmail, password } }
-        : { headers: { authorization: authToken } };
-    const response = await axios(`${API_URL}/api/auth/login`, {
-      method: 'POST',
-      ...request,
-    });
-    signInSuccess(response);
-    setAuthentication(response.data.token);
-    //localStorage.setItem('jwtToken', response.data.token)
-   
-    // jwt.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
-    return response.data;
-  } catch (err) {
-   
-    throw new Error(err.response.data.error);
-  }
+        // jwt.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
+        return response.data;
+    } catch (err) {
+        throw new Error(err.response.data.error);
+    }
 };
 
 /**
@@ -61,15 +59,15 @@ export const login = async (usernameOrEmail, password, authToken) => {
  * @returns {object} User object
  */
 export const githubAuthentication = async (code) => {
-  try {
-    const response = await axios.post('/api/auth/login/github', {
-      code,
-      state: sessionStorage.getItem('authState'),
-    });
-    return response.data;
-  } catch (err) {
-    throw new Error(err.response.data.error);
-  }
+    try {
+        const response = await axios.post("/api/auth/login/github", {
+            code,
+            state: sessionStorage.getItem("authState"),
+        });
+        return response.data;
+    } catch (err) {
+        throw new Error(err.response.data.error);
+    }
 };
 
 /**
@@ -81,22 +79,19 @@ export const githubAuthentication = async (code) => {
  * @returns {object} The user object
  */
 export const registerUser = async (email, fullname, username, password) => {
- 
-  try {
-    const response = await axios.post(`${API_URL}/api/auth/register`, {
-      email,
-      fullname,
-      username,
-      password,
-    });
-    const res = await login(email, password, response.data.token);
-   
-    return response.data;
-  } catch (err) {
-   
-    throw new Error(err.response.data.error);
-   
-  }
+    try {
+        const response = await axios.post(`${API_URL}/api/auth/register`, {
+            email,
+            fullname,
+            username,
+            password,
+        });
+        const res = await login(email, password, response.data.token);
+
+        return response.data;
+    } catch (err) {
+        throw new Error(err.response.data.error);
+    }
 };
 
 /**
@@ -107,26 +102,25 @@ export const registerUser = async (email, fullname, username, password) => {
  * @param {string} authToken A user's auth token
  */
 export const changePassword = async (oldPassword, newPassword, authToken) => {
-  const headers ={
-    'Content-Type': 'application/json'
-  };
+    const headers = {
+        "Content-Type": "application/json",
+    };
 
-if (authToken) headers.Authorization = `Bearer ${authToken}`;
-const data= {
-  oldPassword: oldPassword,
-  newPassword: newPassword
-}
-  try {
-    
-    await axios({
-      method: 'patch',
-      url: `${API_URL}/api/auth/password`,
-      data: data,
-      headers: {...headers}
-      });
-  } catch (err) {
-
-    if (err.response.data?.message) throw new Error(err.response.data?.message);
-    throw new Error(err.response.data.error);
-  }
+    if (authToken) headers.Authorization = `Bearer ${authToken}`;
+    const data = {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+    };
+    try {
+        await axios({
+            method: "patch",
+            url: `${API_URL}/api/auth/password`,
+            data: data,
+            headers: { ...headers },
+        });
+    } catch (err) {
+        if (err.response.data?.message)
+            throw new Error(err.response.data?.message);
+        throw new Error(err.response.data.error);
+    }
 };

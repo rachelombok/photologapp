@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useContext } from 'react';
-import SettingsForm from '../../components/settingsform/settingsform';
-import { Typography } from '@mui/material'
+import React, { useEffect, useState, useContext } from "react";
+import SettingsForm from "../../components/settingsform/settingsform";
+import { Typography } from "@mui/material";
 const SettingsPage = () => {
-    return(
+    return (
         <>
-        <Typography variant='h1' color={'white'} align='center'>Settings</Typography>
-        <SettingsForm/>
+            <Typography variant="h1" color={"white"} align="center">
+                Settings
+            </Typography>
+            <SettingsForm />
         </>
     );
 };

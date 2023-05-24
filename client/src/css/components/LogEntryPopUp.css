@@ -1,45 +1,43 @@
 .card-body {
     padding: 10px 0 0 0;
-
 }
 
-.popup-carousel-img{
+.popup-carousel-img {
     object-fit: cover;
 }
 
-.popup-description{
+.popup-description {
     display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical; 
-  width: 230px;
-  overflow: hidden;
-  color: white;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    width: 230px;
+    overflow: hidden;
+    color: white;
 }
 
-.popup-card{
+.popup-card {
     background-color: rgb(28, 29, 29);
     padding: 4px;
 }
 
-.popup-title{
+.popup-title {
     color: white;
 }
-.justshoot-btn{
+.justshoot-btn {
     background-color: rgb(133, 65, 218);
     align-content: flex-end;
-  }
-
-.mapboxgl-popup-content{
-    border: 2px black;
-  background-color: rgb(28, 29, 29);
-  border-radius: 3;
 }
 
-.mapboxgl-popup-close-button{
+.mapboxgl-popup-content {
+    border: 2px black;
+    background-color: rgb(28, 29, 29);
+    border-radius: 3;
+}
+
+.mapboxgl-popup-close-button {
     color: white;
 }
 
-
-.mapboxgl-popup-anchor-top .mapboxgl-popup-tip{
-border-bottom-color:rgb(28, 29, 29);
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+    border-bottom-color: rgb(28, 29, 29);
 }

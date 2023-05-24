@@ -1,46 +1,44 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import React, {  Component } from "react";
+import React, { Component } from "react";
 import Geocoder from "react-map-gl-geocoder";
 
-class GeocoderSearch extends Component{
-
+class GeocoderSearch extends Component {
     state = {
         viewport: {
-          latitude: 37.7577,
-          longitude: -122.4376,
-          zoom: 8
+            latitude: 37.7577,
+            longitude: -122.4376,
+            zoom: 8,
         },
         logEntries: [],
         showPopUp: {},
-        addLocation: null
-    
-      };
+        addLocation: null,
+    };
 
-    handleGeocoderViewportChange = viewport => {
+    handleGeocoderViewportChange = (viewport) => {
         const geocoderDefaultOverrides = { transitionDuration: 1000 };
-    
+
         return this.handleViewportChange({
-          ...viewport,
-          ...geocoderDefaultOverrides
+            ...viewport,
+            ...geocoderDefaultOverrides,
         });
     };
 
-
-    render(){
+    render() {
         const { viewport } = this.state;
-        return(
+        return (
             <div>
                 <Geocoder
-            onViewportChange={this.handleGeocoderViewportChange}
-            mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-            viewport={viewport}
-            position="top-left"
-          />
+                    onViewportChange={this.handleGeocoderViewportChange}
+                    mapboxApiAccessToken={
+                        process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
+                    }
+                    viewport={viewport}
+                    position="top-left"
+                />
             </div>
         );
     }
-
 }
 
-  export default GeocoderSearch;
+export default GeocoderSearch;

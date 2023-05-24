@@ -1,6 +1,10 @@
 .btn-flat {
-    background: linear-gradient(90deg, rgba(18,21,168,1) 0%, rgba(163,0,232,1) 100%);
-    background-color: rgb(18,21,168);
+    background: linear-gradient(
+        90deg,
+        rgba(18, 21, 168, 1) 0%,
+        rgba(163, 0, 232, 1) 100%
+    );
+    background-color: rgb(18, 21, 168);
     color: white;
     min-width: 100px;
 }

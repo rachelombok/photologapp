@@ -1,41 +1,40 @@
-.carousel-post-img{
+.carousel-post-img {
     object-fit: contain;
     max-height: 500px;
 }
 
-.comments-section{
+.comments-section {
     max-height: 400px;
     overflow-y: scroll;
     padding-bottom: 30px;
 }
 
-#username > *{
+#username > * {
     display: inline-flex;
 }
 
 .my-modal {
     max-height: 200px;
-} 
+}
 
-#post-comment-button{
+#post-comment-button {
     position: absolute;
     bottom: 0;
 }
 
-.post-modal .modal-content{
+.post-modal .modal-content {
     background-color: rgb(28, 29, 29);
 }
 
-
-.post-modal-title{
+.post-modal-title {
     color: white;
 }
 
-.post-modal-card{
-    background-color:rgb(28, 29, 29) ;
+.post-modal-card {
+    background-color: rgb(28, 29, 29);
     color: white;
 }
 
-.post-modal-text{
+.post-modal-text {
     color: white;
 }
