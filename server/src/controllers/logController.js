@@ -158,7 +158,7 @@ module.exports.toggleLike = async (req, res, next) => {
     }
     return res.send({ success: true });
   } catch(e){
-    next(err);
+    next(e);
   }
 }
 

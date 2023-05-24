@@ -230,7 +230,7 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
 
 </Modal.Body>
 
-<Modal.Footer>
+<Modal.Footer className='post-modal-title'>
    
                 <p className='mr-auto'>
                 <IconButton onClick={handleLike}>
