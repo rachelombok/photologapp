@@ -168,8 +168,8 @@ const PostModal = ({modal, setModal, logEntry, fromMap = false}) => {
              </p>
             
             <Card.Title className='post-modal-title'>Rating</Card.Title>
-            <Rating name="read-only" value={logEntry.rating} readOnly />
-            {!fromMap ? <Link to={{ pathname: "/", lat: logEntry.latitude, long: logEntry.longitude  }}> See this post on the map</Link> : null}
+            <Rating name="read-only" value={logEntry.rating} readOnly /><br></br>
+            {!fromMap ? <Link to={{ pathname: "/", lat: logEntry.latitude, long: logEntry.longitude  }} className='justshoot-link'> See this post on the map</Link> : null}
             
             
             {likes?.length > 1 ? (<>
