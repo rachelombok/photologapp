@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-const logEntryLikesSchema = new Schema({
+const logEntryLikesSchema = new Schema(
+  {
     logEntry: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "LogEntry",

@@ -1,41 +1,40 @@
-const jwtSimple = require('jwt-simple');
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const User = require('../models/User');
-const ConfirmationToken = require('../models/ConfirmationToken');
-const bcrypt = require('bcrypt');
-const axios = require('axios');
+const jwtSimple = require("jwt-simple");
+const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const User = require("../models/User");
+const ConfirmationToken = require("../models/ConfirmationToken");
+const bcrypt = require("bcrypt");
+const axios = require("axios");
 
 const {
   validateEmail,
   validateFullName,
   validateUsername,
   validatePassword,
-} = require('../utils/validation');
+} = require("../utils/validation");
 
 module.exports.get = (req, res) => {
   res.json({
-    message: 'Hello Auth! 🔐',
+    message: "Hello Auth! 🔐",
   });
 };
 
 const createTokenSendResponse = (user, res, next) => {
   const payload = {
     _id: user._id,
-      email: user.email,
-      username: user.username,
-      fullname: user.fullname,
-      avatar: user.avatar,
+    email: user.email,
+    username: user.username,
+    fullname: user.fullname,
+    avatar: user.avatar,
     website: user.website,
     bio: user.bio,
-
   };
-  const token = jwt.sign(payload, 'shhhhh', { expiresIn: '2d'});
+  const token = jwt.sign(payload, "shhhhh", { expiresIn: "2d" });
   return res.json({
     success: true,
     token: token,
-    user: payload
-   });
+    user: payload,
+  });
   /*jwt.sign(
     payload,
     "shhhhh", { //process.env.JWT_SECRET
@@ -59,15 +58,15 @@ module.exports.verifyJwt = (token) => {
       const id = jwtSimple.decode(token, "j2390jf09kjsalkj4r93").id;
       const user = await User.findOne(
         { _id: id },
-        'email username avatar bookmarks bio fullName confirmed website'
+        "email username avatar bookmarks bio fullName confirmed website"
       );
       if (user) {
         return resolve(user);
       } else {
-        reject('Not authorizedreject1.');
+        reject("Not authorizedreject1.");
       }
     } catch (err) {
-      return reject('Not authorizedreject2.');
+      return reject("Not authorizedreject2.");
     }
   });
 };
@@ -77,7 +76,8 @@ module.exports.requireAuth = async (req, res, next) => {
 
   const { authorization } = req.headers;
   console.log("req auth here", authorization, req.headers);
-  if (!authorization) return res.status(401).send({ error: 'Not authorized login.' });
+  if (!authorization)
+    return res.status(401).send({ error: "Not authorized login." });
   if (authorization && authorization.startsWith("Bearer")) {
     token = authorization.split(" ")[1];
   }
@@ -89,24 +89,25 @@ module.exports.requireAuth = async (req, res, next) => {
   }
   try {
     //const user = await this.verifyJwt(authorization);
-    const decoded = jwt.verify(token, 'shhhhh'); //turn key to env secret
-    console.log('decode', decoded);
+    const decoded = jwt.verify(token, "shhhhh"); //turn key to env secret
+    console.log("decode", decoded);
     const user = await User.findById(decoded._id).select("-password");
-    console.log('found user', user);
+    console.log("found user", user);
     if (!user) {
       return next({ message: `No user found for ID ${decoded._id}` });
     }
     // Allow other middlewares to access the authenticated user details.
     res.locals.user = user;
     req.user = user;
-    console.log('made it done requireauth', req.body, req.data);
+    console.log("made it done requireauth", req.body, req.data);
     next();
   } catch (err) {
     return res.status(401).send({ error: `New error: ${err}` });
   }
 };
 
-module.exports.optionalAuth = async (req, res, next) => { // fix this func
+module.exports.optionalAuth = async (req, res, next) => {
+  // fix this func
   let token;
   const { authorization } = req.headers;
   if (authorization && authorization.startsWith("Bearer")) {
@@ -114,20 +115,20 @@ module.exports.optionalAuth = async (req, res, next) => { // fix this func
   }
   console.log(authorization);
   if (authorization) {
-    console.log('yes auth op!');
+    console.log("yes auth op!");
     try {
       //const user = await this.verifyJwt(authorization);
-      const decoded = jwt.verify(token, 'shhhhh'); //turn key to env secret
-      console.log('decode optional', decoded);
+      const decoded = jwt.verify(token, "shhhhh"); //turn key to env secret
+      console.log("decode optional", decoded);
       const user = await User.findById(decoded._id).select("-password");
-    console.log('found user optional', user);
-    if (!user) {
-      return next({ message: `No user found for ID ${decoded._id}` });
-    }
+      console.log("found user optional", user);
+      if (!user) {
+        return next({ message: `No user found for ID ${decoded._id}` });
+      }
       // Allow other middlewares to access the authenticated user details.
       res.locals.user = user;
       req.user = user;
-    console.log('made it done optionalauth', req.body, req.data);
+      console.log("made it done optionalauth", req.body, req.data);
     } catch (err) {
       // better return error fix
       return res.status(401).send({ error: err });
@@ -156,7 +157,7 @@ module.exports.loginAuthentication = async (req, res, next) => {
   if (!usernameOrEmail || !password) {
     return res
       .status(400)
-      .send({ error: 'Please provide both a username/email and a password.' });
+      .send({ error: "Please provide both a username/email and a password." });
   }
 
   try {
@@ -165,7 +166,7 @@ module.exports.loginAuthentication = async (req, res, next) => {
     });
     if (!user || !user.password) {
       return res.status(401).send({
-        error: 'The credentials you provided are incorrect, please try again.',
+        error: "The credentials you provided are incorrect, please try again.",
       });
     }
 
@@ -176,7 +177,7 @@ module.exports.loginAuthentication = async (req, res, next) => {
       if (!result) {
         return res.status(401).send({
           error:
-            'The credentials you provided are incorrect, please try again.',
+            "The credentials you provided are incorrect, please try again.",
         });
       }
       createTokenSendResponse(user, res, next);
@@ -217,7 +218,7 @@ module.exports.register = async (req, res, next) => {
     user = new User({ fullname, email, username, password: hashPassword });
     confirmationToken = new ConfirmationToken({
       user: user._id,
-      token: crypto.randomBytes(20).toString('hex'),
+      token: crypto.randomBytes(20).toString("hex"),
     });
     console.log("UUUSer ", user);
     console.log("conf ", confirmationToken);
@@ -235,7 +236,7 @@ module.exports.register = async (req, res, next) => {
       token: jwtSimple.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
     });*/
   } catch (err) {
-      console.log(err);
+    console.log(err);
     next(err.message);
   }
   // sendConfirmationEmail(user.username, user.email, confirmationToken.token);
@@ -246,13 +247,13 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
   if (!code || !state) {
     return res
       .status(400)
-      .send({ error: 'Please provide a github access code and state.' });
+      .send({ error: "Please provide a github access code and state." });
   }
 
   try {
     // Exchange the temporary code with an access token
     const response = await axios.post(
-      'https://github.com/login/oauth/access_token',
+      "https://github.com/login/oauth/access_token",
       {
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_CLIENT_SECRET,
@@ -260,16 +261,16 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
         state,
       }
     );
-    const accessToken = response.data.split('&')[0].split('=')[1];
+    const accessToken = response.data.split("&")[0].split("=")[1];
 
     // Retrieve the user's info
-    const githubUser = await axios.get('https://api.github.com/user', {
+    const githubUser = await axios.get("https://api.github.com/user", {
       headers: { Authorization: `token ${accessToken}` },
     });
 
     // Retrieve the user's email addresses
     // Private emails are not provided in the previous request
-    const emails = await axios.get('https://api.github.com/user/emails', {
+    const emails = await axios.get("https://api.github.com/user/emails", {
       headers: { Authorization: `token ${accessToken}` },
     });
     const primaryEmail = emails.data.find((email) => email.primary).email;
@@ -284,7 +285,10 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
           avatar: userDocument.avatar,
           bookmarks: userDocument.bookmarks,
         },
-        token: jwtSimple.encode({ id: userDocument._id }, process.env.JWT_SECRET),
+        token: jwtSimple.encode(
+          { id: userDocument._id },
+          process.env.JWT_SECRET
+        ),
       });
     }
 
@@ -296,7 +300,7 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
       if (existingUser.email === primaryEmail) {
         return res.status(400).send({
           error:
-            'A user with the same email already exists, please change your primary github email.',
+            "A user with the same email already exists, please change your primary github email.",
         });
       }
       /*if (existingUser.username === githubUser.data.login.toLowerCase()) {
@@ -329,7 +333,7 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
 };
 
 module.exports.changePassword = async (req, res, next) => {
-  console.log(req.body)
+  console.log(req.body);
   const { oldPassword, newPassword } = req.body;
   const user = req.user;
   let currentPassword = undefined;
@@ -339,13 +343,13 @@ module.exports.changePassword = async (req, res, next) => {
     currentPassword = userDocument.password;
 
     const result = await bcrypt.compare(oldPassword, currentPassword);
-    console.log('track passowrds', result, currentPassword);
+    console.log("track passowrds", result, currentPassword);
     if (!result) {
       return res.status(401).send({
-        error: 'Your old password was entered incorrectly, please try again.',
+        error: "Your old password was entered incorrectly, please try again.",
       });
     }
-    
+
     const newPasswordError = validatePassword(newPassword);
     if (newPasswordError)
       return res.status(400).send({ error: newPasswordError });
@@ -358,13 +362,11 @@ module.exports.changePassword = async (req, res, next) => {
   }
 };
 
-module.exports.me = async (req, res, next) => { 
-  console.log('getting the users data', req.user);
+module.exports.me = async (req, res, next) => {
+  console.log("getting the users data", req.user);
   const { avatar, username, fullname, email, _id, website, bio } = req.user;
-  res
-    .status(200)
-    .json({
-      success: true,
-      data: { avatar, username, fullname, email, _id, website, bio },
-    });
+  res.status(200).json({
+    success: true,
+    data: { avatar, username, fullname, email, _id, website, bio },
+  });
 };
