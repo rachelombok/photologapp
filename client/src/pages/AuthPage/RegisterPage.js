@@ -6,6 +6,7 @@ import { Link, useHistory } from "react-router-dom";
 import { registerUser, login } from "../../services/authenticationService";
 import { UserContext } from "../../context/UserContext";
 import { toast } from "react-toastify";
+
 const RegisterPage = ({ login }) => {
     const history = useHistory();
     const { register, handleSubmit } = useForm();
