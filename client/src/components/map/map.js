@@ -131,7 +131,7 @@ const Map = (props) => {
                 minLength={3}
                 position="top-left"
             />
-            <div style={{ position: "absolute", right: 10 }}>
+            <div style={{ position: "absolute", right: '3%' }}>
                 <NavigationControl />
             </div>
 
