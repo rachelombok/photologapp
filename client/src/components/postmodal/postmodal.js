@@ -80,7 +80,7 @@ const PostModal = ({ modal, setModal, logEntry, fromMap = false }) => {
                 });
             //const res = await createComment(logId, commentMessage.value, token);
             const res = await toggleLike(logEntry._id, token);
-            toast.success("liked!");
+            // toast.success("liked!");
             setIsLogLiked(!isLogLiked);
             setRefetch(true);
         } catch (e) {
