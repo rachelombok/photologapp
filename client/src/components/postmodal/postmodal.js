@@ -236,7 +236,7 @@ const PostModal = ({ modal, setModal, logEntry, fromMap = false }) => {
                                         See this post on the map
                                     </Link>
                                 ) : null}
-                                {likes?.length > 1 ? (
+                                {likes?.length > 0 ? (
                                     <>
                                         <Card.Title className="post-modal-title">
                                             Liked By

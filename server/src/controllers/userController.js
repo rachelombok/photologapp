@@ -30,7 +30,7 @@ const createTokenSendResponse = (user, res, next) => {
     website: user.website,
     bio: user.bio,
   };
-  const token = jwt.sign(payload, "shhhhh", { expiresIn: "2d" });
+  const token = jwt.sign(payload, "shhhhh", { expiresIn: "7d" });
   return res.json({
     success: true,
     token: token,
