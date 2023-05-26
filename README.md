@@ -1,7 +1,7 @@
 # JustShoot , aka photologgapp
 
 photolog app, justshoot.netlify.app
-[View the app here](justshoot.netlify.app)
+[View the app here](https://justshoot.netlify.app)
 
 This is a photo log entry app made with React, NodeJS, react-map-gl, mongoose, multer-s3, react-bootstrap, MUI, react-toastify, and a bunch of other packages. Client on Netlify, Server on Heroku. [Video demo](https://www.youtube.com/watch?v=Zye6HkykpDY)
 
