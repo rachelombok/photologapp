@@ -5,10 +5,6 @@ photolog app, justshoot.netlify.app
 
 This is a photo log entry app made with React, NodeJS, react-map-gl, mongoose, multer-s3, react-bootstrap, MUI, react-toastify, and a bunch of other packages. Client on Netlify, Server on Heroku. [Video demo](https://www.youtube.com/watch?v=Zye6HkykpDY)
 
-![js1](client/src/assets/images/justshoot1.jpg)
-![js2](client/src/assets/images/justshoot2.jpg)
-![js3](client/src/assets/images/justshoot3.png)
-
 to push to server:
 `git subtree push --prefix server heroku master`
 
@@ -26,3 +22,7 @@ to lint client:
 
 to lint server:
 `npm run lint`
+
+![js1](client/src/assets/images/justshoot1.jpg) <br>
+![js2](client/src/assets/images/justshoot2.jpg) <br>
+![js3](client/src/assets/images/justshoot3.png) <br>
