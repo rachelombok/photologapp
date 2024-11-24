@@ -18,11 +18,6 @@ const UserListModal = ({
     follow,
 }) => {
     const [listOfUsers, setListOfUsers] = useState({ user: {}, users: [] });
-    // listOfUsers = following or followers ids?
-    // string saying which list 'Followers' or 'Following'
-    // userid for person making the request (use context), token
-    // or just user
-    // listCount = follower or following count
     const { user } = useContext(UserContext);
     const reqUserName = user.username;
     const toggleModal = () => {

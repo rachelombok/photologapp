@@ -17,9 +17,6 @@ const {
 } = require("../utils/validation");
 const { request } = require("http");
 
-// create comment, retrieve comments
-// toggle like, get likes
-
 module.exports.createComment = async (req, res, next) => {
   console.log("comment body", req.body);
   const { logId } = req.params;
@@ -56,7 +53,6 @@ module.exports.createComment = async (req, res, next) => {
     res.status(201).send({
       ...comment.toObject(),
       author: { username: user.username, avatar: user.avatar },
-      // commentVotes: [],
     });
   } catch (err) {
     next(err);
@@ -92,13 +88,6 @@ module.exports.deleteComment = async (req, res, next) => {
     logEntry.commentsCount = logEntry.commentsCount - 1;
     await logEntry.save();
 
-    /*// This uses pre hooks to delete everything associated with this comment i.e replies
-    const commentDelete = await Comment.deleteOne({
-      _id: commentId,
-    });
-    if (!commentDelete.deletedCount) {
-      return res.status(500).send({ error: 'Could not delete the comment.' });
-    }*/
     const commentDelete = await Comment.deleteOne({
       _id: commentId,
     });
@@ -169,7 +158,6 @@ module.exports.toggleLike = async (req, res, next) => {
 module.exports.retrieveComments = async (req, res, next) => {
   const { logId } = req.params;
   try {
-    //const comments = await retrieveComments(postId, offset, exclude);
     const comments = await Comment.find({ logEntry: logId }).populate({
       path: "author",
       select: "username avatar",
@@ -184,7 +172,6 @@ module.exports.retrieveComments = async (req, res, next) => {
 module.exports.retrieveLogEntryLikes = async (req, res, next) => {
   const { logId } = req.params;
   try {
-    //const comments = await retrieveComments(postId, offset, exclude);
     const likes = await LogEntryLikes.findOne({ logEntry: logId }).populate({
       path: "likes.author",
       select: "username avatar",

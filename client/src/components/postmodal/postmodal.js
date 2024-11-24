@@ -37,34 +37,6 @@ const PostModal = ({ modal, setModal, logEntry, fromMap = false }) => {
     const { user } = useContext(UserContext);
     const token = localStorage.getItem("jwtToken");
     const date = new Date();
-    //modal, setModal,
-
-    // fetch user data using the user id on the logentry
-    // display a modal with the post data
-    // // will be used on map and profile, so make it general for both
-    // pass logentry to Modal, check if on profile or on map, also send profile info
-    // only update if logentry or show prop changes
-    // new endpoint to just get avatar / username
-    // if displaying modal on Map page, dont put Link to "see this on map"
-    // dont allow someone to comment if not logged in
-    // fetch who liked the post, use refetch here too
-    // list of who liked, userlistmodal
-
-    // DISPLAY
-    // carousel of all images (lazy loaded) ✅
-    // name of who posted and username (click link to go to their profile)✅
-    // place Name and date it was visited✅
-    // how long ago it was posted (move that function to utils file)
-    // descritpion of place etc✅
-    // location icon w/ name of where the photolog was left
-    // avi of user
-    // show hash tags (when ready)
-    // border around carousel
-    // add key to carousel.item
-    // add avatar to each comment
-    // add href link to username subtitle, no underline or blue color
-    // if comment section is empty, put an 'add your comment' message
-    // add border to like list avatars
 
     const toggleModal = () => {
         setModal(!modal);
@@ -78,22 +50,13 @@ const PostModal = ({ modal, setModal, logEntry, fromMap = false }) => {
                 return toast.error("Must have an account to leave a like.", {
                     hideProgressBar: true,
                 });
-            //const res = await createComment(logId, commentMessage.value, token);
             const res = await toggleLike(logEntry._id, token);
-            // toast.success("liked!");
             setIsLogLiked(!isLogLiked);
             setRefetch(true);
         } catch (e) {
             setRefetch(false);
             toast.error(e.message);
         }
-        // wrap this all around try n catch
-        // also grey out submit button if no comment
-        // grey out if only spaces, strip comment message
-
-        // call function to create comment
-        // toast success
-        //
     };
 
     const isLiked = () => {
@@ -114,7 +77,6 @@ const PostModal = ({ modal, setModal, logEntry, fromMap = false }) => {
     };
 
     useEffect(async () => {
-        // retrieve comments here w logId
         const commentList = await getComments(logEntry._id);
         const likeList = await getLogEntryLikes(logEntry._id);
 
@@ -268,13 +230,6 @@ const PostModal = ({ modal, setModal, logEntry, fromMap = false }) => {
                                     {" "}
                                     Get Directions
                                 </Button>
-                                {/*{likes ? 
-            ( <AvatarGroup max={5}>
-                {likes.likes.map((like) => (
-                    <Avatar src={`${like.author.avatar}`}/>
-                ))}
-             </AvatarGroup>) : null }
-            </Col>*/}
                             </Col>
 
                             <Col xs={6} md={4}>

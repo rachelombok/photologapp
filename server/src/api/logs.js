@@ -45,7 +45,6 @@ router.post(
     console.log("did we make tit after auth?");
     try {
       const reqUser = req.user._id;
-      // console.log('files', req.user, req);
       let fileArray = req.files,
         fileLocation;
       console.log("filearray", fileArray);
@@ -68,7 +67,6 @@ router.post(
         image: galleryImgLocationArray,
         author: reqUser,
         tags: req.body.tags,
-        //image: req.file.location,
       });
       await User.findByIdAndUpdate(reqUser, {
         $push: { logs: logEntry._id },
@@ -82,7 +80,6 @@ router.post(
       const createdEntry = await logEntry.save();
       console.log(createdEntry);
       await logEntryLikes.save();
-      //const createdEntry = await logentry.save();
       res.json(createdEntry);
     } catch (error) {
       if (error.name === "Validation Error") {
@@ -91,108 +88,8 @@ router.post(
       console.log(`logs regular err: ${error}`);
       next(error);
     }
-    /*const uid = req.params.id;
-    let update;
-    try {
-        console.log("reqquest",req.body.longitude);
-        singleUpload(req, res, function (err) {
-            if (err) {
-                console.log("errorupinhere");
-              return res.json({
-                success: false,
-                errors: {
-                  title: "Image Upload Error",
-                  detail: err.message,
-                  error: err,
-                },
-              });
-            }
-        update = req.file.location;
-        console.log("this usupdate",update);
-        
-    });
-    console.log("here?");
-    const logEntry = LogEntry.create({
-        placeName: req.body.placeName,
-        description: req.body.description,
-        image: update,
-        rating: req.body.rating,
-        visitDate: req.body.visitDate,
-        latitude: req.body.latitude,
-        longitude: req.body.longitude,
-    });
-    const createdEntry = await logEntry.save();
-    //const createdEntry = await logentry.save();
-    res.json(createdEntry);
-
-    } catch (error){
-        if (error.name === 'Validation Error'){
-            res.status(422);        
-        }
-        console.log(`regular err: ${error.name}`);
-        next(error);
-    }*/
+   
   }
 );
-//const logEntry = new LogEntry(req.body);
-//const createdEntry = await logEntry.save();
-//res.json(createdEntry);
 
-//const logEntry = new LogEntry(req.body);
-
-//res.json(createdEntry);
-/*,
-        function(err, snap) {
-            if (err) {
-              res.render('error', { error: err });
-              return;
-            }
-            
-            res.json(snap);*/
-
-/*console.log(`file req${req}`);
-    try {
-        //const path = req.file.path;
-        const obj = {
-            title: req.body.title,
-            description: req.body.description,
-            comments: req.body.comments,
-            image: req.file,
-            rating: req.body.rating,
-            visitDate: req.body.visitDate,
-            latitude: req.body.latitude,
-            longitude: req.body.longitude,
-            //image: {
-            //    data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.image)),
-            //    contentType: 'image/png'
-            //}
-        }
-        const logEntry = new LogEntry(obj);
-        const createdEntry = await logEntry.save();
-        res.json(createdEntry);
-        
-    } catch (error) {
-        if (error.name === 'Validation Error'){
-            res.status(422);        
-        }
-        console.log(`regular err: ${error.name}`);
-        next(error);
-
-    }*/
-
-/*
-router.post('/image-upload', async (req, res) => {
-    singleUpload(req, res, function (err) {
-        if (err) {
-          return res.status(422).send({ error: err.message });
-        }
-    
-        res.json({ 
-            data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-            contentType: 'image/png'
-     });
-      });
-    
-});
-*/
 module.exports = router;

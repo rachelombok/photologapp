@@ -13,11 +13,6 @@ const AddLocation = (props) => {
         show,
         setShow,
     } = props;
-    //let show = props.show
-    //const [show, setShow] = useState(false);
-
-    //const handleClose = () => setShow(false);
-    //const handleShow = () => setShow(true);
 
     return (
         <div>

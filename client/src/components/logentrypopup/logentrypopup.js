@@ -9,8 +9,6 @@ import { Link } from "react-router-dom";
 const LogEntryPopUp = ({ logEntry, setShowPopUp }) => {
     const [log, setLog] = useState();
     const [modal, setModal] = useState(false);
-    // "Friday, Jul 2, 2021"
-    // add key to carousels
     const date = new Date();
 
     const toggleModal = () => {

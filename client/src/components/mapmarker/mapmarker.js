@@ -87,17 +87,9 @@ const MapMarker = (props) => {
 };
 
 function areEqual(prevProps, nextProps) {
-    //console.log(nextProps.showPopUp, prevProps.showPopUp);
     if (nextProps.logEntries.length > prevProps.logEntries.length) return false;
     if (prevProps.showPopUp == nextProps.showPopUp) return true;
     return false;
-    // true if no rerender should occur
-    // false if should rerender
-    /*
-  return true if passing nextProps to render would return
-  the same result as passing prevProps to render,
-  otherwise return false
-  */
 }
 
 export default memo(MapMarker, areEqual);

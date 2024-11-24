@@ -8,17 +8,14 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const middlewares = require("./middlewares");
 const mongoose = require("mongoose");
-//const apiRouter = require('./api');
 
 const logs = require("./api/logs");
 const user = require("./api/user");
 const auth = require("./api/auth");
 
 const app = express();
-//console.log(process.env.DATABASE_URL);
 app.use(bodyParser.json());
 
-// app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

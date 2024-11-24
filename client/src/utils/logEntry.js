@@ -1,5 +1,4 @@
 export const calculateTimeDifference = (postDate, currentDate) => {
-    // fix 1 values
     postDate = new Date(postDate);
     const seconds = (currentDate.getTime() - postDate.getTime()) / 1000;
     const minutes = seconds / 60;
@@ -34,7 +33,6 @@ export const formatDateString = (dateString) => {
 };
 
 export const calculateCommentTimeDifference = (postDate, currentDate) => {
-    // fix 1 valuess
     postDate = new Date(postDate);
     const seconds = (currentDate.getTime() - postDate.getTime()) / 1000;
     const minutes = seconds / 60;

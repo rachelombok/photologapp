@@ -7,14 +7,11 @@ import ProfileHeader from "../../components/profileheader/profileheader";
 import ProfilePostSection from "../../components/profilepostsection/profilepostsection";
 import "../../css/pages/ProfilePage.css";
 import NotFoundPage from "../NotFoundPage/NotFound";
-const ProfilePage = ({ url }) => {
-    // profile header
-    // profile post content
-    // set up this page to work for without authentication
 
+const ProfilePage = ({ url }) => {
     let { username } = useParams();
     const [profile, setProfile] = useState({});
-    const token = localStorage.getItem("jwtToken"); // we can also usecontext isntead
+    const token = localStorage.getItem("jwtToken");
     const { user, setUser } = useContext(UserContext);
     const [deadend, setDeadend] = useState(false);
     const [refetch, setRefetch] = useState(false);
@@ -25,7 +22,6 @@ const ProfilePage = ({ url }) => {
         await getUserProfile(username, token)
             .then((res) => {
                 if (Boolean(user)) {
-                    // if user is authenticated
                     res.user.isMe = user._id == res.user._id ? true : false;
                     res.user.isFollowing = res.isFollowing;
                 }

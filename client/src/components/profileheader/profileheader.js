@@ -16,22 +16,12 @@ const ProfileHeader = ({ profile, setRefetch }) => {
     const { user } = useContext(UserContext);
 
     const token = localStorage.getItem("jwtToken");
-    // avatar, following, followers, post #
-    // edit profile or following/follow button
-    //  useContext is for checking if logged in or not
-    // get(/:username) is for fetching user
-    // dont allow click on following/follower unless authenticated
 
     const follow = async () => {
         try {
-            // check if user exists, if not redirect to login page/register page
             if (user || token) {
-                // refactor tjis function to accept a username/profile
                 const alreadyFollowing = profile?.isFollowing;
                 await followUser(profile?._id, token);
-                //if (alreadyFollowing) toast.success('')
-                //toast.success('you followed them!');
-                //window.location.reload(); //figure out how to refresh
                 setRefetch(true);
             } else {
                 setShowLoginModal(true);
@@ -47,8 +37,6 @@ const ProfileHeader = ({ profile, setRefetch }) => {
         } else {
             setIsAuthenticatedUser(false);
         }
-
-        // use refetch instead when a user follows
     }, [
         profile?.followersCount,
         profile?.followingCount,
@@ -56,9 +44,6 @@ const ProfileHeader = ({ profile, setRefetch }) => {
     ]);
 
     const toggleModal = (e) => {
-        // console.log(e.target.id, e);
-        //console.log(getDisplayLog(e.target.id));
-        //setModalLog(getDisplayLog(e.target.id));
         setFollowersModal(false);
         setFollowingModal(false);
     };

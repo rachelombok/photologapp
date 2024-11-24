@@ -76,7 +76,6 @@ const Map = (props) => {
         this.setState({ ...this.state.viewport, ...viewport });
     };
 
-    // if you are happy with Geocoder default settings, you can just use handleViewportChange directly
     const handleGeocoderViewportChange = (viewport) => {
         const geocoderDefaultOverrides = { transitionDuration: 1000 };
 
@@ -131,7 +130,7 @@ const Map = (props) => {
                 minLength={3}
                 position="top-left"
             />
-            <div style={{ position: "absolute", right: '3%' }}>
+            <div style={{ position: "absolute", right: "3%" }}>
                 <NavigationControl />
             </div>
 

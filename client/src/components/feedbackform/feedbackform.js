@@ -12,7 +12,6 @@ const FeedbackForm = () => {
 
     const sendEmail = (e) => {
         e.preventDefault();
-      // add these values to secrets
         emailjs
             .sendForm(
                 "service_mwhljm6",

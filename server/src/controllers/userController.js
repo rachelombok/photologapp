@@ -18,7 +18,6 @@ const {
   validateWebsite,
 } = require("../utils/validation");
 const { request } = require("http");
-//const { sendConfirmationEmail } = require('../utils/controllerUtils');
 
 const createTokenSendResponse = (user, res, next) => {
   const payload = {
@@ -57,75 +56,6 @@ module.exports.retrieveUser = async (req, res, next) => {
         .status(404)
         .send({ error: "Could not find a user with that username." });
     }
-    console.log(user);
-    /*const posts = await Post.aggregate([
-      {
-        $facet: {
-          data: [
-            { $match: { author: ObjectId(user._id) } },
-            { $sort: { date: -1 } },
-            { $limit: 12 },
-            {
-              $lookup: {
-                from: 'postvotes',
-                localField: '_id',
-                foreignField: 'post',
-                as: 'postvotes',
-              },
-            },
-            {
-              $lookup: {
-                from: 'comments',
-                localField: '_id',
-                foreignField: 'post',
-                as: 'comments',
-              },
-            },
-            {
-              $lookup: {
-                from: 'commentreplies',
-                localField: 'comments._id',
-                foreignField: 'parentComment',
-                as: 'commentReplies',
-              },
-            },
-            {
-              $unwind: '$postvotes',
-            },
-            {
-              $addFields: { image: '$thumbnail' },
-            },
-            {
-              $project: {
-                user: true,
-                followers: true,
-                following: true,
-                comments: {
-                  $sum: [{ $size: '$comments' }, { $size: '$commentReplies' }],
-                },
-                image: true,
-                thumbnail: true,
-                filter: true,
-                caption: true,
-                author: true,
-                postVotes: { $size: '$postvotes.votes' },
-              },
-            },
-          ],
-          postCount: [
-            { $match: { author: ObjectId(user._id) } },
-            { $count: 'postCount' },
-          ],
-        },
-      },
-      { $unwind: '$postCount' },
-      {
-        $project: {
-          data: true,
-          postCount: '$postCount.postCount',
-        },
-      },
-    ]);*/
 
     const followersDocument = await Followers.findOne({
       user: ObjectId(user._id),
@@ -135,27 +65,18 @@ module.exports.retrieveUser = async (req, res, next) => {
       user: ObjectId(user._id),
     });
 
-    //user.isMe = req.user.id === user._id.toString();
     console.log(
       `getting following for ${user.fullname}`,
       followersDocument.followers,
       followingDocument.following
     );
     user.isMe = res.locals.user === user._id.toString();
-    //user.followingLength =followingDocument.following?.length;
-    //user.followerLength = followersDocument.followers?.length;
     user.isFollowing = requestingUser
       ? !!followersDocument.followers?.find(
           (follower) => String(follower.user) === String(requestingUser._id)
         )
       : false;
     console.log("is following in retirve ia", user.isFollowing, requestingUser);
-    // user if profile
-    /*user.isFollowing = requestingUser
-    ? !!followersDocument.followers.find(
-        (follower) => String(follower.user) === String(requestingUser._id)
-      )
-    : false;*/
     return res.send({
       user,
       followers: followersDocument.followers?.length,
@@ -166,7 +87,6 @@ module.exports.retrieveUser = async (req, res, next) => {
             (follower) => String(follower.user) === String(requestingUser._id)
           )
         : false,
-      //posts: posts[0],
     });
   } catch (err) {
     next(err);
@@ -285,41 +205,32 @@ module.exports.followUser = async (req, res, next) => {
     console.log(
       `${user.fullname} is trying to follow ${userToFollow.fullname}`
     );
-    // rachel follows someonelese
-    // rachel = user._id
-    //someoneelse = userId
     const followerUpdate = await Followers.updateOne(
       { user: userId, "followers.user": { $ne: user._id } },
       { $push: { followers: { user: user._id } } }
-    ); // add Rachel to someoneleses followers 'list'
+    );
 
     const followingUpdate = await Following.updateOne(
       { user: user._id, "following.user": { $ne: userId } },
       { $push: { following: { user: userId } } }
     );
-    // add someone else to Rachels following 'list
-
     if (!followerUpdate.nModified || !followingUpdate.nModified) {
       if (!followerUpdate.ok || !followingUpdate.ok) {
         return res
           .status(500)
           .send({ error: "Could not follow user please try again later." });
       }
-      // Nothing was modified in the above query meaning that the user is already following
-      // Unfollow instead
-
-      // Rachel = user._id,
       const followerUnfollowUpdate = await Followers.updateOne(
         {
           user: userId,
         },
         { $pull: { followers: { user: user._id } } }
-      ); // remove Rachel from someone else followers list
+      );
 
       const followingUnfollowUpdate = await Following.updateOne(
         { user: user._id },
         { $pull: { following: { user: userId } } }
-      ); // remove someone else from Rachels following list
+      );
       if (!followerUnfollowUpdate.ok || !followingUnfollowUpdate.ok) {
         return res
           .status(500)
@@ -345,31 +256,6 @@ module.exports.followUser = async (req, res, next) => {
       $push: { following: userId },
       $inc: { followingCount: 1 },
     });
-    /* const notification = new Notification({
-      notificationType: 'follow',
-      sender: user._id,
-      receiver: userId,
-      date: Date.now(),
-    });
-
-    const sender = await User.findById(user._id, 'username avatar');
-    const isFollowing = await Following.findOne({
-      user: userId,
-      'following.user': user._id,
-    });
-
-    await notification.save();
-    socketHandler.sendNotification(req, {
-      notificationType: 'follow',
-      sender: {
-        _id: sender._id,
-        username: sender.username,
-        avatar: sender.avatar,
-      },
-      receiver: userId,
-      date: notification.date,
-      isFollowing: !!isFollowing,
-    });*/
 
     res.send({ success: true, operation: "follow" });
   } catch (err) {
@@ -400,7 +286,6 @@ const retrieveRelatedUsers = async (user, userId, offset, followers) => {
       path: "followers.user",
       select: "username avatar fullname isFollowing",
     });
-    //console.log(followersDocument, reqUserFollowing.following);
     const followersList = { user: followersDocument.user, users: [] };
     followersDocument.followers.forEach((followerUser) => {
       // if followed userid is in my following list, isfollowing is true
@@ -460,118 +345,6 @@ const retrieveRelatedUsers = async (user, userId, offset, followers) => {
     });
     return followingList;
   }
-
-  //ollowersDocument.justbc = "YPE";
-  // user.isFollowing = requestingUser ? !!followersDocument.followers?.find((follower) => String(follower.user) === String(requestingUser._id)) : false;
-
-  /*if (followers){
-    console.log('we are looking for dollowers', userId);
-    //const followersList = await Followers.findOne({ userId }, 'user');
-    const followersDocument = await Followers.findOne(
-      { user: userId },
-      'user followers'
-    ).populate({ path: 'followers', populate: {
-      path: 'user',
-      select: 'fullname avatar username'
-    } });
-    if (!followersDocument) {
-      console.log('empty list', followersDocument);
-      return;
-    }
-    console.log('did i find the follow list?', followersDocument.followers);
-    const followedUsers = new Set();
-    // user.isFollowing = requestingUser ? !!followersDocument.followers?.find((follower) => String(follower.user) === String(requestingUser._id)) : false;
-    
-    followersDocument.followers.forEach((followerUser)=>{
-      followerUser.isFollowing = false;
-      // console.log(followerUser.user._id, usr)
-      if(String(followerUser.user._id) === String(user._id)) {
-        followerUser.isFollowing = true;
-      }
-      console.log('add the field?',user, followerUser);
-    });
-    return followersDocument;
-  }
-  else {
-    const followinggDocument = await Following.findOne(
-      { user: userId },
-      'user following'
-    ).populate({ path: 'following', populate: {
-      path: 'user',
-      select: 'fullname avatar username'
-    } });
-  }*/
-
-  /*const pipeline = [
-    {
-      $match: { user: ObjectId(userId) },
-    },
-    {
-      $lookup: {
-        from: 'users',
-        let: followers
-          ? { userId: '$followers.user' }
-          : { userId: '$following.user' },
-        pipeline: [
-          {
-            $match: {
-              // Using the $in operator instead of the $eq
-              // operator because we can't coerce the types
-              $expr: { $in: ['$_id', '$$userId'] },
-            },
-          },
-          {
-            $skip: Number(offset),
-          },
-          {
-            $limit: 10,
-          },
-        ],
-        as: 'users',
-      },
-    },
-    {
-      $lookup: {
-        from: 'followers',
-        localField: 'user._id',
-        foreignField: 'user',
-        as: 'userFollowers',
-      },
-    },
-    {
-      $project: {
-        'users._id': true,
-        'users.username': true,
-        'users.avatar': true,
-        userFollowers: true,
-      },
-    },
-  ];
-
-
-  const aggregation = followers
-    ? await Followers.aggregate(pipeline)
-    : await Following.aggregate(pipeline);
-  console.log('aggie', aggregation[0].users);
-  // Make a set to store the IDs of the followed users
-  const followedUsers = new Set();
-  // Loop through every follower and add the id to the set if the user's id is in the array
-  aggregation[0].userFollowers.forEach((followingUser) => {
-    if (
-      !!followingUser.followers.find(
-        (follower) => String(follower.user) === String(user._id)
-      )
-    ) {
-      followedUsers.add(String(followingUser.user));
-    }
-  });
-  // Add the isFollowing key to the following object with a value
-  // depending on the outcome of the loop above
-  aggregation[0].users.forEach((followingUser) => {
-    followingUser.isFollowing = followedUsers.has(String(followingUser._id));
-  });
-console.log('getting followerspls', aggregation, followedUsers);
-  return aggregation[0].users;*/
 };
 
 module.exports.retrieveFollowing = async (req, res, next) => {
@@ -699,35 +472,6 @@ module.exports.changeAvatar = async (req, res, next) => {
       .status(404)
       .send({ error: "Trouble updating your picture, try again later" });
   }
-
-  /*cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
-
-  try {
-    const response = await cloudinary.uploader.upload(req.file.path, {
-      width: 200,
-      height: 200,
-      gravity: 'face',
-      crop: 'thumb',
-    });
-    fs.unlinkSync(req.file.path);
-
-    const avatarUpdate = await User.updateOne(
-      { _id: user._id },
-      { avatar: response.secure_url }
-    );
-
-    if (!avatarUpdate.nModified) {
-      throw new Error('Could not update user avatar.');
-    }
-
-    return res.send({ avatar: response.secure_url });
-  } catch (err) {
-    next(err);
-  }*/
 };
 
 module.exports.removeAvatar = async (req, res, next) => {
@@ -824,16 +568,8 @@ module.exports.updateProfile = async (req, res, next) => {
         updatedFields = { ...updatedFields, email, confirmed: false };
       }
     }
-    console.log(updatedFields);
     const updatedUser = await userDocument.save();
     createTokenSendResponse(updatedUser, res, next);
-    /*if (email && email !== user.email) {
-      sendConfirmationEmail(
-        updatedUser.username,
-        updatedUser.email,
-        confirmationToken.token
-      );
-    }*/
   } catch (err) {
     next(err);
   }

@@ -80,7 +80,6 @@ const userSchema = new Schema(
         },
       },
     ],
-    //might be mongoose.Schema.ObjectId
     resetToken: String,
     expireToken: Date,
   },

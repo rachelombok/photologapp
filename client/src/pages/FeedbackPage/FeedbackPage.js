@@ -1,6 +1,7 @@
 import React from "react";
 import FeedbackForm from "../../components/feedbackform/feedbackform";
 import { Typography } from "@mui/material";
+
 const FeedbackPage = () => {
     return (
         <div className="profile-page grid">

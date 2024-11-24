@@ -14,7 +14,6 @@ const LogEntryForm = ({ location, onFormClose }) => {
     const { register, handleSubmit } = useForm();
     const { user } = useContext(UserContext);
     const token = localStorage.getItem("jwtToken");
-    // add tags n rating input too, then change dis play of these in postmodal
 
     const onSubmit = async (data) => {
         try {
@@ -51,30 +50,10 @@ const LogEntryForm = ({ location, onFormClose }) => {
             toast.error(error.message, { position: "top-right" });
             setLoading(false);
         }
-        /*
-     try {
-       console.log(data);
-       setLoading(true);
-       const formData = new FormData();
-       formData.append('image', photo);
-       formData.set('title', data.title);
-       data.latitude = location.latitude;
-       data.longitude = location.longitude;
-       data.image = data.image[0];
-       console.log(photo);
-       await createLogEntry(data);
-       //await uploadImage(formData);
-       onClose();
-     } catch (error) {
-       console.error(error);
-       setError(error.message);
-       setLoading(false);
-     }*/
     };
 
     const setFile = (evt) => {
         setPhoto(evt.target.files);
-        //setFileName(evt.target.files[0].name);
     };
 
     return (

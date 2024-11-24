@@ -43,9 +43,6 @@ export const login = async (usernameOrEmail, password, authToken) => {
         });
         signInSuccess(response);
         setAuthentication(response.data.token);
-        //localStorage.setItem('jwtToken', response.data.token)
-
-        // jwt.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
         return response.data;
     } catch (err) {
         throw new Error(err.response.data.error);

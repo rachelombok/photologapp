@@ -21,12 +21,6 @@ export const updateUserAvatar = async (formData, token) => {
     } catch (err) {
         throw new Error(err.response.data.error);
     }
-
-    /*const response = await axios.patch(`${API_URL}/api/user/avatar`, formData , {
-        headers: {...headers},
-        data: formData
-      });*/
-    // axios patch to avatar
 };
 
 export const getUserProfile = async (username, authToken) => {

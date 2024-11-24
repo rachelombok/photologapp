@@ -25,8 +25,6 @@ const SettingsForm = () => {
         try {
             setLoading(true);
             await changePassword(oldPassword.value, newPassword.value, token);
-            // await change pass(old pass, new pass, token)
-            //toast.success
             toast.success(
                 "Your password has been updated! You'll have to log in with the new one next time.",
                 { hideProgressBar: true }
@@ -34,8 +32,6 @@ const SettingsForm = () => {
             setLoading(false);
             history.push(`${user.username}`);
         } catch (e) {
-            // toast.error
-
             toast.error(e.message, {
                 position: "top-right",
             });

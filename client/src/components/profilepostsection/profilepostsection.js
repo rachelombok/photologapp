@@ -15,8 +15,6 @@ const ProfilePostSection = ({ logs }) => {
     };
 
     const toggleModal = (e) => {
-        // console.log(e.target.id, e);
-        //console.log(getDisplayLog(e.target.id));
         setModalLog(getDisplayLog(e.target.id));
         setModal(!modal);
     };
@@ -38,8 +36,6 @@ const ProfilePostSection = ({ logs }) => {
                         onClick={toggleModal}
                         id={log._id}
                     />
-                    {/*} <ChatIcon className='comment-overlay' fontSize="large"/>
-                    <FavoriteIcon className='like-overlay' fontSize="large"/> */}
                 </Col>
             ))}
             {modal ? (

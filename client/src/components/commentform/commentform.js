@@ -30,13 +30,6 @@ const CommentForm = ({ logId, setRefetch, user }) => {
             setRefetch(false);
             toast.error(e.message);
         }
-        // wrap this all around try n catch
-        // also grey out submit button if no comment
-        // grey out if only spaces, strip comment message
-
-        // call function to create comment
-        // toast success
-        //
     };
     return (
         <Form id="post-comment-button" ref={formRef} onSubmit={handleComment}>

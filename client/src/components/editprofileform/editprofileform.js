@@ -22,10 +22,6 @@ const EditProfileForm = () => {
     const setFile = (e) => {
         if (e.target.files[0]) {
             setNewAvatar(e.target.files[0]);
-
-            /*uploadImage(e.target.files[0]).then((res) =>
-        setNewAvatar(res.secure_url)
-      );*/
         }
     };
 
@@ -53,8 +49,6 @@ const EditProfileForm = () => {
                 username: username.value,
                 bio: bio.value,
                 website: website.value,
-                //avatar: newAvatar || user.avatar,
-                //isNewAvi: newAvatar ? true : false,
             };
             const res = await updateUserProfile(body, token);
             setUser(res.user);
@@ -69,15 +63,7 @@ const EditProfileForm = () => {
                 position: "top-right",
             });
         }
-
-        // use context or storage to get user details
-        // preproulate fields with these data
-        // update data with an endpoint call
-        // history push to users username or new username
-        // update fiels that are different in form
-        // service func
     };
-    // change fullname, password, avatar, bio, website
     return (
         <Form onSubmit={handleEditProfile} encType="multipart/form-data">
             <div className="profile-page grid">

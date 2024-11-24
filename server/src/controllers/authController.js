@@ -35,21 +35,6 @@ const createTokenSendResponse = (user, res, next) => {
     token: token,
     user: payload,
   });
-  /*jwt.sign(
-    payload,
-    "shhhhh", { //process.env.JWT_SECRET
-      expiresIn: '2d',
-    }, (err, token) => {
-      if (err) {
-        res.status(422);
-        const error = Error('Unable to login');
-        next(error);
-      } else {
-      // login all good
-        res.json({ user: payload, token });
-      }
-    },
-  );*/
 };
 
 module.exports.verifyJwt = (token) => {
@@ -88,15 +73,13 @@ module.exports.requireAuth = async (req, res, next) => {
     });
   }
   try {
-    //const user = await this.verifyJwt(authorization);
-    const decoded = jwt.verify(token, "shhhhh"); //turn key to env secret
+    const decoded = jwt.verify(token, "shhhhh");
     console.log("decode", decoded);
     const user = await User.findById(decoded._id).select("-password");
     console.log("found user", user);
     if (!user) {
       return next({ message: `No user found for ID ${decoded._id}` });
     }
-    // Allow other middlewares to access the authenticated user details.
     res.locals.user = user;
     req.user = user;
     console.log("made it done requireauth", req.body, req.data);
@@ -117,8 +100,7 @@ module.exports.optionalAuth = async (req, res, next) => {
   if (authorization) {
     console.log("yes auth op!");
     try {
-      //const user = await this.verifyJwt(authorization);
-      const decoded = jwt.verify(token, "shhhhh"); //turn key to env secret
+      const decoded = jwt.verify(token, "shhhhh");
       console.log("decode optional", decoded);
       const user = await User.findById(decoded._id).select("-password");
       console.log("found user optional", user);
@@ -130,7 +112,6 @@ module.exports.optionalAuth = async (req, res, next) => {
       req.user = user;
       console.log("made it done optionalauth", req.body, req.data);
     } catch (err) {
-      // better return error fix
       return res.status(401).send({ error: err });
     }
   }
@@ -181,15 +162,6 @@ module.exports.loginAuthentication = async (req, res, next) => {
         });
       }
       createTokenSendResponse(user, res, next);
-      /*res.send({
-        user: {
-          _id: user._id,
-          email: user.email,
-          username: user.username,
-          avatar: user.avatar,
-        },
-        token: jwtSimple.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
-      });*/
     });
   } catch (err) {
     next(err);
@@ -225,21 +197,10 @@ module.exports.register = async (req, res, next) => {
     await user.save();
     await confirmationToken.save();
     createTokenSendResponse(user, res, next);
-    /*res.status(201).send({
-      user: {
-        id: user._id,
-        email: user.email,
-        username: user.username,
-      },
-      // j2390jf09kjsalkj4r93
-      //token: jwtSimple.encode({ id: user._id }, process.env.JWT_SECRET),
-      token: jwtSimple.encode({ id: user._id }, "j2390jf09kjsalkj4r93"),
-    });*/
   } catch (err) {
     console.log(err);
     next(err.message);
   }
-  // sendConfirmationEmail(user.username, user.email, confirmationToken.token);
 };
 
 module.exports.githubLoginAuthentication = async (req, res, next) => {
@@ -251,7 +212,6 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
   }
 
   try {
-    // Exchange the temporary code with an access token
     const response = await axios.post(
       "https://github.com/login/oauth/access_token",
       {
@@ -303,10 +263,6 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
             "A user with the same email already exists, please change your primary github email.",
         });
       }
-      /*if (existingUser.username === githubUser.data.login.toLowerCase()) {
-        const username = await generateUniqueUsername(githubUser.data.login);
-        githubUser.data.login = username;
-      }*/
     }
 
     const user = new User({

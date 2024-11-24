@@ -28,8 +28,6 @@ const NewLogEntryForm = (props) => {
             let uploadedimage;
             try {
                 setLoading(true);
-                //uploadedimage = await uploadImage(data.images);
-                //console.log(uploadedimage);
             } catch (error) {
                 console.log("newerr");
                 console.error(error);
@@ -40,11 +38,7 @@ const NewLogEntryForm = (props) => {
             try {
                 data.latitude = props.coordinates.latitude;
                 data.longitude = props.coordinates.longitude;
-                //console.log(uploadedimage);
-                //data.image = uploadedimage.imageUrl;
-                //const response = await createTravelEntry(data);
                 props.onFormClose();
-                //console.log(response);
             } catch (error) {
                 console.error(error);
                 setError(error.message);

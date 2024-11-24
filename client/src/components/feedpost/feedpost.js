@@ -27,6 +27,7 @@ import {
 } from "../../utils/logEntry";
 import { getLogEntryLikes, toggleLike } from "../../services/postService";
 import { UserContext } from "../../context/UserContext";
+
 const FeedPost = ({ logEntry }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -58,13 +59,6 @@ const FeedPost = ({ logEntry }) => {
         } catch (e) {
             setRefetch(false);
         }
-        // wrap this all around try n catch
-        // also grey out submit button if no comment
-        // grey out if only spaces, strip comment message
-
-        // call function to create comment
-        // toast success
-        //
     };
 
     const isLiked = () => {
@@ -91,10 +85,6 @@ const FeedPost = ({ logEntry }) => {
         isLiked();
         setRefetch(false);
     }, [refetch, likes?.length]);
-
-    // add a more drop down list in top right with 'copy link to post' option once post pages are made
-    // liking can be done from here but commenting must open the modal
-    // populate feedpost api with user avi
 
     return (
         <div className="feed-post">
