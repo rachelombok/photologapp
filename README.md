@@ -5,7 +5,7 @@ photolog app, justshoot.netlify.app
 
 This is a photo log entry app made with React, NodeJS, react-map-gl, mongoose, multer-s3, react-bootstrap, MUI, react-toastify, and a bunch of other packages. Client on Netlify, Server on Heroku. [Video demo](https://www.youtube.com/watch?v=Zye6HkykpDY)
 
-Made possible by the tutorials available on the [CodingGarden!]()
+Made possible by the tutorials available on the [CodingGarden!](https://github.com/CodingGarden)
 
 to push to server:
 `git subtree push --prefix server heroku master`
