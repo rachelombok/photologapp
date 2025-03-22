@@ -40,7 +40,6 @@ const createTokenSendResponse = (user, res, next) => {
 module.exports.retrieveUser = async (req, res, next) => {
   const { username } = req.params;
   const requestingUser = req.user;
-  //console.log('req user', res, req);
   try {
     const user = await User.findOne(
       { username },
@@ -65,18 +64,12 @@ module.exports.retrieveUser = async (req, res, next) => {
       user: ObjectId(user._id),
     });
 
-    console.log(
-      `getting following for ${user.fullname}`,
-      followersDocument.followers,
-      followingDocument.following
-    );
     user.isMe = res.locals.user === user._id.toString();
     user.isFollowing = requestingUser
       ? !!followersDocument.followers?.find(
           (follower) => String(follower.user) === String(requestingUser._id)
         )
       : false;
-    console.log("is following in retirve ia", user.isFollowing, requestingUser);
     return res.send({
       user,
       followers: followersDocument.followers?.length,
@@ -189,7 +182,6 @@ module.exports.bookmarkPost = async (req, res, next) => {
 };
 
 module.exports.followUser = async (req, res, next) => {
-  console.log("starting to follow user");
 
   const { userId } = req.params; // id of user we are trying to follow
   const user = res.locals.user; // id of user making the request
@@ -202,9 +194,6 @@ module.exports.followUser = async (req, res, next) => {
         .status(400)
         .send({ error: "Could not find a user with that id." });
     }
-    console.log(
-      `${user.fullname} is trying to follow ${userToFollow.fullname}`
-    );
     const followerUpdate = await Followers.updateOne(
       { user: userId, "followers.user": { $ne: user._id } },
       { $push: { followers: { user: user._id } } }
@@ -316,12 +305,6 @@ const retrieveRelatedUsers = async (user, userId, offset, followers) => {
       path: "following.user",
       select: "username avatar fullname isFollowing",
     });
-    console.log(
-      "following doc",
-      followingDocument,
-      userId,
-      followingDocument.following
-    );
     const followingList = { user: followingDocument.user, users: [] };
     followingDocument.following.forEach((followingUser) => {
       // if followed userid is in my following list, isfollowing is true
@@ -366,7 +349,6 @@ module.exports.retrieveFollowers = async (req, res, next) => {
     const users = await retrieveRelatedUsers(user, userId, offset, true);
     return res.send(users);
   } catch (err) {
-    console.log("we failed here11");
     next(err);
   }
 };
@@ -461,7 +443,6 @@ module.exports.changeAvatar = async (req, res, next) => {
       .status(400)
       .send({ error: "Please provide the image to upload." });
   }
-  console.log("changing avatar", req.file);
   try {
     await User.findByIdAndUpdate(req.user._id, {
       avatar: req.file.location,
@@ -494,14 +475,6 @@ module.exports.removeAvatar = async (req, res, next) => {
 module.exports.updateProfile = async (req, res, next) => {
   const user = res.locals.user;
   const { fullName, username, website, bio, email } = req.body;
-  console.log(
-    "this is what we are updateing",
-    fullName,
-    username,
-    website,
-    bio,
-    email
-  );
   let confirmationToken = undefined;
   let updatedFields = {};
   try {

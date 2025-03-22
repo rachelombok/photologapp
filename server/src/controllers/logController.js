@@ -18,7 +18,6 @@ const {
 const { request } = require("http");
 
 module.exports.createComment = async (req, res, next) => {
-  console.log("comment body", req.body);
   const { logId } = req.params;
   const { message } = req.body;
   const user = req.user;
@@ -162,7 +161,6 @@ module.exports.retrieveComments = async (req, res, next) => {
       path: "author",
       select: "username avatar",
     });
-    console.log(comments);
     return res.send(comments);
   } catch (err) {
     next(err);

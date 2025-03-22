@@ -24,12 +24,10 @@ const NewLogEntryForm = (props) => {
         if (data.images.length > 5) {
             window.alert("Do not submit more than 5 images.");
         } else {
-            console.log("okie okie");
             let uploadedimage;
             try {
                 setLoading(true);
             } catch (error) {
-                console.log("newerr");
                 console.error(error);
                 setError(error.message);
                 setLoading(false);

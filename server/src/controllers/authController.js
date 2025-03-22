@@ -60,7 +60,6 @@ module.exports.requireAuth = async (req, res, next) => {
   let token;
 
   const { authorization } = req.headers;
-  console.log("req auth here", authorization, req.headers);
   if (!authorization)
     return res.status(401).send({ error: "Not authorized login." });
   if (authorization && authorization.startsWith("Bearer")) {
@@ -74,15 +73,12 @@ module.exports.requireAuth = async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, "shhhhh");
-    console.log("decode", decoded);
     const user = await User.findById(decoded._id).select("-password");
-    console.log("found user", user);
     if (!user) {
       return next({ message: `No user found for ID ${decoded._id}` });
     }
     res.locals.user = user;
     req.user = user;
-    console.log("made it done requireauth", req.body, req.data);
     next();
   } catch (err) {
     return res.status(401).send({ error: `New error: ${err}` });
@@ -96,21 +92,16 @@ module.exports.optionalAuth = async (req, res, next) => {
   if (authorization && authorization.startsWith("Bearer")) {
     token = authorization.split(" ")[1];
   }
-  console.log(authorization);
   if (authorization) {
-    console.log("yes auth op!");
     try {
       const decoded = jwt.verify(token, "shhhhh");
-      console.log("decode optional", decoded);
       const user = await User.findById(decoded._id).select("-password");
-      console.log("found user optional", user);
       if (!user) {
         return next({ message: `No user found for ID ${decoded._id}` });
       }
       // Allow other middlewares to access the authenticated user details.
       res.locals.user = user;
       req.user = user;
-      console.log("made it done optionalauth", req.body, req.data);
     } catch (err) {
       return res.status(401).send({ error: err });
     }
@@ -120,9 +111,7 @@ module.exports.optionalAuth = async (req, res, next) => {
 
 module.exports.loginAuthentication = async (req, res, next) => {
   const { authorization } = req.headers;
-  console.log("athuoriz ", authorization, req);
   const { usernameOrEmail, password } = req.body;
-  console.log(req);
   if (authorization) {
     try {
       const user = await this.verifyJwt(authorization);
@@ -192,13 +181,10 @@ module.exports.register = async (req, res, next) => {
       user: user._id,
       token: crypto.randomBytes(20).toString("hex"),
     });
-    console.log("UUUSer ", user);
-    console.log("conf ", confirmationToken);
     await user.save();
     await confirmationToken.save();
     createTokenSendResponse(user, res, next);
   } catch (err) {
-    console.log(err);
     next(err.message);
   }
 };
@@ -289,7 +275,6 @@ module.exports.githubLoginAuthentication = async (req, res, next) => {
 };
 
 module.exports.changePassword = async (req, res, next) => {
-  console.log(req.body);
   const { oldPassword, newPassword } = req.body;
   const user = req.user;
   let currentPassword = undefined;
@@ -299,7 +284,6 @@ module.exports.changePassword = async (req, res, next) => {
     currentPassword = userDocument.password;
 
     const result = await bcrypt.compare(oldPassword, currentPassword);
-    console.log("track passowrds", result, currentPassword);
     if (!result) {
       return res.status(401).send({
         error: "Your old password was entered incorrectly, please try again.",
@@ -319,7 +303,6 @@ module.exports.changePassword = async (req, res, next) => {
 };
 
 module.exports.me = async (req, res, next) => {
-  console.log("getting the users data", req.user);
   const { avatar, username, fullname, email, _id, website, bio } = req.user;
   res.status(200).json({
     success: true,

@@ -46,7 +46,6 @@ const MapMarker = (props) => {
 
     return (
         <div>
-            {console.log("map marker level 2 call", props)}
             {props.logEntries.map((entry) => (
                 <React.Fragment key={entry._id}>
                     <Marker

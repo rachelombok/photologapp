@@ -42,18 +42,14 @@ router.post(
   requireAuth,
   upload.array("image", 5),
   async (req, res, next) => {
-    console.log("did we make tit after auth?");
     try {
       const reqUser = req.user._id;
       let fileArray = req.files,
         fileLocation;
-      console.log("filearray", fileArray);
-      console.log(JSON.stringify(req.body));
 
       const galleryImgLocationArray = [];
       for (let i = 0; i < fileArray.length; i++) {
         fileLocation = fileArray[i].location;
-        console.log("filenm", fileLocation);
         galleryImgLocationArray.push(fileLocation);
       }
       const logEntry = new LogEntry({
@@ -75,17 +71,14 @@ router.post(
       const logEntryLikes = new LogEntryLikes({
         logEntry: logEntry._id,
       });
-      console.log("bloop", logEntry);
 
       const createdEntry = await logEntry.save();
-      console.log(createdEntry);
       await logEntryLikes.save();
       res.json(createdEntry);
     } catch (error) {
       if (error.name === "Validation Error") {
         res.status(422);
       }
-      console.log(`logs regular err: ${error}`);
       next(error);
     }
    
